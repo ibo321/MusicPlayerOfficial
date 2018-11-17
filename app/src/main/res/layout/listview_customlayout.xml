@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/musicLogo"
+        android:layout_width="40sp"
+        android:layout_height="40sp"
+        android:background="@drawable/musiclogo_black" />
+
+    <TextView
+        android:id="@+id/artistTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/musicLogo"
+        android:text="Artist"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/songNameTxt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/artistTxt"
+        android:layout_toRightOf="@id/musicLogo"
+        android:text="Song Name"
+        android:textColor="#11ca6b" />
+
+    <ImageView
+        android:id="@+id/playB"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:layout_marginTop="4sp"
+        android:layout_toLeftOf="@id/stopB"
+        android:src="@drawable/play_black" />
+
+    <ImageView
+        android:id="@+id/stopB"
+        android:layout_width="30sp"
+        android:layout_height="30sp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="4sp"
+        android:src="@drawable/stop_black" />
+
+</RelativeLayout>
