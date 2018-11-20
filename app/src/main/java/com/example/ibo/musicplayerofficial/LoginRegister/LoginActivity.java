@@ -3,6 +3,7 @@ package com.example.ibo.musicplayerofficial.LoginRegister;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -28,6 +29,7 @@ import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity {
 
+    //Declare variables
     private FirebaseAuth mAuth;
     EditText edtLogin_email, edtLogin_pass;
     ProgressDialog progressDialog;
@@ -94,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //Check if user entered correct informations
-    public void checkTextFieldsIsEmptyOrNot() {
+    private void checkTextFieldsIsEmptyOrNot() {
         String email = edtLogin_email.getText().toString().trim();
         final String password = edtLogin_pass.getText().toString().trim();
 
@@ -120,10 +122,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    //Login performed
-    public void onClickLogin() {
+    //Login performed using Firebase Authentication
+    private void onClickLogin() {
 
-        //assign email and password variables to my fields and get the text
+        //assign email and password variables to my editText fields and get the typed text
         final String email = edtLogin_email.getText().toString().trim();
         final String password = edtLogin_pass.getText().toString().trim();
 
@@ -136,18 +138,21 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("login", "Succeed login: " + email.toString() + " " + password.toString());
+                            //Get a log message if user logged in
+                            Log.d("login", "Succeed login: " + email.toString() +
+                                    " " + password.toString());
+
+                            //Navigate to SongListActivity if success
                             Intent intent = new Intent(LoginActivity.this, SongListActivity.class);
                             startActivity(intent);
-
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("login", "Failed to login: " + email.toString() + " " + password.toString(), task.getException());
+                            //Get a log message if user COULDN'T log in
+                            Log.w("login", "Failed to login: " + email.toString() + " " +
+                                    password.toString(), task.getException());
+
                             Toast.makeText(LoginActivity.this, "Wrong Email or Password!",
                                     Toast.LENGTH_LONG).show();
                         }
-
                         progressDialog.dismiss();
                     }
                 });

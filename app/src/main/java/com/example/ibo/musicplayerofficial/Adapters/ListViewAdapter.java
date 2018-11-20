@@ -1,6 +1,7 @@
 package com.example.ibo.musicplayerofficial.Adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.media.Image;
 import android.media.MediaPlayer;
 import android.view.LayoutInflater;
@@ -30,7 +31,7 @@ public class ListViewAdapter extends BaseAdapter {
         this.context = context;
     }
 
-    private class Viewholder{
+    private class Viewholder {
         TextView artistTxt, songNameTxt;
         ImageView playB, stopB;
     }
@@ -55,7 +56,7 @@ public class ListViewAdapter extends BaseAdapter {
 
         final Viewholder viewholder;
 
-        if (view == null){
+        if (view == null) {
             viewholder = new Viewholder();
 
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -75,28 +76,48 @@ public class ListViewAdapter extends BaseAdapter {
         viewholder.artistTxt.setText(song.getArtist());
         viewholder.songNameTxt.setText(song.getSongName());
 
+        //get all songs
+        mediaPlayer = MediaPlayer.create(context, song.getSong());
+
         viewholder.playB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currentSong == null || song != currentSong){
-                    currentSong = song;
 
+                if (currentSong == null) {
                     mediaPlayer = MediaPlayer.create(context, song.getSong());
                 }
-                if (mediaPlayer.isPlaying()){
-                    mediaPlayer.pause();
+
+                //if mediaplayer is not null and my current song is not equal to the new song i clicked on
+                if (mediaPlayer != null && currentSong != song) {
+
+                    //resets the mediaplayer and creates a new song from the position in the list
+                    mediaPlayer.reset();
+
+                    mediaPlayer = MediaPlayer.create(context, song.getSong());
                     viewholder.playB.setImageResource(R.drawable.play_black);
-                } else {
+
                     mediaPlayer.start();
                     viewholder.playB.setImageResource(R.drawable.pause_black);
+                } else {
+                    mediaPlayer.pause();
+                    viewholder.playB.setImageResource(R.drawable.play_black);
+                }
+
+                //check if current song is null or the newly clicked song is equal to my current song
+                //if true then assign the newly clicked song as my CURRENT one
+                //--so it doesnt play the same song for every single one
+                if (currentSong == null || song != currentSong) {
+                    currentSong = song;
                 }
             }
         });
 
+        //stop song
         viewholder.stopB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currentSong != null){
+                //stops my current song and make it null
+                if (currentSong != null) {
                     mediaPlayer.stop();
                     mediaPlayer.release();
 
@@ -105,7 +126,6 @@ public class ListViewAdapter extends BaseAdapter {
                 }
             }
         });
-
         return view;
     }
 }

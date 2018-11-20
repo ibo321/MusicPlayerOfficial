@@ -11,33 +11,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="100sp"
         android:text="Create your account"
         android:textColor="@color/white"
-        android:textStyle="bold"
-        android:textSize="30dp" />
+        android:textSize="30sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/edtRegister_email"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
+        android:layout_width="250sp"
+        android:layout_height="50sp"
         android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="40sp"
         android:background="#11000000"
         android:drawableStart="@drawable/email"
         android:ems="10"
         android:hint="example@hotmail.com"
         android:inputType="textEmailAddress"
         android:textColor="@color/white"
-        android:textColorHint="@color/gray"
-        />
+        android:textColorHint="@color/gray" />
 
     <EditText
         android:id="@+id/edtRegister_pass"
-        android:layout_width="250dp"
-        android:layout_height="50dp"
+        android:layout_width="250sp"
+        android:layout_height="50sp"
         android:layout_below="@id/edtRegister_email"
         android:layout_centerInParent="true"
         android:background="#11000000"
@@ -50,11 +48,11 @@
 
     <Button
         android:id="@+id/btn_registerNow"
-        android:layout_width="250dp"
-        android:layout_height="40dp"
+        android:layout_width="250sp"
+        android:layout_height="40sp"
         android:layout_below="@id/edtRegister_pass"
         android:layout_centerInParent="true"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="50sp"
         android:background="@color/gray"
         android:onClick="onClickRegisterNow"
         android:text="Register now"

@@ -4,14 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Music.SongListActivity">
+    tools:context=".Music.CollectionActivity">
 
     <include layout="@layout/bottom_navigationbar"
         android:id="@+id/navigationBar"/>
-    <ListView
-        android:id="@+id/listView"
+    <TextView
+        android:text="OKOKOOKOKOKO"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:layout_above="@id/navigationBar"/>
+        android:layout_above="@id/navigationBar" />
 </RelativeLayout>
