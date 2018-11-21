@@ -3,29 +3,24 @@ package com.example.ibo.musicplayerofficial.LoginRegister;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.ibo.musicplayerofficial.Music.SongListActivity;
+import com.example.ibo.musicplayerofficial.Fragments.MainFragment;
+import com.example.ibo.musicplayerofficial.MainActivity;
 import com.example.ibo.musicplayerofficial.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import org.w3c.dom.Text;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -143,7 +138,7 @@ public class LoginActivity extends AppCompatActivity {
                                     " " + password.toString());
 
                             //Navigate to SongListActivity if success
-                            Intent intent = new Intent(LoginActivity.this, SongListActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                         } else {
                             //Get a log message if user COULDN'T log in
