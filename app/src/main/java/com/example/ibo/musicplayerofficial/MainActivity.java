@@ -1,8 +1,10 @@
 package com.example.ibo.musicplayerofficial;
 
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -12,6 +14,7 @@ import com.example.ibo.musicplayerofficial.Fragments.MainFragment;
 import com.example.ibo.musicplayerofficial.Fragments.RadioFragment;
 
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,4 +66,18 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     };
+
+
+    @Override
+    public void onBackPressed() {
+
+        //if there is something in my stack of fragments then go back to it when clicked 'back'
+        android.app.FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+
+    }
 }

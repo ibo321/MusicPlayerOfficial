@@ -1,8 +1,6 @@
 package com.example.ibo.musicplayerofficial.Adapters;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.media.Image;
 import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ibo.musicplayerofficial.Classes.Song;
+import com.example.ibo.musicplayerofficial.Fragments.SongFragment;
 import com.example.ibo.musicplayerofficial.R;
 
 import java.util.ArrayList;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ListViewAdapter extends BaseAdapter {
 
@@ -34,7 +35,9 @@ public class ListViewAdapter extends BaseAdapter {
     private class Viewholder {
         TextView artistTxt, songNameTxt;
         ImageView playB, stopB;
+        CircleImageView artistImg;
     }
+
 
     @Override
     public int getCount() {
@@ -66,6 +69,8 @@ public class ListViewAdapter extends BaseAdapter {
             viewholder.songNameTxt = (TextView) view.findViewById(R.id.songNameTxt);
             viewholder.playB = (ImageView) view.findViewById(R.id.playB);
             viewholder.stopB = (ImageView) view.findViewById(R.id.stopB);
+            viewholder.artistImg = (CircleImageView) view.findViewById(R.id.artistImg);
+
             view.setTag(viewholder);
         } else {
             viewholder = (Viewholder) view.getTag();
@@ -73,6 +78,7 @@ public class ListViewAdapter extends BaseAdapter {
 
         final Song song = arrayList.get(position);
 
+        viewholder.artistImg.setImageResource(song.getArtistImg());
         viewholder.artistTxt.setText(song.getArtist());
         viewholder.songNameTxt.setText(song.getSongName());
 
