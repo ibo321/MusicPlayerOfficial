@@ -15,15 +15,14 @@ import com.example.ibo.musicplayerofficial.Fragments.RadioFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    public interface FragmentCommunication {
+        void onItemSelected(String key, String Value);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Actionbar modified
-        getSupportActionBar().setTitle("Song list");
-        getSupportActionBar().setBackgroundDrawable(getDrawable(R.drawable.blackgradient));
 
         //find my bottomNavigation
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);

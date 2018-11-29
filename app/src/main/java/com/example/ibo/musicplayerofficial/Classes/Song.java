@@ -2,9 +2,11 @@ package com.example.ibo.musicplayerofficial.Classes;
 
 public class Song {
 
+    //Declare variables
     String artist, songName;
     int song, artistImg;
 
+    //Constructor
     public Song(String artist, String songName, int song, int artistImg) {
         this.artist = artist;
         this.songName = songName;
@@ -12,6 +14,7 @@ public class Song {
         this.artistImg = artistImg;
     }
 
+    //Get/Set methods
     public int getArtistImg() {
         return artistImg;
     }

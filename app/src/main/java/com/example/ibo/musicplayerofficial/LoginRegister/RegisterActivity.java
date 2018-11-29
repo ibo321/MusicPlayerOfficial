@@ -37,7 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
         btn_registerNow = (Button) findViewById(R.id.btn_registerNow);
     }
 
-    //Click on register now
+    //Register performed by using Firebase Authentication
     public void onClickRegisterNow(View view) {
         final String email = edtRegister_email.getText().toString().trim();
         final String password = edtRegister_pass.getText().toString().trim();

@@ -7,7 +7,7 @@
 
 
     <ImageView
-        android:id="@id/artistImg"
+        android:id="@+id/artistImgBackgroundDetail"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.4"
@@ -16,7 +16,7 @@
         android:src="@drawable/edsher" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@id/artistImg"
+        android:id="@+id/artistImgDetail"
         android:layout_width="250sp"
         android:layout_height="250sp"
         android:layout_alignParentTop="true"
@@ -27,10 +27,10 @@
         app:civ_border_width="2sp" />
 
     <TextView
-        android:id="@id/songNameTxt"
+        android:id="@+id/songNameTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/artistImg"
+        android:layout_below="@id/artistImgDetail"
         android:layout_centerInParent="true"
         android:layout_marginTop="10sp"
         android:text="Song name" />
@@ -42,7 +42,7 @@
         android:layout_below="@id/songNameTxt"
         android:layout_marginTop="9sp"
         android:layout_toLeftOf="@id/songLenght"
-        android:text="03:00" />
+        android:text="00:00" />
 
     <TextView
         android:id="@+id/currentSongLeft"
@@ -51,7 +51,7 @@
         android:layout_below="@id/songNameTxt"
         android:layout_marginTop="9sp"
         android:layout_toRightOf="@id/songLenght"
-        android:text="-02:20" />
+        android:text="03:00" />
 
     <SeekBar
         android:id="@+id/songLenght"
@@ -61,17 +61,16 @@
         android:layout_centerInParent="true"
         android:layout_marginTop="10sp" />
 
-
     <ImageView
         android:id="@+id/previousB"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_below="@id/songLenght"
-        android:layout_toLeftOf="@id/playB"
+        android:layout_toLeftOf="@id/playBDetail"
         android:src="@drawable/previous" />
 
     <ImageView
-        android:id="@id/playB"
+        android:id="@+id/playBDetail"
         android:layout_width="70sp"
         android:layout_height="70sp"
         android:layout_below="@id/songLenght"
@@ -83,7 +82,7 @@
         android:layout_width="60sp"
         android:layout_height="60sp"
         android:layout_below="@id/songLenght"
-        android:layout_toRightOf="@id/playB"
+        android:layout_toRightOf="@id/playBDetail"
         android:src="@drawable/next" />
 
     <ImageView

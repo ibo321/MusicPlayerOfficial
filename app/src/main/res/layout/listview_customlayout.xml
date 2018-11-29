@@ -6,7 +6,7 @@
     android:background="@color/white">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/artistImg"
+        android:id="@+id/artistImgBackgroundDetail"
         android:layout_width="50sp"
         android:layout_height="50sp"
         android:src="@drawable/musiclogo"
@@ -17,7 +17,7 @@
         android:id="@+id/artistTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/artistImg"
+        android:layout_toRightOf="@id/artistImgBackgroundDetail"
         android:text="Artist"
         android:textColor="@color/black"
         android:textSize="15sp"
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/artistTxt"
-        android:layout_toRightOf="@id/artistImg"
+        android:layout_toRightOf="@id/artistImgBackgroundDetail"
         android:text="Song Name"
         android:textColor="#11ca6b" />
 

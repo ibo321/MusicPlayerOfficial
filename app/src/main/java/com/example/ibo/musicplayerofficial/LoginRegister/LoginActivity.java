@@ -46,12 +46,16 @@ public class LoginActivity extends AppCompatActivity {
 
         //hide actionbar
         getSupportActionBar().hide();
+
+        //get methods
         findViews();
         checkedBox();
         checkLoginStatusBeforeLogin();
+
         mAuth = FirebaseAuth.getInstance();
     }
 
+    //Perform login if types values are correct
     private void checkLoginStatusBeforeLogin() {
 
         //listens on the login button
@@ -59,7 +63,8 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //call this method to check first if the fields are empty or not
-                checkTextFieldsIsEmptyOrNot();
+
+                checkTextFieldsIfCorrectOrNot();
 
                 //if the fields are all correct then perform login
                 if (checkStatus) {
@@ -91,7 +96,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //Check if user entered correct informations
-    private void checkTextFieldsIsEmptyOrNot() {
+    private void checkTextFieldsIfCorrectOrNot() {
         String email = edtLogin_email.getText().toString().trim();
         final String password = edtLogin_pass.getText().toString().trim();
 
@@ -100,7 +105,14 @@ public class LoginActivity extends AppCompatActivity {
             checkStatus = false;
             edtLogin_email.setError("Check your email!");
         } else if (TextUtils.isEmpty(password)) {
-            edtLogin_pass.setError("Must contain atleast 6 digits!");
+            checkStatus = false;
+            edtLogin_pass.setError("Fill empty field!");
+        } else if (password.length() < 6) {
+            checkStatus = false;
+            edtLogin_pass.setError("Password must be more than 5 characters!");
+        } else if (!email.contains("@")) {
+            checkStatus = false;
+            edtLogin_email.setError("Email doesn't exist!");
         } else {
             checkStatus = true;
         }
@@ -115,7 +127,6 @@ public class LoginActivity extends AppCompatActivity {
         sharedPref = getSharedPreferences(PREF_FILE_NAME, MODE_PRIVATE);
         rememberME = findViewById(R.id.remember_checkBox);
     }
-
 
     //Login performed using Firebase Authentication
     private void onClickLogin() {
@@ -145,7 +156,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.w("login", "Failed to login: " + email.toString() + " " +
                                     password.toString(), task.getException());
 
-                            Toast.makeText(LoginActivity.this, "Wrong Email or Password!",
+                            Toast.makeText(LoginActivity.this, "Email or password doesn't exist!",
                                     Toast.LENGTH_LONG).show();
                         }
                         progressDialog.dismiss();
