@@ -17,11 +17,11 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/artistImgDetail"
-        android:layout_width="250sp"
-        android:layout_height="250sp"
+        android:layout_width="150sp"
+        android:layout_height="150sp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="75sp"
+        android:layout_marginTop="6dp"
         android:src="@drawable/edsher"
         app:civ_border_color="@color/white"
         app:civ_border_width="2sp" />
@@ -93,5 +93,26 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="10sp"
         android:src="@drawable/favorite" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/playBDetail"
+        android:alpha="0.5"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/lyricTxt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="193dp"
+            android:text="testing this"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+    </ScrollView>
 
 </RelativeLayout>

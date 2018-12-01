@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.ibo.musicplayerofficial.Fragments.CollectionFragment;
 import com.example.ibo.musicplayerofficial.Fragments.MainFragment;
@@ -15,9 +16,7 @@ import com.example.ibo.musicplayerofficial.Fragments.RadioFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    public interface FragmentCommunication {
-        void onItemSelected(String key, String Value);
-    }
+    MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,4 +78,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
 }

@@ -3,15 +3,24 @@ package com.example.ibo.musicplayerofficial.Classes;
 public class Song {
 
     //Declare variables
-    String artist, songName;
+    String artist, songName, lyrics;
     int song, artistImg;
 
     //Constructor
-    public Song(String artist, String songName, int song, int artistImg) {
+    public Song(String artist, String songName, int song, int artistImg, String lyrics) {
         this.artist = artist;
         this.songName = songName;
         this.song = song;
         this.artistImg = artistImg;
+        this.lyrics = lyrics;
+    }
+
+    public String getLyrics() {
+        return lyrics;
+    }
+
+    public void setLyrics(String lyrics) {
+        this.lyrics = lyrics;
     }
 
     //Get/Set methods
