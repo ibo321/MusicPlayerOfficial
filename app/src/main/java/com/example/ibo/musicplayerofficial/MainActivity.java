@@ -1,22 +1,24 @@
 package com.example.ibo.musicplayerofficial;
 
 import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.ibo.musicplayerofficial.Fragments.CollectionFragment;
 import com.example.ibo.musicplayerofficial.Fragments.MainFragment;
 import com.example.ibo.musicplayerofficial.Fragments.RadioFragment;
+import com.example.ibo.musicplayerofficial.Fragments.SongFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     MediaPlayer mediaPlayer;
+    MainFragment mainFragment;
+    CollectionFragment collectionFragment;
+    SongFragment songFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +60,11 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
 
+
             //set the selected fragments to the container so it display the views in their
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, selectedFragment).commit();
+            getSupportFragmentManager().beginTransaction()
+                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
+                    .replace(R.id.fragment_container, selectedFragment).commit();
 
             return true;
         }
@@ -76,8 +81,5 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
-
     }
-
-
 }

@@ -44,7 +44,7 @@ public class MainFragment extends Fragment {
         //create a new arraylist object
         arrayList = new ArrayList<>();
 
-        //add songs
+        //region Add songs (collapsed)
         arrayList.add(new Song("Akon", "-Dont matter", R.raw.akon_dontmatter, R.drawable.akon, "Konvict, konvict, konvict\n" +
                 "Oh, oh, oh, ooh, oh, oh\n" +
                 "Oh, oh, oh, ooh, oh, oh\n" +
@@ -516,6 +516,7 @@ public class MainFragment extends Fragment {
                 "A little bit psycho\n" +
                 "At night she's screamin'\n" +
                 "\"I'm-ma-ma-ma out my mind\""));
+        //endregion
 
         //Create a new adapter of my custom adapter and assign its values
 
@@ -532,7 +533,6 @@ public class MainFragment extends Fragment {
         return view;
     }
 
-    //ListView onItemListener
     //I call this class inside my onCreateView so i dont populate it too much
     private class ListViewClickListener implements AdapterView.OnItemClickListener {
 
@@ -548,15 +548,18 @@ public class MainFragment extends Fragment {
 
             //call FragmentManager and begin the transaction to my songFragment class
             fragmentManager = getFragmentManager();
-            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction = getFragmentManager().beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.pull_up, R.anim.pull_down);
 
             //When clicked on a listview item - navigate to songfragment and when clicked back -> go back to mainfragment
             //save my mainfragment to my stack so it isnt destroyed but kept safe so i can get back to it
-            fragmentManager.beginTransaction().replace(R.id.fragment_container, songFragment).addToBackStack(null).commit();
+            fragmentTransaction.replace(R.id.fragment_container, songFragment).addToBackStack(null).commit();
+
         }
     }
 
-//    //Stop getSong when fragment is changed
+    //region Unused Method - Replaced with method underneath
+    //    //Stop getSong when fragment is changed
 //    @Override
 //    public void onStop() {
 //        super.onStop();
@@ -564,6 +567,7 @@ public class MainFragment extends Fragment {
 //        //Call method onStop from my adapter
 //        adapter.StopSong();
 //    }
+    //endregion
 
     @Override
     public void onPause() {
@@ -572,6 +576,8 @@ public class MainFragment extends Fragment {
         //Call method PauseSong inside my adapter
         adapter.PauseSong();
     }
+
+
 
 
 }

@@ -142,7 +142,8 @@ public class SongFragment extends Fragment {
         this.getArtist = artist;
     }
 
-//    //Get Lyrics API
+    //region Lyrics Api (cant make it work)
+    //    //Get Lyrics API
 //    private class SoapCall extends AsyncTask<String, Object, String> {
 //
 //        public static final String NAMESPACE = "http://api.chartlyrics.com/";
@@ -187,6 +188,7 @@ public class SongFragment extends Fragment {
 //            }
 //        }
 //    }
+    //endregion
 
     //TODO: It put the right properties but FavoriteFragment cannot retrieve bundle (null)
     public class OnAddToFavoritesClick implements View.OnClickListener {
