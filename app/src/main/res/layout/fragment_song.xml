@@ -86,13 +86,13 @@
         android:src="@drawable/next" />
 
     <ImageView
-        android:id="@+id/favoriteB"
+        android:id="@+id/addTo_favoritesBtn"
         android:layout_width="40sp"
         android:layout_height="40sp"
         android:layout_below="@id/songLenght"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="10sp"
-        android:src="@drawable/favorite" />
+        android:src="@drawable/favorite_half" />
 
     <ScrollView
         android:id="@+id/scrollView"

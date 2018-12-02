@@ -1,10 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/black">
 
-    <ListView
-        android:id="@+id/collectionListView"
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/favoriteBtn"
+            android:layout_width="110sp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2sp"
+            android:layout_marginRight="20sp"
+            android:background="@drawable/radious_transparent"
+            android:text="Favorites"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/historyBtn"
+            android:layout_width="110sp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2sp"
+            android:layout_marginRight="20sp"
+            android:background="@drawable/radious_transparent"
+            android:text="History"
+            android:textColor="@color/white" />
+
+        <Button
+            android:id="@+id/playlistBtn"
+            android:layout_width="110sp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2sp"
+            android:background="@drawable/radious_transparent"
+            android:text="Playlist"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/searchEdt"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:layout_width="350sp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/linearLayout"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="10sp"
+        android:textColorHighlight="@color/OrangeTheme"
+        android:drawableLeft="@drawable/search"
+        android:hint="Search in favorites..." />
+
+    <FrameLayout
+        android:id="@+id/collection_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/searchEdt" />
+
 </RelativeLayout>

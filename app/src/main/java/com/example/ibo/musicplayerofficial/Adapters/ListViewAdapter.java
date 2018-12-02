@@ -2,7 +2,6 @@ package com.example.ibo.musicplayerofficial.Adapters;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.ibo.musicplayerofficial.Classes.Song;
-import com.example.ibo.musicplayerofficial.Fragments.SongFragment;
 import com.example.ibo.musicplayerofficial.R;
 
 import java.util.ArrayList;
@@ -70,14 +68,14 @@ public class ListViewAdapter extends BaseAdapter {
 
             //Inflate my view
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = layoutInflater.inflate(R.layout.listview_customlayout, null);
+            view = layoutInflater.inflate(R.layout.songlist_customlayout, null);
 
             //Find my view id's
-            viewholder.artistImg = (CircleImageView) view.findViewById(R.id.artistImgBackgroundDetail);
-            viewholder.artistTxt = (TextView) view.findViewById(R.id.artistTxt);
-            viewholder.songNameTxt = (TextView) view.findViewById(R.id.songNameTxt);
-            viewholder.playB = (ImageView) view.findViewById(R.id.playB);
-            viewholder.stopB = (ImageView) view.findViewById(R.id.stopB);
+            viewholder.artistImg = view.findViewById(R.id.artistImgBackgroundDetail);
+            viewholder.artistTxt = view.findViewById(R.id.artistTxt);
+            viewholder.songNameTxt = view.findViewById(R.id.songNameTxt);
+            viewholder.playB = view.findViewById(R.id.playB);
+            viewholder.stopB = view.findViewById(R.id.stopB);
 
             //Set my view to viewholder
             view.setTag(viewholder);
@@ -93,6 +91,9 @@ public class ListViewAdapter extends BaseAdapter {
         viewholder.artistTxt.setText(song.getArtist());
         viewholder.songNameTxt.setText(song.getSongName());
 
+
+        //TODO: Remove all non-view functionalities to their right places
+        //TODO: Merge mediaplayer inside MainFragment instead
         //get all songs
         mediaPlayer = MediaPlayer.create(context, song.getSong());
 
@@ -109,17 +110,19 @@ public class ListViewAdapter extends BaseAdapter {
                 //if mediaplayer is not null and my current song is not equal to the new song i clicked on
                 if (mediaPlayer != null && currentSong != song) {
 
+                    currentSong = song;
+
                     //resets the mediaplayer and creates a new song from the position in the list
                     mediaPlayer.reset();
 
                     mediaPlayer = MediaPlayer.create(context, song.getSong());
-                    viewholder.playB.setImageResource(R.drawable.play_black);
 
                     mediaPlayer.start();
-                    viewholder.playB.setImageResource(R.drawable.pause_black);
+                    viewholder.playB.setImageResource(R.drawable.pause_orange);
+
                 } else {
                     mediaPlayer.pause();
-                    viewholder.playB.setImageResource(R.drawable.play_black);
+                    viewholder.playB.setImageResource(R.drawable.play_orange);
                 }
 
                 //check if current song is null or the newly clicked song is equal to my current song
@@ -141,11 +144,26 @@ public class ListViewAdapter extends BaseAdapter {
                     mediaPlayer.release();
 
                     currentSong = null;
-                    viewholder.playB.setImageResource(R.drawable.play_black);
+                    viewholder.playB.setImageResource(R.drawable.play_orange);
                 }
             }
         });
-        
+
         return view;
     }
+
+    public void PauseSong() {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        }
+    }
+
+//    public void StopSong() {
+//        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+//            mediaPlayer.stop();
+//            mediaPlayer.release();
+//            mediaPlayer = null;
+//        }
+//    }
+
 }
