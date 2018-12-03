@@ -63,6 +63,9 @@
         android:id="@+id/collection_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/searchEdt" />
+        android:layout_below="@id/searchEdt" >
+    </FrameLayout>
+
+
 
 </RelativeLayout>

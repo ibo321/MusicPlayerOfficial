@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.content.res.AppCompatResources;
 import android.view.LayoutInflater;
@@ -17,8 +17,6 @@ import com.example.ibo.musicplayerofficial.R;
 public class CollectionFragment extends Fragment {
 
     Button favoriteBtn, historyBtn, playlistBtn;
-    FavoriteFragment favoriteFragment;
-    FragmentManager fragmentManager;
 
     @Nullable
     @Override
@@ -45,11 +43,7 @@ public class CollectionFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            favoriteFragment = new FavoriteFragment();
-
-            fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.collection_container, favoriteFragment).addToBackStack(null).commit();
-
+            insertNestedFragment();
         }
     }
 
@@ -69,5 +63,13 @@ public class CollectionFragment extends Fragment {
         public void onClick(View v) {
 
         }
+    }
+
+
+    // Embeds the child fragment dynamically
+    private void insertNestedFragment() {
+        Fragment childFragment = new FavoriteFragment();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+        transaction.replace(R.id.collection_container, childFragment).commit();
     }
 }

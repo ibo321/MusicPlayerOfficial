@@ -21,26 +21,23 @@ public class FavoriteFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.songlist_customlayout, container, false);
+        View view = inflater.inflate(R.layout.fragment_favorites, container, false);
 
         //Set arguments to new properties
-        artist = view.findViewById(R.id.artistTxt);
-        songName = view.findViewById(R.id.songNameTxt);
+        artist = view.findViewById(R.id.test1);
+        songName = view.findViewById(R.id.test2);
         artistImg = view.findViewById(R.id.artistImgBackgroundDetail);
 
 
         playB = view.findViewById(R.id.playB);
         stopB = view.findViewById(R.id.stopB);
 
-        SongFragment songFragment = new SongFragment();
-
-
         //TODO: Fix this! Bundle is NULL
-        if (songFragment.getArguments() != null) {
+        if (getArguments() != null) {
 
-            int arg_artistImg = songFragment.getArguments().getInt("arg_artistImg");
-            String arg_artist = songFragment.getArguments().getString("arg_artist");
-            String arg_songName = songFragment.getArguments().getString("arg_songName");
+            int arg_artistImg = getArguments().getInt("arg_artistImg");
+            String arg_artist = getArguments().getString("arg_artist");
+            String arg_songName = getArguments().getString("arg_songName");
 
             artistImg.setImageResource(arg_artistImg);
             artist.setText(arg_artist);

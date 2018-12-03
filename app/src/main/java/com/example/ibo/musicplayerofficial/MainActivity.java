@@ -1,6 +1,5 @@
 package com.example.ibo.musicplayerofficial;
 
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -11,14 +10,8 @@ import android.view.MenuItem;
 import com.example.ibo.musicplayerofficial.Fragments.CollectionFragment;
 import com.example.ibo.musicplayerofficial.Fragments.MainFragment;
 import com.example.ibo.musicplayerofficial.Fragments.RadioFragment;
-import com.example.ibo.musicplayerofficial.Fragments.SongFragment;
 
 public class MainActivity extends AppCompatActivity {
-
-    MediaPlayer mediaPlayer;
-    MainFragment mainFragment;
-    CollectionFragment collectionFragment;
-    SongFragment songFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

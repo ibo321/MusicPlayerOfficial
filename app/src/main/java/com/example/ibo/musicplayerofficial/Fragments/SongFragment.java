@@ -32,6 +32,7 @@ public class SongFragment extends Fragment {
     String getSongName, getLyric, getArtist;
     int getSong, getArtistImg;
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,7 +56,6 @@ public class SongFragment extends Fragment {
         playBVIEW.setOnClickListener(new ClickPlaySong());
         addToFavoriteBtn.setOnClickListener(new OnAddToFavoritesClick());
         seekBar.setOnSeekBarChangeListener(new SeekbarProgress());
-
 
 //        new SoapCall().execute();
         return view;
@@ -82,6 +82,7 @@ public class SongFragment extends Fragment {
             }
         }
 
+        //region Unused seekbar methods
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
 
@@ -91,6 +92,7 @@ public class SongFragment extends Fragment {
         public void onStopTrackingTouch(SeekBar seekBar) {
 
         }
+        //endregion
     }
 
     //set the details of the getSong i clicked on in my list
@@ -196,16 +198,16 @@ public class SongFragment extends Fragment {
         @Override
         public void onClick(View v) {
 
-            SongFragment songFragment = new SongFragment();
 
+            //TODO: Working properly? Check!
+            FavoriteFragment favoriteFragment = new FavoriteFragment();
             Bundle bundle = new Bundle();
 
             bundle.putString("arg_artist", getArtist);
             bundle.putString("arg_songName", getSongName);
             bundle.putInt("arg_artistImg", getArtistImg);
 
-            songFragment.setArguments(bundle);
-
+            favoriteFragment.setArguments(bundle);
             addToFavoriteBtn.setImageResource(R.drawable.favorite);
 
         }
