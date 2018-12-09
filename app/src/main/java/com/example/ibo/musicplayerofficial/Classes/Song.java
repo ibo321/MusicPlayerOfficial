@@ -1,6 +1,8 @@
 package com.example.ibo.musicplayerofficial.Classes;
 
-public class Song {
+import java.io.Serializable;
+
+public class Song implements Serializable {
 
     //Declare variables
     String artist, songName, lyrics;

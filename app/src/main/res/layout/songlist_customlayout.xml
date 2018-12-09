@@ -6,7 +6,7 @@
     android:background="@color/black">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/artistImgBackgroundDetail"
+        android:id="@+id/songFrag_artistImg"
         android:layout_width="50sp"
         android:layout_height="50sp"
         android:src="@drawable/musiclogo"
@@ -17,7 +17,7 @@
         android:id="@+id/artistTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/artistImgBackgroundDetail"
+        android:layout_toRightOf="@id/songFrag_artistImg"
         android:text="Artist"
         android:textColor="@color/white"
         android:textSize="15sp"
@@ -28,24 +28,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/artistTxt"
-        android:layout_toRightOf="@id/artistImgBackgroundDetail"
+        android:layout_toRightOf="@id/songFrag_artistImg"
         android:text="Song Name"
         android:textColor="#FF6D15" />
 
     <ImageView
-        android:id="@+id/playB"
+        android:id="@+id/favButton"
         android:layout_width="30sp"
         android:layout_height="30sp"
-        android:layout_marginTop="4sp"
-        android:layout_toLeftOf="@id/stopB"
-        android:src="@drawable/play_orange" />
-
-    <ImageView
-        android:id="@+id/stopB"
-        android:layout_width="30sp"
-        android:layout_height="30sp"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="4sp"
-        android:src="@drawable/stop_orange" />
+        android:layout_marginTop="8dp"
+        android:src="@drawable/logo_favorite_half"
+        android:layout_alignParentEnd="true"/>
 
 </RelativeLayout>

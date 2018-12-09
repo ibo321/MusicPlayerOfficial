@@ -1,17 +1,28 @@
 package com.example.ibo.musicplayerofficial;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.example.ibo.musicplayerofficial.Classes.Song;
 import com.example.ibo.musicplayerofficial.Fragments.CollectionFragment;
 import com.example.ibo.musicplayerofficial.Fragments.MainFragment;
 import com.example.ibo.musicplayerofficial.Fragments.RadioFragment;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+
 public class MainActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +51,20 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.action_main:
                     //When clicked on 'Main' set selectedFragment to the MainFragment class
                     selectedFragment = new MainFragment();
+                    //Actionbar
+                    getSupportActionBar().setTitle("Song list");
                     break;
 
                 case R.id.action_collection:
                     //When clicked on 'Collection' set selectedFragment to the CollectionFragment class
                     selectedFragment = new CollectionFragment();
+                    getSupportActionBar().setTitle("Collection");
                     break;
 
                 case R.id.action_radio:
                     //When clicked on 'Radio' set selectedFragment to the RadioFragment class
                     selectedFragment = new RadioFragment();
+                    getSupportActionBar().setTitle("Radio");
                     break;
             }
 
@@ -62,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
     };
-
 
     @Override
     public void onBackPressed() {

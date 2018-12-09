@@ -1,6 +1,7 @@
 package com.example.ibo.musicplayerofficial.Fragments;
 
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ibo.musicplayerofficial.R;
 
@@ -22,42 +24,48 @@ import com.example.ibo.musicplayerofficial.R;
 public class SongFragment extends Fragment {
 
     ScrollView scrollView;
-    TextView songNameVIEW, lyricTxt;
-    ImageView artistImgVIEW, playBVIEW, addToFavoriteBtn;
+    TextView songNameTV, lyricTxt;
+    ImageView artistImg, artistImgBG, playBtn;
     SeekBar seekBar;
 
     MediaPlayer mediaPlayer;
     ObjectAnimator objectAnimator;
 
-    String getSongName, getLyric, getArtist;
-    int getSong, getArtistImg;
+    int getSong;
 
+    static final int READ_BLOCK_SIZE = 100;
 
+    @SuppressLint("SetTextI18n")
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_song, container, false);
 
         //find views
-        songNameVIEW = view.findViewById(R.id.songNameTxt);
-        artistImgVIEW = view.findViewById(R.id.artistImgDetail);
+        songNameTV = view.findViewById(R.id.songNameTxt);
+        artistImg = view.findViewById(R.id.songFrag_artistImg);
+        artistImgBG = view.findViewById(R.id.songFrag_artistImgBG);
         lyricTxt = view.findViewById(R.id.lyricTxt);
-        playBVIEW = view.findViewById(R.id.playBDetail);
+        playBtn = view.findViewById(R.id.playBDetail);
         scrollView = view.findViewById(R.id.scrollView);
         seekBar = view.findViewById(R.id.songLenght);
-        addToFavoriteBtn = view.findViewById(R.id.addTo_favoritesBtn);
-
-        //set the values to the correct singer
-        artistImgVIEW.setImageResource(getArtistImg);
-        songNameVIEW.setText(getSongName);
-        lyricTxt.setText(getLyric);
 
         //Call methods
-        playBVIEW.setOnClickListener(new ClickPlaySong());
-        addToFavoriteBtn.setOnClickListener(new OnAddToFavoritesClick());
+        playBtn.setOnClickListener(new ClickPlaySong());
         seekBar.setOnSeekBarChangeListener(new SeekbarProgress());
 
-//        new SoapCall().execute();
+        if (getArguments() != null) {
+            songNameTV.setText(getArguments().getString("arg_artist") + " " +
+                    getArguments().getString("arg_songname"));
+            artistImg.setImageResource(getArguments().getInt("arg_artistimg"));
+            artistImgBG.setImageResource(getArguments().getInt("arg_artistimg"));
+            lyricTxt.setText(getArguments().getString("arg_lyrics"));
+            getSong = getArguments().getInt("arg_song");
+        } else {
+            Toast.makeText(getActivity(), "Bundle is null", Toast.LENGTH_SHORT).show();
+        }
+
+//      new SoapCall().execute();
         return view;
     }
 
@@ -74,7 +82,7 @@ public class SongFragment extends Fragment {
     };
 
     //Seekbar listener
-    private class SeekbarProgress implements SeekBar.OnSeekBarChangeListener{
+    private class SeekbarProgress implements SeekBar.OnSeekBarChangeListener {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if (fromUser) {
@@ -119,14 +127,14 @@ public class SongFragment extends Fragment {
 
                 //Start getSong
                 mediaPlayer.start();
-                playBVIEW.setImageResource(R.drawable.pause_black);
+                playBtn.setImageResource(R.drawable.pause_black);
 
                 //Call my handler to update my seekbar
                 mSeekbarUpdateHandler.postDelayed(mUpdateSeekbar, 0);
 
             } else {
                 mediaPlayer.pause();
-                playBVIEW.setImageResource(R.drawable.play_black);
+                playBtn.setImageResource(R.drawable.play_black);
 
                 //Remove the callback of the handler
                 mSeekbarUpdateHandler.removeCallbacks(mUpdateSeekbar);
@@ -136,13 +144,13 @@ public class SongFragment extends Fragment {
 
     //Get getSong details of  the getSong clicked on
     //refer to MainFragment for the implementation
-    public void getSongDetails(String artist, String songName, int artistImg, int song, String lyric) {
-        this.getArtistImg = artistImg;
-        this.getSong = song;
-        this.getSongName = songName;
-        this.getLyric = lyric;
-        this.getArtist = artist;
-    }
+//    public void getSongDetails(String artist, String songName, int artistImg, int song, String lyric) {
+//        this.getArtistImg = artistImg;
+//        this.getSong = song;
+//        this.getSongName = songName;
+//        this.getLyric = lyric;
+//        this.getArtist = artist;
+//    }
 
     //region Lyrics Api (cant make it work)
     //    //Get Lyrics API
@@ -192,24 +200,4 @@ public class SongFragment extends Fragment {
 //    }
     //endregion
 
-    //TODO: It put the right properties but FavoriteFragment cannot retrieve bundle (null)
-    public class OnAddToFavoritesClick implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-
-
-            //TODO: Working properly? Check!
-            FavoriteFragment favoriteFragment = new FavoriteFragment();
-            Bundle bundle = new Bundle();
-
-            bundle.putString("arg_artist", getArtist);
-            bundle.putString("arg_songName", getSongName);
-            bundle.putInt("arg_artistImg", getArtistImg);
-
-            favoriteFragment.setArguments(bundle);
-            addToFavoriteBtn.setImageResource(R.drawable.favorite);
-
-        }
-    }
 }

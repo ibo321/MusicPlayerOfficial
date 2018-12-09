@@ -1,29 +1,37 @@
 package com.example.ibo.musicplayerofficial.Adapters;
 
 import android.content.Context;
-import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ibo.musicplayerofficial.Classes.Song;
 import com.example.ibo.musicplayerofficial.R;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static android.content.Context.MODE_PRIVATE;
+
 public class ListViewAdapter extends BaseAdapter {
 
+
     //Create variables
-    MediaPlayer mediaPlayer;
     int layout;
-    Song currentSong;
     ArrayList<Song> arrayList;
     Context context;
+    FileOutputStream file;
+    ObjectOutputStream object;
 
     //Constructor
     public ListViewAdapter(int layout, ArrayList<Song> arrayList, Context context) {
@@ -35,8 +43,8 @@ public class ListViewAdapter extends BaseAdapter {
     //ViewHolder class holding my views
     private class Viewholder {
         TextView artistTxt, songNameTxt;
-        ImageView playB, stopB;
         CircleImageView artistImg;
+        ImageView favBtn;
     }
 
     @Override
@@ -71,11 +79,10 @@ public class ListViewAdapter extends BaseAdapter {
             view = layoutInflater.inflate(R.layout.songlist_customlayout, null);
 
             //Find my view id's
-            viewholder.artistImg = view.findViewById(R.id.artistImgBackgroundDetail);
+            viewholder.artistImg = view.findViewById(R.id.songFrag_artistImg);
             viewholder.artistTxt = view.findViewById(R.id.artistTxt);
             viewholder.songNameTxt = view.findViewById(R.id.songNameTxt);
-            viewholder.playB = view.findViewById(R.id.playB);
-            viewholder.stopB = view.findViewById(R.id.stopB);
+            viewholder.favBtn = view.findViewById(R.id.favButton);
 
             //Set my view to viewholder
             view.setTag(viewholder);
@@ -91,79 +98,55 @@ public class ListViewAdapter extends BaseAdapter {
         viewholder.artistTxt.setText(song.getArtist());
         viewholder.songNameTxt.setText(song.getSongName());
 
-
-        //TODO: Remove all non-view functionalities to their right places
-        //TODO: Merge mediaplayer inside MainFragment instead
-        //get all songs
-        mediaPlayer = MediaPlayer.create(context, song.getSong());
-
-        //Play button click performed
-        viewholder.playB.setOnClickListener(new View.OnClickListener() {
+        viewholder.favBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //Checks if my current song is null and creates a new song
-                if (currentSong == null) {
-                    mediaPlayer = MediaPlayer.create(context, song.getSong());
+                //Create filepath
+                String filePath = context.getFilesDir().getPath() + "/test.txt";
+                File f = new File(filePath);
+
+                try {
+                    //Create fileoutputstream and objectoutputstream
+                    file = new FileOutputStream(f);
+                    object = new ObjectOutputStream(file);
+
+                    // write object to file
+                    object.writeObject(song);
+
+                    //region Can also use this to write data (instead of class object)
+//                    fileout = context.openFileOutput("mytextfile.txt", MODE_PRIVATE);
+//                    outputWriter = new OutputStreamWriter(fileout);
+//                    outputWriter.write(song.getSongName());
+//                    outputWriter.close();
+                    //endregion
+
+                    // closing resources
+                    object.close();
+                    file.close();
+
+                    //display file saved message
+                    Toast.makeText(context, "File saved successfully!",
+                            Toast.LENGTH_SHORT).show();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-                //if mediaplayer is not null and my current song is not equal to the new song i clicked on
-                if (mediaPlayer != null && currentSong != song) {
-
-                    currentSong = song;
-
-                    //resets the mediaplayer and creates a new song from the position in the list
-                    mediaPlayer.reset();
-
-                    mediaPlayer = MediaPlayer.create(context, song.getSong());
-
-                    mediaPlayer.start();
-                    viewholder.playB.setImageResource(R.drawable.pause_orange);
-
-                } else {
-                    mediaPlayer.pause();
-                    viewholder.playB.setImageResource(R.drawable.play_orange);
-                }
-
-                //check if current song is null or the newly clicked song is equal to my current song
-                //if true then assign the newly clicked song as my CURRENT one
-                //--so it doesnt play the same song for every single one
-                if (currentSong == null || song != currentSong) {
-                    currentSong = song;
-                }
-            }
-        });
-
-        //Stop song when click performed
-        viewholder.stopB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //stops my current song and make it null
-                if (currentSong != null) {
-                    mediaPlayer.stop();
-                    mediaPlayer.release();
-
-                    currentSong = null;
-                    viewholder.playB.setImageResource(R.drawable.play_orange);
-                }
+                viewholder.favBtn.setImageResource(R.drawable.favorite);
             }
         });
 
         return view;
     }
 
-    public void PauseSong() {
-        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
-        }
-    }
-
-//    public void StopSong() {
+    //region A method to stop the mediaplayer called in another fragment/activity
+    //    public void StopSong() {
 //        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
 //            mediaPlayer.stop();
 //            mediaPlayer.release();
 //            mediaPlayer = null;
 //        }
 //    }
+    //endregion
 
 }
