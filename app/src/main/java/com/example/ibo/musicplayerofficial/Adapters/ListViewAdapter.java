@@ -32,6 +32,7 @@ public class ListViewAdapter extends BaseAdapter {
     Context context;
     FileOutputStream file;
     ObjectOutputStream object;
+    ListViewAdapter adapter;
 
     //Constructor
     public ListViewAdapter(int layout, ArrayList<Song> arrayList, Context context) {
@@ -112,6 +113,10 @@ public class ListViewAdapter extends BaseAdapter {
                     object = new ObjectOutputStream(file);
 
                     // write object to file
+
+                    //TODO: Why doesnt this work?
+//                  arrayList.add(object.writeObject(song));
+
                     object.writeObject(song);
 
                     //region Can also use this to write data (instead of class object)

@@ -2,6 +2,7 @@ package com.example.ibo.musicplayerofficial;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.service.notification.StatusBarNotification;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -29,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        getSupportActionBar().setTitle("Song list");
+        getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.OrangeTheme));
         //find my bottomNavigation
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
 
@@ -67,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
                     getSupportActionBar().setTitle("Radio");
                     break;
             }
-
 
             //set the selected fragments to the container so it display the views in their
             getSupportFragmentManager().beginTransaction()

@@ -1,6 +1,5 @@
 package com.example.ibo.musicplayerofficial.Fragments;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,19 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.ibo.musicplayerofficial.Adapters.ListViewAdapter;
 import com.example.ibo.musicplayerofficial.Classes.Song;
 import com.example.ibo.musicplayerofficial.R;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class MainFragment extends Fragment {
 
@@ -43,6 +35,9 @@ public class MainFragment extends Fragment {
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
+        //Actionbar
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Song list");
+
         //Find my listview
         songListView = view.findViewById(R.id.songListView);
 
@@ -50,7 +45,7 @@ public class MainFragment extends Fragment {
         arrayList = new ArrayList<>();
 
         //region Add songs (collapsed)
-        arrayList.add(new Song("Akon", "- Dont matter", R.raw.akon_dontmatter, R.drawable.akon, "Konvict, konvict, konvict\n" +
+        arrayList.add(new Song("Akon", "-Dont matter", R.raw.akon_dontmatter, R.drawable.akon, "Konvict, konvict, konvict\n" +
                 "Oh, oh, oh, ooh, oh, oh\n" +
                 "Oh, oh, oh, ooh, oh, oh\n" +
                 "Nobody wanta' see us together\n" +
@@ -134,7 +129,7 @@ public class MainFragment extends Fragment {
                 "Fight for our right to love, yeah (right to love, yeah)\n" +
                 "Nobody wants to see us together\n" +
                 "But it don't matter, no ('cause I got you)"));
-        arrayList.add(new Song("Beyonce", "- Formation", R.raw.beyonce_formation, R.drawable.beyonce, "Y'all haters corny with that illuminati mess\n" +
+        arrayList.add(new Song("Beyonce", "-Formation", R.raw.beyonce_formation, R.drawable.beyonce, "Y'all haters corny with that illuminati mess\n" +
                 "Paparazzi, catch my fly, and my cocky fresh\n" +
                 "I'm so reckless when I rock my Givenchy dress (stylin')\n" +
                 "I'm so possessive so I rock his Roc necklaces\n" +
@@ -211,7 +206,7 @@ public class MainFragment extends Fragment {
                 "Okay ladies, now let's get in formation\n" +
                 "You know you that bitch when you cause all this conversation\n" +
                 "Always stay gracious, best revenge is your paper"));
-        arrayList.add(new Song("Chris Brown", "- Hope You Do", R.raw.chrisbrown_hopeyoudo, R.drawable.chrisbrown, "Yeah\n" +
+        arrayList.add(new Song("Chris Brown", "-Hope You Do", R.raw.chrisbrown_hopeyoudo, R.drawable.chrisbrown, "Yeah\n" +
                 "Oh baby\n" +
                 "Now the word around town, 'round town that boy goin' crazy (goin' crazy)\n" +
                 "It's been a while since I been out, then come back to whip that Mercedes (that Mercedes)\n" +
@@ -288,7 +283,7 @@ public class MainFragment extends Fragment {
                 "Do\n" +
                 "Need some more liquor, yeah\n" +
                 "Eatin' that pussy, I drown in your river"));
-        arrayList.add(new Song("Akon ft. Colby'O'Donis", "- Beautiful", R.raw.akon_beautiful_ft_colbyodonis_kardinaloffishall, R.drawable.akon, "When I see you\n" +
+        arrayList.add(new Song("Akon ft. Colby'O'Donis", "-Beautiful", R.raw.akon_beautiful_ft_colbyodonis_kardinaloffishall, R.drawable.akon, "When I see you\n" +
                 "I run out of words to say (oh oh)\n" +
                 "I wouldn't leave you\n" +
                 "'Cause you're that type of girl to make me stay (oh oh)\n" +
@@ -370,7 +365,7 @@ public class MainFragment extends Fragment {
                 "I wanna get with you\n" +
                 "You're so beautiful, so damn beautiful, said you're so beautiful\n" +
                 "So damn beautiful, you're so beautiful"));
-        arrayList.add(new Song("Akon", "- Locked Up", R.raw.akon_lockedup_ft_stylesp, R.drawable.akon, "I'm steady tryna find a motive,\n" +
+        arrayList.add(new Song("Akon", "-Locked Up", R.raw.akon_lockedup_ft_stylesp, R.drawable.akon, "I'm steady tryna find a motive,\n" +
                 "Why do what I do?,\n" +
                 "Freedom ain't gettin' no closer,\n" +
                 "No matter how far I go,\n" +
@@ -421,7 +416,7 @@ public class MainFragment extends Fragment {
                 "Oh they won't let me out.\n" +
                 "Can you please accept my phone calls?\n" +
                 "'Cause I'm locked up, locked up, locked up."));
-        arrayList.add(new Song("Ava Max", "- Sweet but Psycho", R.raw.avamax_sweetbutpsycho, R.drawable.avamax, "[Chorus]\n" +
+        arrayList.add(new Song("Ava Max", "-Sweet but Psycho", R.raw.avamax_sweetbutpsycho, R.drawable.avamax, "[Chorus]\n" +
                 "Oh, she's sweet but a psycho\n" +
                 "A little bit psycho\n" +
                 "At night she's screamin'\n" +
@@ -533,6 +528,7 @@ public class MainFragment extends Fragment {
         //Click on a specific getSong from my list
         songListView.setOnItemClickListener(new ListViewClickListener());
 
+
         //return my view
         return view;
     }
@@ -569,8 +565,10 @@ public class MainFragment extends Fragment {
             //When clicked on a listview item - navigate to songfragment and when clicked back -> go back to mainfragment
             //save my mainfragment to my stack so it isnt destroyed but kept safe so i can get back to it
             fragmentTransaction.replace(R.id.fragment_container, songFragment).addToBackStack(null).commit();
+
         }
     }
+
     //region Unused Method - Replaced with method underneath
     //    //Stop getSong when fragment is changed
 //    @Override
@@ -581,4 +579,15 @@ public class MainFragment extends Fragment {
 //        adapter.StopSong();
 //    }
     //endregion
+    //    @Override
+//    public void onPause() {
+//        super.onPause();
+//
+//        //Call method PauseSong inside my adapter
+//        adapter.PauseSong();
+//    }
+
+
+
+
 }

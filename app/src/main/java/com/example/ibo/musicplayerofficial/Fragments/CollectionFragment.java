@@ -39,6 +39,7 @@ public class CollectionFragment extends Fragment {
         public void onClick(View v) {
             insertNestedFragment();
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Favorites");
+
         }
     }
 
