@@ -1,6 +1,7 @@
 package com.example.ibo.musicplayerofficial.Adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
@@ -32,7 +34,12 @@ public class ListViewAdapter extends BaseAdapter {
     Context context;
     FileOutputStream file;
     ObjectOutputStream object;
-    ListViewAdapter adapter;
+    int counter = 0;
+    ArrayList<Song> list;
+
+    String filePath;
+    File getFile;
+
 
     //Constructor
     public ListViewAdapter(int layout, ArrayList<Song> arrayList, Context context) {
@@ -99,25 +106,28 @@ public class ListViewAdapter extends BaseAdapter {
         viewholder.artistTxt.setText(song.getArtist());
         viewholder.songNameTxt.setText(song.getSongName());
 
+        list = new ArrayList<>();
+
+        //Create filepath
+        filePath = context.getFilesDir().getPath() + "/test.txt";
+        getFile = new File(filePath);
+
         viewholder.favBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                //Create filepath
-                String filePath = context.getFilesDir().getPath() + "/test.txt";
-                File f = new File(filePath);
-
                 try {
                     //Create fileoutputstream and objectoutputstream
-                    file = new FileOutputStream(f);
+                    file = new FileOutputStream(getFile);
                     object = new ObjectOutputStream(file);
 
                     // write object to file
 
-                    //TODO: Why doesnt this work?
+                    //TODO: Why doesnt this work? ==> FIXED BY NEXT LINE OF CODE!
 //                  arrayList.add(object.writeObject(song));
 
-                    object.writeObject(song);
+                    list.add(song);
+                    object.writeObject(list);
 
                     //region Can also use this to write data (instead of class object)
 //                    fileout = context.openFileOutput("mytextfile.txt", MODE_PRIVATE);
@@ -130,9 +140,21 @@ public class ListViewAdapter extends BaseAdapter {
                     object.close();
                     file.close();
 
+                    //region Used to APPEND in stream but couldnt make it work
+                    //                    ObjectOutputStream os2 = new ObjectOutputStream(new FileOutputStream("/test.txt", true)) {
+//                        protected void writeStreamHeader() throws IOException {
+//                            reset();
+//                        }
+//                    };
+//
+//                    os2.writeObject(song);
+                    //endregion
+
                     //display file saved message
-                    Toast.makeText(context, "File saved successfully!",
+                    counter++;
+                    Toast.makeText(context, "File(s) saved: " + counter,
                             Toast.LENGTH_SHORT).show();
+                    Log.d("list", "Added to the list: " + song.getArtist() + " " + song.getSongName());
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -143,15 +165,14 @@ public class ListViewAdapter extends BaseAdapter {
 
         return view;
     }
+}
 
-    //region A method to stop the mediaplayer called in another fragment/activity
-    //    public void StopSong() {
+//region A method to stop the mediaplayer called in another fragment/activity
+//    public void StopSong() {
 //        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
 //            mediaPlayer.stop();
 //            mediaPlayer.release();
 //            mediaPlayer = null;
 //        }
 //    }
-    //endregion
-
-}
+//endregion

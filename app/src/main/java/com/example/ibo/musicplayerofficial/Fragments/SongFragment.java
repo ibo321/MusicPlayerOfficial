@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,9 +33,9 @@ public class SongFragment extends Fragment {
     MediaPlayer mediaPlayer;
     ObjectAnimator objectAnimator;
 
-    int getSong;
+    String displayArtist;
 
-    static final int READ_BLOCK_SIZE = 100;
+    int getSong;
 
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -55,8 +57,7 @@ public class SongFragment extends Fragment {
         seekBar.setOnSeekBarChangeListener(new SeekbarProgress());
 
         if (getArguments() != null) {
-            songNameTV.setText(getArguments().getString("arg_artist") + " " +
-                    getArguments().getString("arg_songname"));
+            songNameTV.setText(getArguments().getString("arg_artist") + " " + getArguments().getString("arg_songname"));
             artistImg.setImageResource(getArguments().getInt("arg_artistimg"));
             artistImgBG.setImageResource(getArguments().getInt("arg_artistimg"));
             lyricTxt.setText(getArguments().getString("arg_lyrics"));
@@ -64,14 +65,18 @@ public class SongFragment extends Fragment {
         } else {
             Toast.makeText(getActivity(), "Bundle is null", Toast.LENGTH_SHORT).show();
         }
+        displayArtist = songNameTV.getText().toString();
 
-//      new SoapCall().execute();
+        //new SoapCall().execute();
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(displayArtist);
         return view;
     }
 
-    //Constantly update the seek bar according to the media player object with the help of a Runnable.
-    //We are using this because only the main thread can update the UI.
+    /*Constantly update the seek bar according to the media player object with the help of a Runnable.
+    We are using this because only the main thread can update the UI.*/
     private Handler mSeekbarUpdateHandler = new Handler();
+
     private Runnable mUpdateSeekbar = new Runnable() {
         @Override
         public void run() {
@@ -81,7 +86,7 @@ public class SongFragment extends Fragment {
 
     };
 
-    //Seekbar listener
+    /*Seekbar listener*/
     private class SeekbarProgress implements SeekBar.OnSeekBarChangeListener {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -108,8 +113,10 @@ public class SongFragment extends Fragment {
     private class ClickPlaySong implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            //Set scrolling text with ObjectAnimator
-            objectAnimator = ObjectAnimator.ofInt(scrollView, "scrollY", scrollView.getChildAt(0).getHeight() - scrollView.getHeight());
+            /*Set scrolling text with ObjectAnimator*/
+            objectAnimator = ObjectAnimator.ofInt(scrollView, "scrollY", scrollView.getChildAt(0).
+                    getHeight() - scrollView.getHeight());
+
 
             if (mediaPlayer == null) {
                 mediaPlayer = MediaPlayer.create(getActivity(), getSong);
@@ -120,84 +127,102 @@ public class SongFragment extends Fragment {
 
             if (!mediaPlayer.isPlaying()) {
 
-                //Start scrolling
+                /*Start getSong*/
+                mediaPlayer.start();
+                playBtn.setImageResource(R.drawable.pause_big_orange);
+
+                /*Start scrolling*/
                 objectAnimator.setDuration(300000).setInterpolator(new LinearInterpolator());
                 objectAnimator.setStartDelay(10000);
                 objectAnimator.start();
 
-                //Start getSong
-                mediaPlayer.start();
-                playBtn.setImageResource(R.drawable.pause_black);
-
-                //Call my handler to update my seekbar
+                /*Call my handler to update my seekbar*/
                 mSeekbarUpdateHandler.postDelayed(mUpdateSeekbar, 0);
 
             } else {
                 mediaPlayer.pause();
-                playBtn.setImageResource(R.drawable.play_black);
+                playBtn.setImageResource(R.drawable.play_big);
 
-                //Remove the callback of the handler
+                /*Remove the callback of the handler*/
                 mSeekbarUpdateHandler.removeCallbacks(mUpdateSeekbar);
             }
         }
     }
 
+    public void stopSong() {
+        mediaPlayer.stop();
+        mediaPlayer.release();
+        mSeekbarUpdateHandler.removeCallbacks(mUpdateSeekbar);
+    }
+
+    @Override
+    public void onDestroy() {
+
+        if (mediaPlayer != null){
+            stopSong();
+            super.onDestroy();
+        } else {
+            super.onDestroy();
+        }
+
+    }
+
     //Get getSong details of  the getSong clicked on
     //refer to MainFragment for the implementation
-//    public void getSongDetails(String artist, String songName, int artistImg, int song, String lyric) {
-//        this.getArtistImg = artistImg;
-//        this.getSong = song;
-//        this.getSongName = songName;
-//        this.getLyric = lyric;
-//        this.getArtist = artist;
-//    }
+    //    public void getSongDetails(String artist, String songName, int artistImg, int song, String lyric) {
+    //        this.getArtistImg = artistImg;
+    //        this.getSong = song;
+    //        this.getSongName = songName;
+    //        this.getLyric = lyric;
+    //        this.getArtist = artist;
+    //    }
 
     //region Lyrics Api (cant make it work)
     //    //Get Lyrics API
-//    private class SoapCall extends AsyncTask<String, Object, String> {
-//
-//        public static final String NAMESPACE = "http://api.chartlyrics.com/";
-//        public static final String URL = "http://api.chartlyrics.com/apiv1.asmx?WSDL";
-//        public static final String METHOD_NAME = "SearchLyricDirect";
-//        public static final String SOAP_ACTION = NAMESPACE + METHOD_NAME;
-//
-//        public int TimeOut = 30000;
-//        String response;
-//        String soapArtist, soapSong;
-//
-//        @Override
-//        protected String doInBackground(String... strings) {
-//            SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-//            // add paramaters and values
-//            request.addProperty("soapArtist", soapArtist);
-//            request.addProperty("soapSong", soapSong);
-//            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-//            envelope.dotNet = true;
-//            envelope.setOutputSoapObject(request);
-//
-//            HttpTransportSE transportSe = new HttpTransportSE(URL, TimeOut);
-//            transportSe.debug = true;
-//
-//            try {
-//                transportSe.call(NAMESPACE + METHOD_NAME, envelope);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                Log.e("Error", e.toString());
-//            }
-//            return response;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String result) {
-//            super.onPostExecute(result);
-//
-//            if (result != null) {
-//                testSoapTxt.setText(result);
-//            } else {
-//                Toast.makeText(getActivity(), "Something went wrong with API", Toast.LENGTH_LONG).show();
-//            }
-//        }
-//    }
+    //    private class SoapCall extends AsyncTask<String, Object, String> {
+    //
+    //        public static final String NAMESPACE = "http://api.chartlyrics.com/";
+    //        public static final String URL = "http://api.chartlyrics.com/apiv1.asmx?WSDL";
+    //        public static final String METHOD_NAME = "SearchLyricDirect";
+    //        public static final String SOAP_ACTION = NAMESPACE + METHOD_NAME;
+    //
+    //        public int TimeOut = 30000;
+    //        String response;
+    //        String soapArtist, soapSong;
+    //
+    //        @Override
+    //        protected String doInBackground(String... strings) {
+    //            SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+    //            // add paramaters and values
+    //            request.addProperty("soapArtist", soapArtist);
+    //            request.addProperty("soapSong", soapSong);
+    //            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+    //            envelope.dotNet = true;
+    //            envelope.setOutputSoapObject(request);
+    //
+    //            HttpTransportSE transportSe = new HttpTransportSE(URL, TimeOut);
+    //            transportSe.debug = true;
+    //
+    //            try {
+    //                transportSe.call(NAMESPACE + METHOD_NAME, envelope);
+    //            } catch (Exception e) {
+    //                e.printStackTrace();
+    //                Log.e("Error", e.toString());
+    //            }
+    //            return response;
+    //        }
+    //
+    //        @Override
+    //        protected void onPostExecute(String result) {
+    //            super.onPostExecute(result);
+    //
+    //            if (result != null) {
+    //                testSoapTxt.setText(result);
+    //            } else {
+    //                Toast.makeText(getActivity(), "Something went wrong with API", Toast.LENGTH_LONG).show();
+    //            }
+    //        }
+    //    }
     //endregion
 
 }

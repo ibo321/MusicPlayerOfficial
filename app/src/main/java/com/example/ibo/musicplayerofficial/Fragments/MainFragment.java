@@ -30,6 +30,12 @@ public class MainFragment extends Fragment {
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("arraylist", arrayList);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -516,6 +522,11 @@ public class MainFragment extends Fragment {
                 "A little bit psycho\n" +
                 "At night she's screamin'\n" +
                 "\"I'm-ma-ma-ma out my mind\""));
+        arrayList.add(new Song("Scarlet Pleasure", "- Superpower", R.raw.scarletpleasure_superpower, R.drawable.scarlet,
+                "[Intro]\n" + "Yeah, you give me superpower, superpowers\n" +
+                "Immortality for hours\n" +
+                "I don't wanna be a coward\n" +
+                "Give me superpower, superpower\n" + "\n" + "[Verse 1]\n" + "Diamonds on my chest, hold my head up high\n" + "Like I'm posing for a picture, nose up in the sky\n" + "In today's papers says, that I'm the man\n" + "Who is gonna save all these people, I don't think I can\n" + "You're my only source, yet my cryptonite\n" + "If I don't get the force, I might die to night\n" + "Fly off into space\n" + "Glitter suit, golden cape\n" + "\n" + "[Pre-Chorus]\n" + "I swear to god, what you do does something amazing\n" + "Can't even cope with the reality I'm facing\n" + "Lately, that feeling's the only thing I'm chasing\n" + "Only thing I'm chasing\n" + "\n" + "[Chorus]\n" + "Yeah, you give me superpower, superpowers\n" + "Immortality for hours\n" + "I don't wanna be a coward\n" + "Give me superpower, superpower\n" + "When you leave I'm getting weak\n" + "I wanna feel, I wanna feel\n" + "Like I could easily lift the Eiffel Tower\n" + "Give me superpower, superpower\n" + "\n" + "[Verse 2]\n" + "Half man, half god, Hercules (Hercules)\n" + "Soft spot, weak point, Achilles (Achilles)\n" + "Ever since I met you, haven't felt the same\n" + "There's no Peter Parker, without Mary Jane (Jane)\n" + "My only source, yet my kryptonite (kryptonite)\n" + "If I don't get the force I might die tonight\n" + "Fly off into space (space)\n" + "Glitter suit, golden cape\n" + "\n" + "[Pre-Chorus]\n" + "I swear to god, what you do does something amazing\n" + "Can't even cope with the reality I'm facing\n" + "Lately, that feeling's the only thing I'm chasing\n" + "Only thing I'm chasing\n" + "\n" + "[Chorus]\n" + "Yeah, you give me superpower, superpowers\n" + "Immortality for hours\n" + "I don't wanna be a coward\n" + "Give me superpower, superpower\n" + "When you leave I'm getting weak\n" + "I wanna feel, I wanna feel\n" + "Like I could easily lift the Eiffel Tower\n" + "Give me superpower, superpower\n" + "\n" + "[Bridge]\n" + "Why does it have to be so sweet and sour?\n" + "Sweet and sour, when it feels so good?\n" + "Give you reasons not to walk out that door\n" + "I'm much stronger when I got you by my side\n" + "\n" + "[Chorus]\n" + "Yeah, you give me superpower, superpowers\n" + "Immortality for hours\n" + "I don't wanna be a coward\n" + "Give me superpower, superpower\n" + "When you leave I'm getting weak\n" + "I wanna feel, I wanna feel\n" + "Like I could easily lift the Eiffel Tower\n" + "Give me superpower, superpower"));
         //endregion
 
         //Create a new adapter of my custom adapter and assign its values
@@ -539,21 +550,20 @@ public class MainFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            //Initiliaze my songFragment to my fragment class
+
+            /*Initiliaze my SongFragment*/
             songFragment = new SongFragment();
 
             final Song song = arrayList.get(position);
 
-            /**get details of the getSong clicked on to the SongFragment page**/
-//          songFragment.getSongDetails(song.getArtist(), song.getSongName(), song.getArtistImg(), song.getSong(), song.getLyrics());
-
-            //call FragmentManager and begin the transaction to my songFragment class
-            fragmentManager = getFragmentManager();
+            /*Call FragmentManager and begin the transaction to my SongFragment class*/
             fragmentTransaction = getFragmentManager().beginTransaction();
             fragmentTransaction.setCustomAnimations(R.anim.pull_up, R.anim.pull_down);
 
-            //Send master details (of song) to SongFragment (using bundle)
-            SongFragment songFragment = new SongFragment();
+            //region Unused method to retrieve master details
+            //songFragment.getSongDetails(song.getArtist(), song.getSongName(), song.getArtistImg(), song.getSong(), song.getLyrics());
+            //endregion
+            /*Send master details to SongFragment using bundle*/
             Bundle bundle = new Bundle();
             bundle.putString("arg_artist", song.getArtist());
             bundle.putString("arg_songname", song.getSongName());
@@ -562,8 +572,7 @@ public class MainFragment extends Fragment {
             bundle.putInt("arg_artistimg", song.getArtistImg());
             songFragment.setArguments(bundle);
 
-            //When clicked on a listview item - navigate to songfragment and when clicked back -> go back to mainfragment
-            //save my mainfragment to my stack so it isnt destroyed but kept safe so i can get back to it
+            /*Replace the container with SongFragment (its like navigating)*/
             fragmentTransaction.replace(R.id.fragment_container, songFragment).addToBackStack(null).commit();
 
         }
@@ -586,8 +595,4 @@ public class MainFragment extends Fragment {
 //        //Call method PauseSong inside my adapter
 //        adapter.PauseSong();
 //    }
-
-
-
-
 }

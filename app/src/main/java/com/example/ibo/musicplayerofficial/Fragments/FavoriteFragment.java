@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,94 +17,131 @@ import com.example.ibo.musicplayerofficial.Adapters.ListViewAdapter;
 import com.example.ibo.musicplayerofficial.Classes.Song;
 import com.example.ibo.musicplayerofficial.R;
 
-import org.w3c.dom.Text;
-
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import static android.view.View.GONE;
-import static com.example.ibo.musicplayerofficial.Fragments.SongFragment.READ_BLOCK_SIZE;
 
 public class FavoriteFragment extends Fragment {
 
+    //Declare listview objects
     ListView listView;
-    ArrayList<String> arrayList;
+    ArrayList<Song> arrayList;
     ListViewAdapter adapter;
+
+    //Declare view objects
     TextView artistTV, songnameTV;
     ImageView favB, artistImg;
 
-    String artist, songname;
+    //Declare ObjectInputStream objects
+    String filePath;
+    File f;
+    FileInputStream file;
+    ObjectInputStream object;
 
-    int counter = 0;
+//    @Override
+//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+////        listView = getView().findViewById(R.id.songListView);
+//
+//    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.songlist_customlayout, container, false);
+        View view = inflater.inflate(R.layout.fragment_favorites, container, false);
 
         listView = view.findViewById(R.id.favFrag_listview);
-        favB = view.findViewById(R.id.favButton);
-        artistTV = view.findViewById(R.id.artistTxt);
-        songnameTV = view.findViewById(R.id.songNameTxt);
-        artistImg = view.findViewById(R.id.songFrag_artistImg);
-
 
         //Doesnt work!
-//        favB.setVisibility(GONE);
+//        favB = (ImageView) view.findViewById(R.id.favButton);
+//        favB.setVisibility(View.INVISIBLE);
 
-        arrayList = new ArrayList<>();
+        arrayList = new ArrayList<Song>();
+        boolean cont = true;
 
         try {
 
-            String filePath = getActivity().getFilesDir().getPath() + "/test.txt";
-            File f = new File(filePath);
+            /*Get the file path and declare the file*/
+            filePath = getActivity().getFilesDir().getPath() + "/test.txt";
+            f = new File(filePath);
 
-            FileInputStream is = new FileInputStream(f);
-            ObjectInputStream ois = new ObjectInputStream(is);
+            /*Get file streams*/
+            file = new FileInputStream(f);
+            object = new ObjectInputStream(file);
 
-            //read the retrieved object
-            Song song = (Song) ois.readObject();
+            //TODO: Duplicates one of the songs.. FIX IT!
+            while (cont) {
+                try {
+
+                    /*Get list of songs from the stream
+                     *Use Set<Song> object to remove duplicates*/
+                    arrayList = (ArrayList<Song>) object.readObject();
+                    Set<Song> noDupList = new LinkedHashSet<>(arrayList);
+
+                    //Song song = (Song) ois.readObject();
+
+                    /*Iterate through the array list and add songs to the list*/
+                    for (Song song : arrayList) {
+                        noDupList.add(song);
+                    }
+
+                } catch (EOFException e) {
+                    e.toString();
+                    break;
+                }
+            }
+
+            /*close resources*/
+            object.close();
+            file.close();
 
             //region Can also use this (strings and values instead of whole class object)
             //            FileInputStream fileIn = getActivity().openFileInput("mytextfile.txt");
-//            InputStreamReader InputRead = new InputStreamReader(fileIn);
-//
-//            char[] inputBuffer = new char[READ_BLOCK_SIZE];
-//            String s = "";
-//            int charRead;
-//
-//            while ((charRead = InputRead.read(inputBuffer)) > 0) {
-//                // char to string conversion
-//                String readstring = String.copyValueOf(inputBuffer, 0, charRead);
-//                s += readstring;
-//            }
-//            InputRead.close();
-//            songNameTV.setText(s);
+            //            InputStreamReader InputRead = new InputStreamReader(fileIn);
+            //
+            //            char[] inputBuffer = new char[READ_BLOCK_SIZE];
+            //            String s = "";
+            //            int charRead;
+            //
+            //            while ((charRead = InputRead.read(inputBuffer)) > 0) {
+            //                // char to string conversion
+            //                String readstring = String.copyValueOf(inputBuffer, 0, charRead);
+            //                s += readstring;
+            //            }
+            //            InputRead.close();
+            //            songNameTV.setText(s);
             //endregion
 
-            artist = song.getArtist();
-            songname = song.getSongName();
-
-            songnameTV.setText(songname);
-            artistTV.setText(artist);
-            artistImg.setImageResource(song.getArtistImg());
-
-            //close resources
-            ois.close();
-            is.close();
-
-
-
+            //region Another way to retrieve values using string/int values
+            //            artist = song.getArtist();
+            //            songname = song.getSongName();
+            //
+            //            songnameTV.setText(songname);
+            //            artistTV.setText(artist);
+            //            artistImg.setImageResource(song.getArtistImg());
+            //endregion
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.d("printstack: ", e.toString());
         }
+
+        adapter = new ListViewAdapter(R.layout.songlist_customlayout, arrayList, getActivity());
+
+        //Set my listview to my custom adapter
+        listView.setAdapter(adapter);
 
         return view;
     }
-
-
 }
