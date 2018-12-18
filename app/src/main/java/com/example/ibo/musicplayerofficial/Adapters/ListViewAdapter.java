@@ -27,7 +27,6 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class ListViewAdapter extends BaseAdapter {
 
-
     //Create variables
     int layout;
     ArrayList<Song> arrayList;
@@ -39,7 +38,6 @@ public class ListViewAdapter extends BaseAdapter {
 
     String filePath;
     File getFile;
-
 
     //Constructor
     public ListViewAdapter(int layout, ArrayList<Song> arrayList, Context context) {

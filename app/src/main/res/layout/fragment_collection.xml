@@ -1,69 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    android:background="@color/white">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tablayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+        app:menu="@menu/menu_collection"
+        app:tabTextColor="@color/black"/>
 
-
-        <Button
-            android:id="@+id/nav_favorites"
-            android:layout_width="110sp"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="2sp"
-            android:layout_marginRight="20sp"
-            android:background="@drawable/radious_transparent"
-            android:text="Favorites"
-            android:textColor="@color/white" />
-
-        <Button
-            android:id="@+id/nav_history"
-            android:layout_width="110sp"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="2sp"
-            android:layout_marginRight="20sp"
-            android:background="@drawable/radious_transparent"
-            android:text="History"
-            android:textColor="@color/white" />
-
-        <Button
-            android:id="@+id/nav_playlist"
-            android:layout_width="110sp"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="2sp"
-            android:background="@drawable/radious_transparent"
-            android:text="Playlist"
-            android:textColor="@color/white" />
-
-    </LinearLayout>
-
-    <EditText
-        android:id="@+id/searchEdt"
-        android:textColorHint="@color/white"
-        android:textColor="@color/white"
-        android:layout_width="350sp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/linearLayout"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="10sp"
-        android:textColorHighlight="@color/OrangeTheme"
-        android:drawableLeft="@drawable/search"
-        android:hint="Search in favorites..." />
-
-    <FrameLayout
-        android:id="@+id/collection_container"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/searchEdt" >
-    </FrameLayout>
-
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom_navigation"
+        android:layout_below="@id/tablayout"/>
 </RelativeLayout>
