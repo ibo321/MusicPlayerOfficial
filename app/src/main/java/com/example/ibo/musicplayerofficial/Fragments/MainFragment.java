@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,9 @@ public class MainFragment extends Fragment {
     ListViewAdapter adapter;
 
     SongFragment songFragment;
+    MainFragment mainFragment;
     FragmentTransaction fragmentTransaction;
+    FragmentManager fragmentManager;
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -36,7 +39,12 @@ public class MainFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        /*Initiliaze my SongFragment*/
+        songFragment = new SongFragment();
+        mainFragment = new MainFragment();
 
         if (savedInstanceState == null || !savedInstanceState.containsKey("array")) {
             //create a new arraylist object
@@ -52,17 +60,14 @@ public class MainFragment extends Fragment {
             arrayList.add(new Song("Scarlet Pleasure", "- Superpower", R.raw.scarletpleasure_superpower, R.drawable.scarlet, "[Intro]\n" + "Yeah, you give me superpower, superpowers\n" + "Immortality for hours\n" + "I don't wanna be a coward\n" + "Give me superpower, superpower\n" + "\n" + "[Verse 1]\n" + "Diamonds on my chest, hold my head up high\n" + "Like I'm posing for a picture, nose up in the sky\n" + "In today's papers says, that I'm the man\n" + "Who is gonna save all these people, I don't think I can\n" + "You're my only source, yet my cryptonite\n" + "If I don't get the force, I might die to night\n" + "Fly off into space\n" + "Glitter suit, golden cape\n" + "\n" + "[Pre-Chorus]\n" + "I swear to god, what you do does something amazing\n" + "Can't even cope with the reality I'm facing\n" + "Lately, that feeling's the only thing I'm chasing\n" + "Only thing I'm chasing\n" + "\n" + "[Chorus]\n" + "Yeah, you give me superpower, superpowers\n" + "Immortality for hours\n" + "I don't wanna be a coward\n" + "Give me superpower, superpower\n" + "When you leave I'm getting weak\n" + "I wanna feel, I wanna feel\n" + "Like I could easily lift the Eiffel Tower\n" + "Give me superpower, superpower\n" + "\n" + "[Verse 2]\n" + "Half man, half god, Hercules (Hercules)\n" + "Soft spot, weak point, Achilles (Achilles)\n" + "Ever since I met you, haven't felt the same\n" + "There's no Peter Parker, without Mary Jane (Jane)\n" + "My only source, yet my kryptonite (kryptonite)\n" + "If I don't get the force I might die tonight\n" + "Fly off into space (space)\n" + "Glitter suit, golden cape\n" + "\n" + "[Pre-Chorus]\n" + "I swear to god, what you do does something amazing\n" + "Can't even cope with the reality I'm facing\n" + "Lately, that feeling's the only thing I'm chasing\n" + "Only thing I'm chasing\n" + "\n" + "[Chorus]\n" + "Yeah, you give me superpower, superpowers\n" + "Immortality for hours\n" + "I don't wanna be a coward\n" + "Give me superpower, superpower\n" + "When you leave I'm getting weak\n" + "I wanna feel, I wanna feel\n" + "Like I could easily lift the Eiffel Tower\n" + "Give me superpower, superpower\n" + "\n" + "[Bridge]\n" + "Why does it have to be so sweet and sour?\n" + "Sweet and sour, when it feels so good?\n" + "Give you reasons not to walk out that door\n" + "I'm much stronger when I got you by my side\n" + "\n" + "[Chorus]\n" + "Yeah, you give me superpower, superpowers\n" + "Immortality for hours\n" + "I don't wanna be a coward\n" + "Give me superpower, superpower\n" + "When you leave I'm getting weak\n" + "I wanna feel, I wanna feel\n" + "Like I could easily lift the Eiffel Tower\n" + "Give me superpower, superpower"));
             //endregion
 
-            //Create a new adapter of my custom adapter and assign its values
-
+            //Assign adapter to its values
             adapter = new ListViewAdapter(R.layout.songlist_customlayout, arrayList, getActivity());
-
-            //Set my listview to my custom adapter
-            songListView.setAdapter(adapter);
 
             super.onActivityCreated(savedInstanceState);
         } else {
             arrayList = (ArrayList<Song>) savedInstanceState.getSerializable("array");
         }
+        Log.i("mainfragment", "onCreate: isCalled from MAIN FRAGMENT");
     }
 
     @Nullable
@@ -79,6 +84,10 @@ public class MainFragment extends Fragment {
         //Click on a specific getSong from my list
         songListView.setOnItemClickListener(new ListViewClickListener());
 
+        //Set my listview to my custom adapter
+        songListView.setAdapter(adapter);
+
+        Log.i("mainfragment", "onCreateView: isCalled from MAIN FRAGMENT");
         //return my view
         return view;
     }
@@ -89,9 +98,6 @@ public class MainFragment extends Fragment {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            /*Initiliaze my SongFragment*/
-            songFragment = new SongFragment();
-
             final Song song = arrayList.get(position);
 
             /*Call FragmentManager and begin the transaction to my SongFragment class*/
@@ -101,6 +107,7 @@ public class MainFragment extends Fragment {
             //region Unused method to retrieve master details
             //songFragment.getSongDetails(song.getArtist(), song.getSongName(), song.getArtistImg(), song.getSong(), song.getLyrics());
             //endregion
+
             /*Send master details to SongFragment using bundle*/
             Bundle bundle = new Bundle();
             bundle.putString("arg_artist", song.getArtist());
@@ -111,11 +118,28 @@ public class MainFragment extends Fragment {
             songFragment.setArguments(bundle);
 
             /*Replace the container with SongFragment (its like navigating)*/
-            fragmentTransaction.replace(R.id.fragment_container, songFragment).addToBackStack(null).commit();
+            fragmentManager = getFragmentManager();
+
+            if (fragmentManager.findFragmentByTag("song") != null){
+                fragmentManager.beginTransaction().show(songFragment).commit();
+            } else {
+                fragmentManager.beginTransaction().add(R.id.fragment_container, songFragment, "song")
+                        .addToBackStack(null)
+                        .commit();
+            }
+            fragmentManager.beginTransaction().hide(mainFragment);
+
+
+//            fragmentTransaction.add(R.id.fragment_container, songFragment).addToBackStack(null).commit();
 
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+    }
     //region Unused Method - Replaced with method underneath
     //    //Stop getSong when fragment is changed
     //    @Override

@@ -1,5 +1,6 @@
 package com.example.ibo.musicplayerofficial.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -57,7 +58,7 @@ public class FavoriteFragment extends Fragment {
     File f;
     FileInputStream file;
     ObjectInputStream object;
-
+    boolean cont = true;
 
     @Nullable
     @Override
@@ -67,13 +68,30 @@ public class FavoriteFragment extends Fragment {
         listView = view.findViewById(R.id.favFrag_listview);
         searchBar = view.findViewById(R.id.searchBar);
 
-        //Doesnt work!
-        //        favB = (ImageView) view.findViewById(R.id.favButton);
-        //        favB.setVisibility(View.INVISIBLE);
-
         arrayList = new ArrayList<Song>();
-        boolean cont = true;
 
+        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String input) {
+
+                adapter.getFilter().filter(input);
+                return false;
+            }
+        });
+        Log.i("callingviews", "onCreateView: is called");
+        return view;
+
+    }
+
+    //TODO: Listview is not getting updated!
+    @Override
+    public void onResume() {
+        super.onResume();
         try {
 
             /*Get the file path and declare the file*/
@@ -137,28 +155,91 @@ public class FavoriteFragment extends Fragment {
             //endregion
 
         } catch (Exception e) {
-            Log.d("printstack: ", e.toString());
+            Log.e("printstack: ", e.toString());
         }
 
         adapter = new FavoriteListViewAdapter(R.layout.fragment_favorites_customlayout, arrayList, getActivity());
 
         //Set my listview to my custom adapter
         listView.setAdapter(adapter);
+        Log.i("callingviews", "onResume: Is called");
+    }
 
-        searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+    //region Can also use this (strings and values instead of whole class object)
+            //            FileInputStream fileIn = getActivity().openFileInput("mytextfile.txt");
+            //            InputStreamReader InputRead = new InputStreamReader(fileIn);
+            //
+            //            char[] inputBuffer = new char[READ_BLOCK_SIZE];
+            //            String s = "";
+            //            int charRead;
+            //
+            //            while ((charRead = InputRead.read(inputBuffer)) > 0) {
+            //                // char to string conversion
+            //                String readstring = String.copyValueOf(inputBuffer, 0, charRead);
+            //                s += readstring;
+            //            }
+            //            InputRead.close();
+            //            songNameTV.setText(s);
+            //endregion
 
-            @Override
-            public boolean onQueryTextChange(String input) {
 
-                adapter.getFilter().filter(input);
-                return false;
-            }
-        });
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Log.i("callingviews", "onDetach: Is called");
+    }
 
-        return view;
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i("callingviews", "onStop: Is called");
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.i("callingviews", "onCreate: Is called");
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.i("callingviews", "onActivityCreated: Is called");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i("callingviews", "onPause: Is called");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.i("callingviews", "onDestroyView: Is called");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.i("callingviews", "onAttach: Is called");
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.i("callingviews", "onViewCreated: Is called");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i("callingviews", "onStart: Is called");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i("callingviews", "onDestroy: Is called");
     }
 }

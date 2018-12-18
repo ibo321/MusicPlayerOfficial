@@ -28,6 +28,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class ListViewAdapter extends BaseAdapter {
 
     //Create variables
+
     int layout;
     ArrayList<Song> arrayList;
     Context context;
@@ -44,6 +45,7 @@ public class ListViewAdapter extends BaseAdapter {
         this.layout = layout;
         this.arrayList = arrayList;
         this.context = context;
+
     }
 
     //ViewHolder class holding my views
@@ -125,6 +127,7 @@ public class ListViewAdapter extends BaseAdapter {
 //                  arrayList.add(object.writeObject(song));
 
                     list.add(song);
+                    notifyDataSetChanged();
                     object.writeObject(list);
 
                     //region Can also use this to write data (instead of class object)
@@ -133,7 +136,6 @@ public class ListViewAdapter extends BaseAdapter {
 //                    outputWriter.write(song.getSongName());
 //                    outputWriter.close();
                     //endregion
-
                     // closing resources
                     object.close();
                     file.close();
@@ -158,6 +160,7 @@ public class ListViewAdapter extends BaseAdapter {
                     e.printStackTrace();
                 }
                 viewholder.favBtn.setImageResource(R.drawable.favorite);
+
             }
         });
 

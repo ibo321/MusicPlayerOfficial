@@ -1,35 +1,24 @@
 package com.example.ibo.musicplayerofficial;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.service.notification.StatusBarNotification;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.Window;
 
-import com.example.ibo.musicplayerofficial.Classes.Song;
 import com.example.ibo.musicplayerofficial.Fragments.CollectionFragment;
 import com.example.ibo.musicplayerofficial.Fragments.MainFragment;
 import com.example.ibo.musicplayerofficial.Fragments.RadioFragment;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-
 public class MainActivity extends AppCompatActivity {
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.activity_main);
-
 
         getSupportActionBar().setTitle("Song list");
         getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.OrangeTheme));
@@ -49,34 +38,80 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
             //set fragment to null
-            Fragment selectedFragment = null;
+            //            Fragment selectedFragment = null;
+            FragmentManager fragmentManager = getSupportFragmentManager();
 
             switch (menuItem.getItemId()) {
                 case R.id.action_main:
-                    //When clicked on 'Main' set selectedFragment to the MainFragment class
-                    selectedFragment = new MainFragment();
-                    //Actionbar
+
+                    /*Checks if MainFragment is clicked with its tag
+                    * Shows the fragment if its in the backstack
+                    * If not then it adds it to the container
+                    * And hides previous fragments in the backstack*/
+
+                    if (fragmentManager.findFragmentByTag("main") != null) {
+                        fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("main")).commit();
+                    } else {
+                        fragmentManager.beginTransaction().add(R.id.fragment_container, new MainFragment(), "main").commit();
+                    }
+                    if (fragmentManager.findFragmentByTag("collection") != null) {
+                        fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("collection")).commit();
+                    }
+                    if (fragmentManager.findFragmentByTag("radio") != null) {
+                        fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("radio")).commit();
+                    }
+
+                    getSupportActionBar().show();
                     getSupportActionBar().setTitle("Song list");
+                    //When clicked on 'Main' set selectedFragment to the MainFragment class
                     break;
 
                 case R.id.action_collection:
-                    //When clicked on 'Collection' set selectedFragment to the CollectionFragment class
-                    selectedFragment = new CollectionFragment();
-                    getSupportActionBar().setTitle("Collection");
+
+                    /*Checks if CollectionFragment is clicked with its tag
+                     * Shows the fragment if its in the backstack
+                     * If not then it adds it to the container
+                     * And hides previous fragments in the backstack*/
+
+                    if (fragmentManager.findFragmentByTag("collection") != null) {
+                        fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("collection")).commit();
+                    } else {
+                        fragmentManager.beginTransaction().add(R.id.fragment_container, new CollectionFragment(), "collection").commit();
+                    }
+                    if (fragmentManager.findFragmentByTag("main") != null) {
+                        fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("main")).commit();
+                    }
+                    if (fragmentManager.findFragmentByTag("radio") != null) {
+                        fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("radio")).commit();
+                    }
+
+                    getSupportActionBar().hide();
+
                     break;
 
                 case R.id.action_radio:
-                    //When clicked on 'Radio' set selectedFragment to the RadioFragment class
-                    selectedFragment = new RadioFragment();
+
+                    /*Checks if RadioFragment is clicked with its tag
+                     * Shows the fragment if its in the backstack
+                     * If not then it adds it to the container
+                     * And hides previous fragments in the backstack*/
+
+                    if (fragmentManager.findFragmentByTag("radio") != null) {
+                        fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("radio")).commit();
+                    } else {
+                        fragmentManager.beginTransaction().add(R.id.fragment_container, new RadioFragment(), "radio").commit();
+                    }
+                    if (fragmentManager.findFragmentByTag("main") != null) {
+                        fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("main")).commit();
+                    }
+                    if (fragmentManager.findFragmentByTag("collection") != null) {
+                        fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("collection")).commit();
+                    }
+                    getSupportActionBar().show();
                     getSupportActionBar().setTitle("Radio");
+
                     break;
             }
-
-            //set the selected fragments to the container so it display the views in their
-            getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left)
-                    .replace(R.id.fragment_container, selectedFragment).commit();
-
             return true;
         }
     };

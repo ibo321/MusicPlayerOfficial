@@ -29,7 +29,7 @@ public class CollectionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_collection, container, false);
         viewPager = view.findViewById(R.id.viewPager);
         tabLayout = view.findViewById(R.id.tablayout);
-        //        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+//                ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getActivity(), getChildFragmentManager());
 
