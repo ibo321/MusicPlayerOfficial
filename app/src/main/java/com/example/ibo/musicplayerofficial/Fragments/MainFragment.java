@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.example.ibo.musicplayerofficial.Adapters.ListViewAdapter;
 import com.example.ibo.musicplayerofficial.Classes.Song;
@@ -27,6 +29,8 @@ public class MainFragment extends Fragment {
     ListView songListView;
     ListViewAdapter adapter;
 
+    SearchView searchView;
+    TextView errorMsg;
     SongFragment songFragment;
     MainFragment mainFragment;
     FragmentTransaction fragmentTransaction;
@@ -67,6 +71,7 @@ public class MainFragment extends Fragment {
         } else {
             arrayList = (ArrayList<Song>) savedInstanceState.getSerializable("array");
         }
+
         Log.i("mainfragment", "onCreate: isCalled from MAIN FRAGMENT");
     }
 
@@ -76,18 +81,33 @@ public class MainFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         //Actionbar
-        //((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Song list");
-
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         //Find my listview
-        songListView = view.findViewById(R.id.songListView);
+        songListView = view.findViewById(R.id.mainFrag_songListView);
+        searchView = view.findViewById(R.id.mainFrag_searchBar);
+        errorMsg = view.findViewById(R.id.mainFrag_emptyMsg);
 
         //Click on a specific getSong from my list
         songListView.setOnItemClickListener(new ListViewClickListener());
 
         //Set my listview to my custom adapter
         songListView.setAdapter(adapter);
+        songListView.setEmptyView(errorMsg);
 
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String input) {
+                adapter.getFilter().filter(input);
+                return false;
+            }
+        });
         Log.i("mainfragment", "onCreateView: isCalled from MAIN FRAGMENT");
+
         //return my view
         return view;
     }
@@ -108,6 +128,7 @@ public class MainFragment extends Fragment {
             //songFragment.getSongDetails(song.getArtist(), song.getSongName(), song.getArtistImg(), song.getSong(), song.getLyrics());
             //endregion
 
+            //TODO: Send the object instead of seperate pieces?
             /*Send master details to SongFragment using bundle*/
             Bundle bundle = new Bundle();
             bundle.putString("arg_artist", song.getArtist());
@@ -115,10 +136,12 @@ public class MainFragment extends Fragment {
             bundle.putString("arg_lyrics", song.getLyrics());
             bundle.putInt("arg_song", song.getSong());
             bundle.putInt("arg_artistimg", song.getArtistImg());
+            bundle.putSerializable("arg_arraylist", arrayList);
             songFragment.setArguments(bundle);
 
             /*Replace the container with SongFragment (its like navigating)*/
             fragmentManager = getFragmentManager();
+
 
             if (fragmentManager.findFragmentByTag("song") != null){
                 fragmentManager.beginTransaction().show(songFragment).commit();
@@ -129,17 +152,16 @@ public class MainFragment extends Fragment {
             }
             fragmentManager.beginTransaction().hide(mainFragment);
 
-
 //            fragmentTransaction.add(R.id.fragment_container, songFragment).addToBackStack(null).commit();
 
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        adapter.notifyDataSetChanged();
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        adapter.notifyDataSetChanged();
+//    }
     //region Unused Method - Replaced with method underneath
     //    //Stop getSong when fragment is changed
     //    @Override

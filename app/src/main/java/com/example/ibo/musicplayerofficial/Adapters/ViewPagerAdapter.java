@@ -1,9 +1,15 @@
 package com.example.ibo.musicplayerofficial.Adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.util.SparseArray;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.example.ibo.musicplayerofficial.Fragments.FavoriteFragment;
 import com.example.ibo.musicplayerofficial.Fragments.HistoryFragment;
@@ -12,9 +18,7 @@ import com.example.ibo.musicplayerofficial.R;
 
 import java.util.List;
 
-public class ViewPagerAdapter extends FragmentPagerAdapter {
-
-    private List<Fragment> fragmentList;
+public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     private Context mContext;
 
@@ -23,10 +27,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         mContext = context;
     }
 
-
     @Override
     public Fragment getItem(int position) {
-
 
         if (position == 0) {
             return new FavoriteFragment();
@@ -35,7 +37,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         } else {
             return new PlaylistFragment();
         }
+    }
 
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        return POSITION_NONE;
     }
 
     @Override
@@ -56,7 +62,5 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             default:
                 return null;
         }
-
     }
-
 }

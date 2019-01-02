@@ -1,12 +1,14 @@
 package com.example.ibo.musicplayerofficial.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.ibo.musicplayerofficial.Classes.Song;
@@ -24,11 +26,13 @@ public class FavoriteListViewAdapter extends BaseAdapter implements Filterable {
     CustomFilter filter;
     ArrayList<Song> filterList;
 
+
     public FavoriteListViewAdapter(int layout, ArrayList<Song> arrayList, Context context) {
         this.layout = layout;
         this.arrayList = arrayList;
         this.context = context;
         this.filterList = arrayList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -36,7 +40,6 @@ public class FavoriteListViewAdapter extends BaseAdapter implements Filterable {
         if (filter == null) {
             filter = new CustomFilter();
         }
-
         return filter;
     }
 
@@ -96,6 +99,7 @@ public class FavoriteListViewAdapter extends BaseAdapter implements Filterable {
         viewholder.artistTxt.setText(song.getArtist());
         viewholder.songNameTxt.setText(song.getSongName());
 
+        notifyDataSetChanged();
         return view;
     }
 
@@ -104,10 +108,7 @@ public class FavoriteListViewAdapter extends BaseAdapter implements Filterable {
 
         @Override
         protected FilterResults performFiltering(CharSequence inputText) {
-            // TODO Auto-generated method stub
-
             FilterResults results = new FilterResults();
-
             if (inputText != null && inputText.length() > 0) {
                 //CONSTARINT TO UPPER
                 inputText = inputText.toString().toUpperCase();
@@ -118,14 +119,11 @@ public class FavoriteListViewAdapter extends BaseAdapter implements Filterable {
                 for (int i = 0; i < filterList.size(); i++) {
                     if (filterList.get(i).getArtist().toUpperCase().contains(inputText)) {
                         Song p = new Song(filterList.get(i).getArtist(), filterList.get(i).getSongName(), filterList.get(i).getSong(), filterList.get(i).getArtistImg(), filterList.get(i).getLyrics());
-
                         filters.add(p);
                     }
                 }
-
                 results.count = filters.size();
                 results.values = filters;
-
             } else {
                 results.count = filterList.size();
                 results.values = filterList;

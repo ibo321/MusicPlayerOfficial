@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
@@ -20,22 +21,25 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ibo.musicplayerofficial.Classes.Song;
 import com.example.ibo.musicplayerofficial.R;
+
+import java.util.ArrayList;
 
 
 public class SongFragment extends Fragment {
-
+    String TAG = "songfragviews";
     ScrollView scrollView;
     TextView songNameTV, lyricTxt;
-    ImageView artistImg, artistImgBG, playBtn;
+    ImageView artistImg, artistImgBG, playBtn, playNextBtn, playPreviousBtn;
     SeekBar seekBar;
 
     MediaPlayer mediaPlayer;
     ObjectAnimator objectAnimator;
-
+    ArrayList<Song> arrayList;
     String displayArtist;
-
     int getSong;
+    Song currentSong;
 
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -48,28 +52,40 @@ public class SongFragment extends Fragment {
         artistImg = view.findViewById(R.id.songFrag_artistImg);
         artistImgBG = view.findViewById(R.id.songFrag_artistImgBG);
         lyricTxt = view.findViewById(R.id.lyricTxt);
-        playBtn = view.findViewById(R.id.playBDetail);
+        playBtn = view.findViewById(R.id.songFrag_playBtn);
         scrollView = view.findViewById(R.id.scrollView);
         seekBar = view.findViewById(R.id.songLenght);
+        playNextBtn = view.findViewById(R.id.songFrag_playNextBtn);
+        playPreviousBtn = view.findViewById(R.id.songFrag_previousBtn);
 
-        //Call methods
-        playBtn.setOnClickListener(new ClickPlaySong());
+
+
+        //Call inner class methods
+        playBtn.setOnClickListener(new OnClickPlaySong());
+        playNextBtn.setOnClickListener(new OnClickNextSong());
+        playPreviousBtn.setOnClickListener(new OnClickPreviousSong());
         seekBar.setOnSeekBarChangeListener(new SeekbarProgress());
 
         if (getArguments() != null) {
+
+            //TODO: Get the object in whole instead of seperate?
             songNameTV.setText(getArguments().getString("arg_artist") + " " + getArguments().getString("arg_songname"));
             artistImg.setImageResource(getArguments().getInt("arg_artistimg"));
             artistImgBG.setImageResource(getArguments().getInt("arg_artistimg"));
             lyricTxt.setText(getArguments().getString("arg_lyrics"));
             getSong = getArguments().getInt("arg_song");
+            //noinspection unchecked
+            arrayList = (ArrayList<Song>) getArguments().getSerializable("arg_arraylist");
+
         } else {
             Toast.makeText(getActivity(), "Bundle is null", Toast.LENGTH_SHORT).show();
         }
         displayArtist = songNameTV.getText().toString();
 
         //new SoapCall().execute();
-
+        songNameTV.setSelected(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(displayArtist);
+        Log.d(TAG, "onCreateView: isCalled");
         return view;
     }
 
@@ -80,8 +96,11 @@ public class SongFragment extends Fragment {
     private Runnable mUpdateSeekbar = new Runnable() {
         @Override
         public void run() {
-            seekBar.setProgress(mediaPlayer.getCurrentPosition());
-            mSeekbarUpdateHandler.postDelayed(this, 10);
+            if (mediaPlayer != null) {
+                seekBar.setProgress(mediaPlayer.getCurrentPosition());
+                mSeekbarUpdateHandler.postDelayed(this, 10);
+            }
+
         }
 
     };
@@ -91,7 +110,10 @@ public class SongFragment extends Fragment {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             if (fromUser) {
-                mediaPlayer.seekTo(progress);
+
+                if (mediaPlayer != null) {
+                    mediaPlayer.seekTo(progress);
+                }
             }
         }
 
@@ -108,65 +130,190 @@ public class SongFragment extends Fragment {
         //endregion
     }
 
-    //set the details of the getSong i clicked on in my list
-    //Method is implemented in MainFragment.java (inside listViewOnClick)
-    private class ClickPlaySong implements View.OnClickListener {
+    private class OnClickNextSong implements OnClickListener {
         @Override
         public void onClick(View v) {
+            playNextSong();
+        }
+    }
+
+    /*set the details of the getSong i clicked on in my list
+    Method is implemented in MainFragment.java (inside listViewOnClick)*/
+    private class OnClickPlaySong implements OnClickListener {
+        @Override
+        public void onClick(View v) {
+
             /*Set scrolling text with ObjectAnimator*/
             objectAnimator = ObjectAnimator.ofInt(scrollView, "scrollY", scrollView.getChildAt(0).
                     getHeight() - scrollView.getHeight());
-
-
             if (mediaPlayer == null) {
                 mediaPlayer = MediaPlayer.create(getActivity(), getSong);
 
                 //Get the duration of getSong
                 seekBar.setMax(mediaPlayer.getDuration());
             }
-
             if (!mediaPlayer.isPlaying()) {
 
-                /*Start getSong*/
                 mediaPlayer.start();
                 playBtn.setImageResource(R.drawable.pause_big_orange);
+
+                /*Call my handler to update my seekbar*/
+                mSeekbarUpdateHandler.postDelayed(mUpdateSeekbar, 0);
 
                 /*Start scrolling*/
                 objectAnimator.setDuration(300000).setInterpolator(new LinearInterpolator());
                 objectAnimator.setStartDelay(10000);
                 objectAnimator.start();
 
-                /*Call my handler to update my seekbar*/
-                mSeekbarUpdateHandler.postDelayed(mUpdateSeekbar, 0);
-
             } else {
-                mediaPlayer.pause();
-                playBtn.setImageResource(R.drawable.play_big);
-
-                /*Remove the callback of the handler*/
-                mSeekbarUpdateHandler.removeCallbacks(mUpdateSeekbar);
+                pauseSong();
             }
         }
     }
 
-    public void stopSong() {
-        mediaPlayer.stop();
-        mediaPlayer.release();
+    public void pauseSong() {
+        mediaPlayer.pause();
+        playBtn.setImageResource(R.drawable.play_big);
+
+        /*Remove the callback of the handler*/
         mSeekbarUpdateHandler.removeCallbacks(mUpdateSeekbar);
     }
 
-    @Override
-    public void onDestroy() {
-
-        if (mediaPlayer != null){
-            stopSong();
-            super.onDestroy();
-        } else {
-            super.onDestroy();
+    public void stopSong() {
+        if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.reset();
+            mediaPlayer.release();
+            mediaPlayer = null;
+            mSeekbarUpdateHandler.removeCallbacks(mUpdateSeekbar);
         }
-
     }
 
+    @SuppressLint("SetTextI18n")
+    private void playNextSong() {
+
+        /*Reset the mediaplayer*/
+        if (mediaPlayer != null || currentSong != null) {
+            mediaPlayer.stop();
+
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+
+        for (int i = 0; i < arrayList.size(); i++) {
+
+            /*If the position in the arraylist is equal to my song*/
+            if (arrayList.get(i).getSong() == getSong) {
+
+                /*Loop to the next index in arraylist*/
+                i++;
+
+                /*Reset the index to 0 if reached last index in arraylist*/
+                if (i >= arrayList.size()) {
+                    i = 0;
+                }
+
+                /*Get next index in arraylist to currentSong variable*/
+                currentSong = arrayList.get(i);
+
+                mediaPlayer = MediaPlayer.create(getActivity(), currentSong.getSong());
+
+                songNameTV.setText(currentSong.getArtist() + " " + currentSong.getSongName());
+                artistImg.setImageResource(currentSong.getArtistImg());
+                artistImgBG.setImageResource(currentSong.getArtistImg());
+                lyricTxt.setText(currentSong.getLyrics());
+
+                mediaPlayer.start();
+
+                mediaPlayer.seekTo(mediaPlayer.getCurrentPosition());
+                mSeekbarUpdateHandler.postDelayed(mUpdateSeekbar, 0);
+
+                /*Assign the current song to getSong variable*/
+                getSong = currentSong.getSong();
+
+                break;
+            }
+        }
+    }
+
+    private class OnClickPreviousSong implements OnClickListener {
+        @Override
+        public void onClick(View v) {
+
+            /*Reset the mediaplayer*/
+            if (mediaPlayer != null || currentSong != null) {
+                mediaPlayer.stop();
+
+                mediaPlayer.release();
+                mediaPlayer = null;
+            }
+
+            for (int i = 0; i < arrayList.size(); i++) {
+
+                /*If the position in the arraylist is equal to my song*/
+                if (arrayList.get(i).getSong() == getSong) {
+
+                    /*Loop to the next index in arraylist*/
+                    i--;
+
+                    /*Reset the index to 0 if reached last index in arraylist*/
+                    if (i < 0) {
+                        i = 0;
+                    }
+
+                    /*Get next index in arraylist to currentSong variable*/
+                    currentSong = arrayList.get(i);
+
+                    mediaPlayer = MediaPlayer.create(getActivity(), currentSong.getSong());
+
+                    songNameTV.setText(currentSong.getArtist() + " " + currentSong.getSongName());
+                    artistImg.setImageResource(currentSong.getArtistImg());
+                    artistImgBG.setImageResource(currentSong.getArtistImg());
+                    lyricTxt.setText(currentSong.getLyrics());
+
+                    mediaPlayer.start();
+
+                    mediaPlayer.seekTo(mediaPlayer.getCurrentPosition());
+                    mSeekbarUpdateHandler.postDelayed(mUpdateSeekbar, 0);
+
+                    /*Assign the current song to getSong variable*/
+                    getSong = currentSong.getSong();
+
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+
+        if (mediaPlayer != null) {
+            stopSong();
+            super.onPause();
+        } else {
+            super.onPause();
+        }
+        Log.d(TAG, "onPause: isCalled");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: isCalled");
+    }
+
+    //    @Override
+    //    public void onDestroy() {
+    //
+    //        if (mediaPlayer != null) {
+    //            stopSong();
+    //            super.onDestroy();
+    //        } else {
+    //            super.onDestroy();
+    //        }
+    //        Log.d(TAG, "onDestroy: isCalled");
+    //    }
     //Get getSong details of  the getSong clicked on
     //refer to MainFragment for the implementation
     //    public void getSongDetails(String artist, String songName, int artistImg, int song, String lyric) {
@@ -224,5 +371,4 @@ public class SongFragment extends Fragment {
     //        }
     //    }
     //endregion
-
 }

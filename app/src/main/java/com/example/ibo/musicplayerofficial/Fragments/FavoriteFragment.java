@@ -5,43 +5,28 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ibo.musicplayerofficial.Adapters.FavoriteListViewAdapter;
-import com.example.ibo.musicplayerofficial.Adapters.ListViewAdapter;
 import com.example.ibo.musicplayerofficial.Classes.Song;
-import com.example.ibo.musicplayerofficial.MainActivity;
 import com.example.ibo.musicplayerofficial.R;
 
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
-import static android.view.View.GONE;
-
 public class FavoriteFragment extends Fragment {
+    private String TAG1 = "callingviews";
 
     //Declare listview objects
     ListView listView;
@@ -49,10 +34,9 @@ public class FavoriteFragment extends Fragment {
     FavoriteListViewAdapter adapter;
 
     //Declare view objects
-    TextView artistTV, songnameTV;
-    ImageView favB, artistImg;
-
+    TextView errorMsg;
     SearchView searchBar;
+
     //Declare ObjectInputStream objects
     String filePath;
     File f;
@@ -60,6 +44,7 @@ public class FavoriteFragment extends Fragment {
     ObjectInputStream object;
     boolean cont = true;
 
+    //TODO: Listview is not getting updated!
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -67,7 +52,7 @@ public class FavoriteFragment extends Fragment {
 
         listView = view.findViewById(R.id.favFrag_listview);
         searchBar = view.findViewById(R.id.searchBar);
-
+        errorMsg = view.findViewById(R.id.favFrag_emptyMsg);
         arrayList = new ArrayList<Song>();
 
         searchBar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -79,22 +64,23 @@ public class FavoriteFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String input) {
 
-                adapter.getFilter().filter(input);
+                if (adapter != null) {
+                    adapter.getFilter().filter(input);
+
+                }
                 return false;
             }
         });
-        Log.i("callingviews", "onCreateView: is called");
+        Log.d(TAG1, "onCreateView: is called");
         return view;
-
     }
 
-    //TODO: Listview is not getting updated!
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         try {
 
-            /*Get the file path and declare the file*/
+            /*Get the file path and convert to a file*/
             filePath = getActivity().getFilesDir().getPath() + "/test.txt";
             f = new File(filePath);
 
@@ -102,7 +88,6 @@ public class FavoriteFragment extends Fragment {
             file = new FileInputStream(f);
             object = new ObjectInputStream(file);
 
-            //TODO: Duplicates one of the songs.. FIX IT!
             while (cont) {
                 try {
 
@@ -111,9 +96,6 @@ public class FavoriteFragment extends Fragment {
                     arrayList = (ArrayList<Song>) object.readObject();
                     Set<Song> noDupList = new LinkedHashSet<>(arrayList);
 
-                    //Song song = (Song) ois.readObject();
-
-                    /*Iterate through the array list and add songs to the list*/
                     for (Song song : arrayList) {
                         noDupList.add(song);
                     }
@@ -127,119 +109,68 @@ public class FavoriteFragment extends Fragment {
             /*close resources*/
             object.close();
             file.close();
-
-            //region Can also use this (strings and values instead of whole class object)
-            //            FileInputStream fileIn = getActivity().openFileInput("mytextfile.txt");
-            //            InputStreamReader InputRead = new InputStreamReader(fileIn);
-            //
-            //            char[] inputBuffer = new char[READ_BLOCK_SIZE];
-            //            String s = "";
-            //            int charRead;
-            //
-            //            while ((charRead = InputRead.read(inputBuffer)) > 0) {
-            //                // char to string conversion
-            //                String readstring = String.copyValueOf(inputBuffer, 0, charRead);
-            //                s += readstring;
-            //            }
-            //            InputRead.close();
-            //            songNameTV.setText(s);
-            //endregion
-
-            //region Another way to retrieve values using string/int values
-            //            artist = song.getArtist();
-            //            songname = song.getSongName();
-            //
-            //            songnameTV.setText(songname);
-            //            artistTV.setText(artist);
-            //            artistImg.setImageResource(song.getArtistImg());
-            //endregion
-
         } catch (Exception e) {
             Log.e("printstack: ", e.toString());
         }
-
         adapter = new FavoriteListViewAdapter(R.layout.fragment_favorites_customlayout, arrayList, getActivity());
 
         //Set my listview to my custom adapter
         listView.setAdapter(adapter);
-        Log.i("callingviews", "onResume: Is called");
+        listView.setEmptyView(errorMsg);
+        Log.d(TAG1, "onStart: isCalled");
     }
 
     //region Can also use this (strings and values instead of whole class object)
-            //            FileInputStream fileIn = getActivity().openFileInput("mytextfile.txt");
-            //            InputStreamReader InputRead = new InputStreamReader(fileIn);
-            //
-            //            char[] inputBuffer = new char[READ_BLOCK_SIZE];
-            //            String s = "";
-            //            int charRead;
-            //
-            //            while ((charRead = InputRead.read(inputBuffer)) > 0) {
-            //                // char to string conversion
-            //                String readstring = String.copyValueOf(inputBuffer, 0, charRead);
-            //                s += readstring;
-            //            }
-            //            InputRead.close();
-            //            songNameTV.setText(s);
-            //endregion
-
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        Log.i("callingviews", "onDetach: Is called");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i("callingviews", "onStop: Is called");
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Log.i("callingviews", "onCreate: Is called");
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.i("callingviews", "onActivityCreated: Is called");
-    }
+    //            FileInputStream fileIn = getActivity().openFileInput("mytextfile.txt");
+    //            InputStreamReader InputRead = new InputStreamReader(fileIn);
+    //
+    //            char[] inputBuffer = new char[READ_BLOCK_SIZE];
+    //            String s = "";
+    //            int charRead;
+    //
+    //            while ((charRead = InputRead.read(inputBuffer)) > 0) {
+    //                // char to string conversion
+    //                String readstring = String.copyValueOf(inputBuffer, 0, charRead);
+    //                s += readstring;
+    //            }
+    //            InputRead.close();
+    //            songNameTV.setText(s);
+    //endregion
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.i("callingviews", "onPause: Is called");
+        Log.d(TAG1, "onPause: isCalled");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.i("callingviews", "onDestroyView: Is called");
+        Log.d(TAG1, "onDestroyView: isCalled");
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.i("callingviews", "onAttach: Is called");
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Log.i("callingviews", "onViewCreated: Is called");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.i("callingviews", "onStart: Is called");
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG1, "onStop: isCalled");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i("callingviews", "onDestroy: Is called");
+        Log.d(TAG1, "onDestroy: isCalled");
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d(TAG1, "onActivityCreated: isCalled");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d(TAG1, "onAttach: isCalled");
+    }
+
 }

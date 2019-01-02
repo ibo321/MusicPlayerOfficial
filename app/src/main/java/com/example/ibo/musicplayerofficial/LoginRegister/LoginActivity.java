@@ -14,7 +14,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.ibo.musicplayerofficial.Fragments.MainFragment;
 import com.example.ibo.musicplayerofficial.MainActivity;
 import com.example.ibo.musicplayerofficial.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -29,7 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText edtLogin_email, edtLogin_pass;
     ProgressDialog progressDialog;
     Button btn_Login;
-    CheckBox rememberME;
+    CheckBox rememberMeCB;
     Boolean checkStatus;
 
     //SharedPreference variables to save user login
@@ -37,7 +36,6 @@ public class LoginActivity extends AppCompatActivity {
     public static final String PREF_FILE_NAME = "loginPref";
     public static final String EMAIL = "EMAIL";
     public static final String PASSWORD = "PASSWORD";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,14 +77,15 @@ public class LoginActivity extends AppCompatActivity {
 
     //Remember me function that save user login
     private void checkedBox() {
+
         //assign email and password variables to sharedPreference strings
         String email = sharedPref.getString(EMAIL, null);
         String password = sharedPref.getString(PASSWORD, null);
 
         if (sharedPref.contains("checked") && sharedPref.getBoolean("checked", false)) {
-            rememberME.setChecked(true);
+            rememberMeCB.setChecked(true);
         } else {
-            rememberME.setChecked(false);
+            rememberMeCB.setChecked(false);
         }
         //if mail and pass is not null then get user email and password
         if (email != null && password != null) {
@@ -125,7 +124,7 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(LoginActivity.this);
         btn_Login = findViewById(R.id.btn_login);
         sharedPref = getSharedPreferences(PREF_FILE_NAME, MODE_PRIVATE);
-        rememberME = findViewById(R.id.remember_checkBox);
+        rememberMeCB = findViewById(R.id.remember_checkBox);
     }
 
     //Login performed using Firebase Authentication
@@ -139,37 +138,33 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Please wait..");
         progressDialog.show();
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            //Get a log message if user logged in
-                            Log.d("login", "Succeed login: " + email.toString() +
-                                    " " + password.toString());
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    //Get a log message if user logged in
+                    Log.d("login", "Succeed login: " + email.toString() + " " + password.toString());
 
-                            //Navigate to SongListActivity if success
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        } else {
-                            //Get a log message if user COULDN'T log in
-                            Log.w("login", "Failed to login: " + email.toString() + " " +
-                                    password.toString(), task.getException());
+                    //Navigate to SongListActivity if success
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    //Get a log message if user COULDN'T log in
+                    Log.w("login", "Failed to login: " + email.toString() + " " + password.toString(), task.getException());
 
-                            Toast.makeText(LoginActivity.this, "Email or password doesn't exist!",
-                                    Toast.LENGTH_LONG).show();
-                        }
-                        progressDialog.dismiss();
-                    }
-                });
+                    Toast.makeText(LoginActivity.this, "Email or password doesn't exist!", Toast.LENGTH_LONG).show();
+                }
+                progressDialog.dismiss();
+            }
+        });
     }
 
     //Navigate to Register page
     public void onClickNavigatToRegisterPage(View view) {
 
         //Intent kan også laves sådan her:
-//       Intent intent = new Intent (LoginActivity.this, RegisterActivity.class);
-//       startActivity(intent);
+        //       Intent intent = new Intent (LoginActivity.this, RegisterActivity.class);
+        //       startActivity(intent);
 
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }

@@ -17,6 +17,10 @@ public class Song implements Serializable {
         this.lyrics = lyrics;
     }
 
+    public Song() {
+
+    }
+
     public String getLyrics() {
         return lyrics;
     }

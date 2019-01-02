@@ -18,4 +18,13 @@
         android:layout_height="match_parent"
         android:layout_below="@id/searchBar"/>
 
+    <TextView
+        android:id="@+id/favFrag_emptyMsg"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="40dp"
+        android:text="No results.."
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </RelativeLayout>
