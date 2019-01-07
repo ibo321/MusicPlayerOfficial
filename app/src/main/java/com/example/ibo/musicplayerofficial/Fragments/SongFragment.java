@@ -2,6 +2,12 @@ package com.example.ibo.musicplayerofficial.Fragments;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +35,7 @@ import java.util.ArrayList;
 
 
 public class SongFragment extends Fragment {
+
     String TAG = "songfragviews";
     ScrollView scrollView;
     TextView songNameTV, lyricTxt;
@@ -58,8 +66,6 @@ public class SongFragment extends Fragment {
         playNextBtn = view.findViewById(R.id.songFrag_playNextBtn);
         playPreviousBtn = view.findViewById(R.id.songFrag_previousBtn);
 
-
-
         //Call inner class methods
         playBtn.setOnClickListener(new OnClickPlaySong());
         playNextBtn.setOnClickListener(new OnClickNextSong());
@@ -83,7 +89,7 @@ public class SongFragment extends Fragment {
         displayArtist = songNameTV.getText().toString();
 
         //new SoapCall().execute();
-        songNameTV.setSelected(true);
+
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(displayArtist);
         Log.d(TAG, "onCreateView: isCalled");
         return view;
@@ -100,7 +106,6 @@ public class SongFragment extends Fragment {
                 seekBar.setProgress(mediaPlayer.getCurrentPosition());
                 mSeekbarUpdateHandler.postDelayed(this, 10);
             }
-
         }
 
     };

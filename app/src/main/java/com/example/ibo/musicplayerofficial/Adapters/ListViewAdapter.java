@@ -40,6 +40,8 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
     String filePath;
     File getFile;
 
+
+
     //Constructor
     public ListViewAdapter(int layout, ArrayList<Song> arrayList, Context context) {
         this.layout = layout;
