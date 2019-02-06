@@ -2,6 +2,7 @@ package com.example.ibo.musicplayerofficialv2.Fragments;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.ViewModelProviders;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.ibo.musicplayerofficialv2.Classes.Song;
 import com.example.ibo.musicplayerofficialv2.R;
+import com.example.ibo.musicplayerofficialv2.ViewModel.SharedViewModel;
 
 import java.util.ArrayList;
 
@@ -42,7 +44,7 @@ public class SongFragment extends Fragment {
     String displayArtist;
     String getSong;
     Song currentSong;
-
+    SharedViewModel viewModel;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,34 +70,34 @@ public class SongFragment extends Fragment {
         songLenght = view.findViewById(R.id.songFrag_songLength);
         currentDur = view.findViewById(R.id.songFrag_currentDur);
 
+        viewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+
         //Call inner class methods
         playBtn.setOnClickListener(new OnClickPlaySong());
         playNextBtn.setOnClickListener(new OnClickNextSong());
         playPreviousBtn.setOnClickListener(new OnClickPreviousSong());
         seekBar.setOnSeekBarChangeListener(new SeekbarProgress());
 
-        //TODO: ArtistImg is empty! FIX!!
         if (getArguments() != null) {
 
-            //TODO: Get the object in whole instead of separate?
+            Song song = new Song();
+            song = (Song) getArguments().getSerializable("arg_song");
+
             Glide.with(getActivity())
-                    .load(Uri.parse(getArguments().getString("arg_artistimg")))
+                    .load(song.getArtistImg())
                     .into(artistImg);
             Glide.with(getActivity())
-                    .load(Uri.parse(getArguments().getString("arg_artistimg")))
+                    .load(song.getArtistImg())
                     .into(artistImgBG);
-
-            getSong = getArguments().getString("arg_song");
-            songNameTV.setText(getArguments().getString("arg_artist") + " " + getArguments().getString("arg_songname"));
-            lyricTxt.setText(getArguments().getString("arg_lyrics"));
-            //noinspection unchecked
-            arrayList = (ArrayList<Song>) getArguments().getSerializable("arg_arraylist");
-
+            getSong = song.getSong();
+            songNameTV.setText(song.getArtist() + " " + song.getSongName());
+            lyricTxt.setText(song.getLyrics());
         } else {
             Toast.makeText(getActivity(), "Bundle is null", Toast.LENGTH_SHORT).show();
         }
         displayArtist = "Now playing " + songNameTV.getText().toString();
 
+        arrayList = viewModel.getSongs().getValue();
         //Set the mediaplayer object
         mediaPlayer = MediaPlayer.create(getActivity(), Uri.parse(getSong));
 

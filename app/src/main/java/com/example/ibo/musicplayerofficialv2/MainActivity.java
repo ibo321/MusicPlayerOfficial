@@ -1,5 +1,7 @@
 package com.example.ibo.musicplayerofficialv2;
 
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleOwner;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,12 +16,13 @@ import com.example.ibo.musicplayerofficialv2.Fragments.CollectionFragment;
 import com.example.ibo.musicplayerofficialv2.Fragments.MainFragment;
 import com.example.ibo.musicplayerofficialv2.Fragments.RadioFragment;
 import com.example.ibo.musicplayerofficialv2.LoginRegister.LoginActivity;
+import com.example.ibo.musicplayerofficialv2.ViewModel.SharedViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LifecycleOwner {
 
     FragmentManager fragmentManager;
-
+    SharedViewModel viewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         //getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.OrangeTheme));
 
         getSupportActionBar().setTitle("Song list");
+
+//        viewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
 
         //find my bottomNavigation
         BottomNavigationView bottomNav = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -198,5 +203,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @NonNull
+    @Override
+    public Lifecycle getLifecycle() {
+        return null;
     }
 }
