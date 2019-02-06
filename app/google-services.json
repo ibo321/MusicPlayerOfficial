@@ -49,6 +49,58 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:9551887328:android:57e352de3050b441",
+        "android_client_info": {
+          "package_name": "com.example.ibo.musicplayerofficialv2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "9551887328-ivttvqt7slhvajb42fptecb2jg9ljngl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ibo.musicplayerofficialv2",
+            "certificate_hash": "1820c24016aabb9fd32ce48c353670c19d7d8abc"
+          }
+        },
+        {
+          "client_id": "9551887328-l4o67q7drmidd24gkiickc60cadaip68.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ibo.musicplayerofficialv2",
+            "certificate_hash": "f2dca7d270112723a510b215a1cf475d1489e5d7"
+          }
+        },
+        {
+          "client_id": "9551887328-e3ir8iaer7l6rokkjhfibvvrbtdjcmjl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHYIvpbCGXrONY9JRS-VLu1CiZGyJBVU0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "9551887328-e3ir8iaer7l6rokkjhfibvvrbtdjcmjl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"
