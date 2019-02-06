@@ -45,6 +45,8 @@ public class SongFragment extends Fragment {
     String getSong;
     Song currentSong;
     SharedViewModel viewModel;
+    Song song;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,15 +82,10 @@ public class SongFragment extends Fragment {
 
         if (getArguments() != null) {
 
-            Song song = new Song();
             song = (Song) getArguments().getSerializable("arg_song");
 
-            Glide.with(getActivity())
-                    .load(song.getArtistImg())
-                    .into(artistImg);
-            Glide.with(getActivity())
-                    .load(song.getArtistImg())
-                    .into(artistImgBG);
+            Glide.with(getActivity()).load(song.getArtistImg()).into(artistImg);
+            Glide.with(getActivity()).load(song.getArtistImg()).into(artistImgBG);
             getSong = song.getSong();
             songNameTV.setText(song.getArtist() + " " + song.getSongName());
             lyricTxt.setText(song.getLyrics());
@@ -110,30 +107,6 @@ public class SongFragment extends Fragment {
         Log.d(TAG, "onCreateView: isCalled");
         return view;
     }
-
-    //    @Override
-    //    public boolean onOptionsItemSelected(MenuItem item) {
-    //        switch (item.getItemId()){
-    //            case R.id.action_search:
-    //                item.setVisible(false);
-    //                break;
-    //        }
-    //        return super.onOptionsItemSelected(item);
-    //    }
-    //
-    //    @Override
-    //    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    //        super.onCreateOptionsMenu(menu, inflater);
-    //        inflater.inflate(R.menu.menu_actionbar, menu);
-    //        MenuItem item = menu.findItem(R.id.action_search);
-    //        item.setVisible(false);
-    //    }
-    //
-    //    @Override
-    //    public void onPrepareOptionsMenu(Menu menu) {
-    //        super.onPrepareOptionsMenu(menu);
-    //        menu.findItem(R.id.action_search).setVisible(false);
-    //    }
 
     /*Constantly update the seek bar according to the media player object with the help of a Runnable.
         We are using this because only the main thread can update the UI.*/
@@ -249,13 +222,9 @@ public class SongFragment extends Fragment {
             /*Set scrolling text with ObjectAnimator*/
             objectAnimator = ObjectAnimator.ofInt(scrollView, "scrollY", scrollView.getChildAt(0).
                     getHeight() - scrollView.getHeight());
-            //            if (mediaPlayer == null) {
-            //
-            //
-            //                //Get the duration of getSong
-            //                seekBar.setMax(mediaPlayer.getDuration());
-            //            }
+
             seekBar.setMax(mediaPlayer.getDuration());
+
             if (!mediaPlayer.isPlaying()) {
 
                 mediaPlayer.start();
@@ -380,14 +349,6 @@ public class SongFragment extends Fragment {
         return finalTimerString;
     }
 
-    //    @Override
-    //    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    //        super.onCreateOptionsMenu(menu, inflater);
-    //
-    //        MenuItem item = menu.findItem(R.id.action_search);
-    //        item.setVisible(false);
-    //
-    //    }
 
     //region Lifecycle-methods
     @Override
@@ -411,91 +372,4 @@ public class SongFragment extends Fragment {
         super.onPause();
         Log.d(TAG, "onPause: isCalled");
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.d(TAG, "onStart: isCalled");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume: isCalled");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy: isCalled");
-    }
-    //endregion
-    //    @Override
-    //    public void onDestroy() {
-    //
-    //        if (mediaPlayer != null) {
-    //            stopSong();
-    //            super.onDestroy();
-    //        } else {
-    //            super.onDestroy();
-    //        }
-    //        Log.d(TAG, "onDestroy: isCalled");
-    //    }
-    //Get getSong details of  the getSong clicked on
-    //refer to MainFragment for the implementation
-    //    public void getSongDetails(String artist, String songName, int artistImg, int song, String lyric) {
-    //        this.getArtistImg = artistImg;
-    //        this.getSong = song;
-    //        this.getSongName = songName;
-    //        this.getLyric = lyric;
-    //        this.getArtist = artist;
-    //    }
-
-    //region Lyrics Api (cant make it work)
-    //    //Get Lyrics API
-    //    private class SoapCall extends AsyncTask<String, Object, String> {
-    //
-    //        public static final String NAMESPACE = "http://api.chartlyrics.com/";
-    //        public static final String URL = "http://api.chartlyrics.com/apiv1.asmx?WSDL";
-    //        public static final String METHOD_NAME = "SearchLyricDirect";
-    //        public static final String SOAP_ACTION = NAMESPACE + METHOD_NAME;
-    //
-    //        public int TimeOut = 30000;
-    //        String response;
-    //        String soapArtist, soapSong;
-    //
-    //        @Override
-    //        protected String doInBackground(String... strings) {
-    //            SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-    //            // add paramaters and values
-    //            request.addProperty("soapArtist", soapArtist);
-    //            request.addProperty("soapSong", soapSong);
-    //            SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-    //            envelope.dotNet = true;
-    //            envelope.setOutputSoapObject(request);
-    //
-    //            HttpTransportSE transportSe = new HttpTransportSE(URL, TimeOut);
-    //            transportSe.debug = true;
-    //
-    //            try {
-    //                transportSe.call(NAMESPACE + METHOD_NAME, envelope);
-    //            } catch (Exception e) {
-    //                e.printStackTrace();
-    //                Log.e("Error", e.toString());
-    //            }
-    //            return response;
-    //        }
-    //
-    //        @Override
-    //        protected void onPostExecute(String result) {
-    //            super.onPostExecute(result);
-    //
-    //            if (result != null) {
-    //                testSoapTxt.setText(result);
-    //            } else {
-    //                Toast.makeText(getActivity(), "Something went wrong with API", Toast.LENGTH_LONG).show();
-    //            }
-    //        }
-    //    }
-    //endregion
 }

@@ -17,10 +17,6 @@ public class Song implements Serializable {
         this.genre = genre;
     }
 
-    public Song() {
-
-    }
-
     //    public Song(String artist, String songName, int song, int artistImg, String lyrics) {
 //
 //    }
