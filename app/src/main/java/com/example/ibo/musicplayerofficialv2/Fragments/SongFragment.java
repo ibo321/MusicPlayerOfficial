@@ -123,6 +123,7 @@ public class SongFragment extends Fragment {
             } else {
                 mSeekbarUpdateHandler.removeCallbacks(this);
             }
+
         }
     };
 
