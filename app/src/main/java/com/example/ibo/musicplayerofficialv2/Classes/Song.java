@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Song implements Serializable {
 
     //Declare variables
-    String artist, songName, lyrics, genre, song, artistImg;
+    private String artist, songName, lyrics, genre, song, artistImg;
 
     //Constructor
     public Song(String artist, String songName, String song, String artistImg, String lyrics, String genre) {
@@ -15,6 +15,10 @@ public class Song implements Serializable {
         this.artistImg = artistImg;
         this.lyrics = lyrics;
         this.genre = genre;
+    }
+
+    public Song() {
+
     }
 
     //    public Song(String artist, String songName, int song, int artistImg, String lyrics) {

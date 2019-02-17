@@ -2,6 +2,7 @@ package com.example.ibo.musicplayerofficialv2;
 
 import android.arch.lifecycle.Lifecycle;
 import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -37,8 +38,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner {
 
         getSupportActionBar().setTitle("Song list");
 
-//        viewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
-
+        viewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
         //find my bottomNavigation
         BottomNavigationView bottomNav = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
@@ -113,16 +113,8 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner {
                         fragmentManager.beginTransaction().show(new CollectionFragment());
                     }
 
-                    //region Old code used to manage CollectionFragment
-                    //if (fragmentManager.findFragmentByTag("collection") != null) {
-                    //   fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("collection")).commit();
-                    //
-                    //} else {
-                    //   fragmentManager.beginTransaction().add(R.id.fragment_container, new CollectionFragment(), "collection").commit();
-                    //}
-                    //endregion
-
                     getSupportActionBar().setTitle("Collection");
+
                     break;
                 case R.id.action_radio:
 
@@ -149,8 +141,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner {
                     }
 
                     getSupportActionBar().setTitle("Radio");
-                    //getSupportActionBar().show();
-                    //getSupportActionBar().setTitle("Radio");
+
                     break;
             }
             return true;
@@ -170,13 +161,6 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    //    @Override
-    //    public boolean onCreateOptionsMenu(Menu menu) {
-    //        getMenuInflater().inflate(R.menu.menu_actionbar, menu);
-    //
-    //        return super.onCreateOptionsMenu(menu);
-    //    }
 
     public void signOut() {
         FirebaseAuth.getInstance().signOut();

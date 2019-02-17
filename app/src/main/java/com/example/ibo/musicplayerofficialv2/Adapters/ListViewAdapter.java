@@ -1,6 +1,11 @@
 package com.example.ibo.musicplayerofficialv2.Adapters;
 
+import android.arch.lifecycle.LifecycleOwner;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +20,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.ibo.musicplayerofficialv2.Classes.Song;
 import com.example.ibo.musicplayerofficialv2.R;
+import com.example.ibo.musicplayerofficialv2.ViewModel.SharedViewModel;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,6 +44,8 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
 
     String filePath;
     File getFile;
+
+    SharedViewModel viewModel;
 
     //Constructor
     public ListViewAdapter(int layout, ArrayList<Song> arrayList, Context context) {
@@ -79,18 +87,18 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
+    public View getView(int position, View view, final ViewGroup parent) {
 
-        //Create viewholder variable
+        /*Create viewholder variable*/
         final Viewholder viewholder;
 
-        //Check if view is null
+        /*Check if view is null*/
         if (view == null) {
 
-            //Create new ViewHolder object
+            /*Create new ViewHolder object*/
             viewholder = new Viewholder();
 
-            //Inflate my view
+            /*Inflate my view*/
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(R.layout.songlist_customlayout, null);
 
@@ -101,13 +109,13 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
             viewholder.favBtn = view.findViewById(R.id.favButton);
             viewholder.genreTxt = view.findViewById(R.id.genre);
 
-            //Set my view to viewholder
+            /*Set my view to viewholder*/
             view.setTag(viewholder);
         } else {
             viewholder = (Viewholder) view.getTag();
         }
 
-        //Assign song to my arraylist
+        /*Assign song to my arraylist*/
         final Song song = arrayList.get(position);
 
         //Set my views to their resources
@@ -129,44 +137,53 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
             @Override
             public void onClick(View v) {
 
-                try {
-                    /*Create fileoutputstream and objectoutputstream*/
-                    //                    file = new FileOutputStream(getFile);
-                    object = new ObjectOutputStream(new FileOutputStream(getFile));
+                //TODO: Almost fixed! Look at Viewmodel.
+                viewModel = ViewModelProviders.of((FragmentActivity) context).get(SharedViewModel.class);
+                favList.add(song);
+                viewModel.getFavList().setValue(favList);
 
-                    /*Add song to new list*/
-                    favList.add(song);
-                    /*Add list to the stream*/
-                    object.writeObject(favList);
+                //region Replaced ObjectStream with ViewModel
+//                try {
+//                    /*Create fileoutputstream and objectoutputstream*/
+//                    //                    file = new FileOutputStream(getFile);
+//                    object = new ObjectOutputStream(new FileOutputStream(getFile));
+//
+//                    /*Add song to new list*/
+//                    favList.add(song);
+//                    /*Add list to the stream*/
+//                    object.writeObject(favList);
+//
+//                    //region Can also use this to write data (instead of class object)
+//                    //                    fileout = context.openFileOutput("mytextfile.txt", MODE_PRIVATE);
+//                    //                    outputWriter = new OutputStreamWriter(fileout);
+//                    //                    outputWriter.write(song.getSongName());
+//                    //                    outputWriter.close();
+//
+//
+//                    /*Show message of saved files*/
+//                    counter++;
+//                    Toast.makeText(context, "Added to favorite list: " + song.getArtist() + " " + song.getSongName(), Toast.LENGTH_SHORT).show();
+//                    Log.d("favList", "Added to the favList: " + counter + " " + song.getArtist() + " " + song.getSongName());
+//
+//                    /*Closing resources*/
+//                    object.close();
+//                    file.close();
+//
+//                    //Used to APPEND in stream but couldnt make it work
+//                    //                    ObjectOutputStream os2 = new ObjectOutputStream(new FileOutputStream("/test.txt", true)) {
+//                    //                        protected void writeStreamHeader() throws IOException {
+//                    //                            reset();
+//                    //                        }
+//                    //                    };
+//                    //
+//                    //                    os2.writeObject(song);
+//
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+                //endregion
 
-                    //region Can also use this to write data (instead of class object)
-                    //                    fileout = context.openFileOutput("mytextfile.txt", MODE_PRIVATE);
-                    //                    outputWriter = new OutputStreamWriter(fileout);
-                    //                    outputWriter.write(song.getSongName());
-                    //                    outputWriter.close();
-                    //endregion
-                    /*Show message of saved files*/
-                    counter++;
-                    Toast.makeText(context, "Added to favorite list: " + song.getArtist() + " " + song.getSongName(), Toast.LENGTH_SHORT).show();
-                    Log.d("favList", "Added to the favList: " + counter + " " + song.getArtist() + " " + song.getSongName());
-
-                    /*Closing resources*/
-                    object.close();
-                    file.close();
-
-                    //region Used to APPEND in stream but couldnt make it work
-                    //                    ObjectOutputStream os2 = new ObjectOutputStream(new FileOutputStream("/test.txt", true)) {
-                    //                        protected void writeStreamHeader() throws IOException {
-                    //                            reset();
-                    //                        }
-                    //                    };
-                    //
-                    //                    os2.writeObject(song);
-                    //endregion
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 viewholder.favBtn.setImageResource(R.drawable.favorite);
             }
         });
@@ -174,13 +191,14 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
         return view;
     }
 
-    //INNER CLASS
+    /*A custom inner class to filter list of songs*/
     class CustomFilter extends Filter {
 
         @Override
         protected FilterResults performFiltering(CharSequence inputText) {
             FilterResults results = new FilterResults();
             if (inputText != null && inputText.length() > 0) {
+
                 /*Converts to UpperCase*/
                 inputText = inputText.toString().toUpperCase();
 

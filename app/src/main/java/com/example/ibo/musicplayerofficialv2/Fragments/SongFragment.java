@@ -229,7 +229,7 @@ public class SongFragment extends Fragment {
             if (!mediaPlayer.isPlaying()) {
 
                 mediaPlayer.start();
-                playBtn.setImageResource(R.drawable.pause_big_orange);
+                playBtn.setImageResource(R.drawable.ic_pause);
 
                 /*Call my handler to update my seekbar*/
                 mSeekbarUpdateHandler.postDelayed(mUpdateSeekbar, 0);
@@ -247,7 +247,7 @@ public class SongFragment extends Fragment {
 
     public void pauseSong() {
         mediaPlayer.pause();
-        playBtn.setImageResource(R.drawable.play_big);
+        playBtn.setImageResource(R.drawable.ic_action_play);
 
         /*Remove the callback of the handler*/
         mSeekbarUpdateHandler.removeCallbacks(mUpdateSeekbar);
@@ -301,7 +301,7 @@ public class SongFragment extends Fragment {
                 Glide.with(getActivity()).load(currentSong.getArtistImg()).into(artistImgBG);
 
                 mediaPlayer.start();
-                playBtn.setImageResource(R.drawable.pause_big_orange);
+                playBtn.setImageResource(R.drawable.ic_pause);
 
                 mediaPlayer.seekTo(mediaPlayer.getCurrentPosition());
                 mSeekbarUpdateHandler.postDelayed(mUpdateSeekbar, 0);

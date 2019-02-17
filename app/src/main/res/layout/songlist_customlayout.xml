@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/songFrag_artistImg"
@@ -11,44 +10,49 @@
         android:layout_marginTop="2dp"
         android:scaleType="centerCrop"
         android:src="@drawable/musiclogo" />
-        <!--app:civ_border_color="@color/white"-->
-        <!--app:civ_border_width="2dp" />-->
+    <!--app:civ_border_color="@color/white"-->
+    <!--app:civ_border_width="2dp" />-->
 
     <TextView
         android:id="@+id/artistTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/songFrag_artistImg"
+        android:autoSizeTextType="uniform"
         android:text="Artist"
-        android:textColor="@color/black"
-        android:autoSizeTextType="uniform"/>
+        android:layout_marginLeft="5dp"
+        android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/songNameTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+
         android:layout_below="@id/artistTxt"
         android:layout_toRightOf="@id/songFrag_artistImg"
-        android:text="Song Name"
         android:autoSizeTextType="uniform"
-        android:textColor="#FF6D15" />
+        android:text="Song Name"
+        android:textColor="#e44434" />
 
     <TextView
         android:id="@+id/genre"
-        android:text="Genre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/songNameTxt"
-        android:textSize="12dp"
+        android:layout_marginLeft="5dp"
+
+        android:layout_toRightOf="@id/songFrag_artistImg"
         android:alpha="0.6"
-        android:layout_toRightOf="@id/songFrag_artistImg"/>
+        android:text="Genre"
+        android:textSize="12dp" />
 
     <ImageView
         android:id="@+id/favButton"
         android:layout_width="30sp"
         android:layout_height="30sp"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="12dp"
-        android:src="@drawable/logo_favorite_half"
-        android:layout_alignParentEnd="true"/>
+        android:src="@drawable/logo_favorite_half" />
 
 </RelativeLayout>

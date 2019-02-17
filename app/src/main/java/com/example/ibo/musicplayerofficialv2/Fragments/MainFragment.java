@@ -26,8 +26,6 @@ import com.example.ibo.musicplayerofficialv2.MainActivity;
 import com.example.ibo.musicplayerofficialv2.R;
 import com.example.ibo.musicplayerofficialv2.ViewModel.SharedViewModel;
 
-//import com.example.ibo.musicplayerofficialv2.DatabaseHelper;
-
 public class MainFragment extends Fragment {
 
     //Declare variables
@@ -143,17 +141,7 @@ public class MainFragment extends Fragment {
             }
         }
     }
-
-    //region Unused Method - Replaced with method underneath
-    //    //Stop getSong when fragment is changed
-    //    @Override
-    //    public void onStop() {
-    //        super.onStop();
-    //
-    //        //Call method onStop from my adapter
-    //        adapter.StopSong();
-    //    }
-    //endregion
+    //region Calling a method to stop the song from adapter class (unused)
     //    @Override
     //    public void onPause() {
     //        super.onPause();
@@ -161,4 +149,5 @@ public class MainFragment extends Fragment {
     //        //Call method PauseSong inside my adapter
     //        adapter.PauseSong();
     //    }
+    //endregion
 }

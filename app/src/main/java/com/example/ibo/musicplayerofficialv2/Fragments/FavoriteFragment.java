@@ -1,5 +1,6 @@
 package com.example.ibo.musicplayerofficialv2.Fragments;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,6 +22,7 @@ import com.example.ibo.musicplayerofficialv2.Adapters.FavoriteListViewAdapter;
 import com.example.ibo.musicplayerofficialv2.Classes.Song;
 import com.example.ibo.musicplayerofficialv2.MainActivity;
 import com.example.ibo.musicplayerofficialv2.R;
+import com.example.ibo.musicplayerofficialv2.ViewModel.SharedViewModel;
 
 import java.io.EOFException;
 import java.io.File;
@@ -42,12 +44,13 @@ public class FavoriteFragment extends Fragment {
     //Declare view objects
     TextView errorMsg;
 
-    //Declare ObjectInputStream objects
+    //region Declare ObjectInputStream objects replaced with ViewModel
     String filePath;
     File f;
     FileInputStream file;
     ObjectInputStream object;
     boolean cont = true;
+    //endregion
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,7 +59,6 @@ public class FavoriteFragment extends Fragment {
         //        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Collection");
     }
 
-    //TODO: Listview is not getting updated!
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -103,57 +105,51 @@ public class FavoriteFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        try {
 
-            /*Get the file path and convert to a file*/
-            filePath = getActivity().getFilesDir().getPath() + "/test.txt";
-            f = new File(filePath);
+        SharedViewModel viewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
 
-            /*Get file streams*/
-            file = new FileInputStream(f);
-            object = new ObjectInputStream(file);
+        //region Replaced ObjectStream with ViewModel
+        //        try {
+        //
+        //            /*Get the file path and convert to a file*/
+        //            filePath = getActivity().getFilesDir().getPath() + "/test.txt";
+        //            f = new File(filePath);
+        //
+        //            /*Get file streams*/
+        //            file = new FileInputStream(f);
+        //            object = new ObjectInputStream(file);
+        //
+        //            while (cont) {
+        //                try {
+        //
+        //                    /*Get list of songs from the stream
+        //                     *Use Set<Song> object to remove duplicates*/
+        //                    arrayList = (ArrayList<Song>) object.readObject();
+        //                    Set<Song> noDupList = new LinkedHashSet<>(arrayList);
+        //
+        //                    for (Song song : arrayList) {
+        //                        noDupList.add(song);
+        //                    }
+        //
+        //                } catch (EOFException e) {
+        //                    e.toString();
+        //                    break;
+        //                }
+        //            }
+        //
+        //            /*close resources*/
+        //            object.close();
+        //            file.close();
+        //        } catch (Exception e) {
+        //            Log.e("printstack: ", e.toString());
+        //        }
+        //endregion
 
-            while (cont) {
-                try {
-
-                    /*Get list of songs from the stream
-                     *Use Set<Song> object to remove duplicates*/
-                    arrayList = (ArrayList<Song>) object.readObject();
-                    Set<Song> noDupList = new LinkedHashSet<>(arrayList);
-
-                    for (Song song : arrayList) {
-                        noDupList.add(song);
-                    }
-
-                } catch (EOFException e) {
-                    e.toString();
-                    break;
-                }
-            }
-
-            /*close resources*/
-            object.close();
-            file.close();
-        } catch (Exception e) {
-            Log.e("printstack: ", e.toString());
-        }
-
-        adapter = new FavoriteListViewAdapter(R.layout.fragment_favorites_customlayout, arrayList, getActivity());
+        adapter = new FavoriteListViewAdapter(R.layout.fragment_favorites_customlayout, viewModel.getFavList().getValue(), getActivity());
 
         //Set my listview to my custom adapter
         listView.setAdapter(adapter);
         listView.setEmptyView(errorMsg);
-
-        //        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-        //            @Override
-        //            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //                FragmentManager fragmentManager = getActivity().getSupportFragmentManager()
-        //                fragmentManager.beginTransaction()
-        //                        .add(R.id.fragment_container, new SongFragment())
-        //                        .addToBackStack(null)
-        //                        .commit();
-        //            }
-        //        });
 
         Log.d(TAG1, "onStart: isCalled");
     }
@@ -174,43 +170,4 @@ public class FavoriteFragment extends Fragment {
     //            InputRead.close();
     //            songNameTV.setText(s);
     //endregion
-
-    //region Lifecycle-methods
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG1, "onPause: isCalled");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        Log.d(TAG1, "onDestroyView: isCalled");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG1, "onStop: isCalled");
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG1, "onDestroy: isCalled");
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Log.d(TAG1, "onActivityCreated: isCalled");
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.d(TAG1, "onAttach: isCalled");
-    }
-    //endregion
-
 }

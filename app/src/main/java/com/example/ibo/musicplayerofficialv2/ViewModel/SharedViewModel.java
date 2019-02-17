@@ -1,29 +1,38 @@
 package com.example.ibo.musicplayerofficialv2.ViewModel;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import com.example.ibo.musicplayerofficialv2.Classes.Song;
-import com.example.ibo.musicplayerofficialv2.Repository.SongRepository;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class SharedViewModel extends ViewModel {
 
     private MutableLiveData<ArrayList<Song>> songs;
-    private SongRepository repo;
+    private MutableLiveData<ArrayList<Song>> favSongs;
 
     public MutableLiveData<ArrayList<Song>> getSongs() {
         if (songs == null) {
-            songs = new MutableLiveData<>();
+            songs = new MutableLiveData<ArrayList<Song>>();
             loadSongs();
         }
         return songs;
     }
 
+    public MutableLiveData<ArrayList<Song>> getFavList() {
+        if (favSongs == null) {
+            favSongs = new MutableLiveData<ArrayList<Song>>();
+        }
+        return favSongs;
+    }
+
     private void loadSongs() {
 
         ArrayList<Song> songList = new ArrayList<>();
+
         //region Add songs (collapsed)
         songList.add(new Song("Beyonce", " -Formation", "https://firebasestorage.googleapis.com/v0/b/musicplayerofficial-563bc.appspot.com/o/beyonce_formation.mp3?alt=media&token=47be3353-2045-4d7e-8c2d-a4d913475e7c", "https://firebasestorage.googleapis.com/v0/b/musicplayerofficial-563bc.appspot.com/o/beyonce.jpg?alt=media&token=0e635764-72e2-43cd-9a6b-412e6be48b19", "Y'all haters corny with that illuminati mess\n" + "Paparazzi, catch my fly, and my cocky fresh\n" + "I'm so reckless when I rock my Givenchy dress (stylin')\n" + "I'm so possessive so I rock his Roc necklaces\n" + "My daddy Alabama, momma Louisiana\n" + "You mix that negro with that Creole make a Texas bamma\n" + "I like my baby hair, with baby hair and afros\n" + "I like my negro nose with Jackson Five nostrils\n" + "Earned all this money but they never take the country out me\n" + "I got a hot sauce in my bag, swag\n" + "I see it, I want it\n" + "I stunt, yellow bone it\n" + "I dream it, I work hard\n" + "I grind 'til I own it\n" + "I twirl on them haters\n" + "Albino alligators\n" + "El Camino with the seat low\n" + "Sippin' Cuervo with no chaser\n" + "Sometimes I go off, I go off\n" + "I go hard, I go hard\n" + "Get what's mine, take what's mine\n" + "I'm a star, I'm a star\n" + "'Cause I slay, slay\n" + "I slay, hey, I slay, okay\n" + "I slay, okay, all day, okay\n" + "I slay, okay, I slay okay\n" + "We gon' slay, slay\n" + "Gon' slay, okay\n" + "We slay, okay\n" + "I slay, okay\n" + "I slay, okay\n" + "Okay, okay, I slay, okay\n" + "Okay, okay, okay, okay\n" + "Okay, okay, ladies, now let's get in formation, 'cause I slay\n" + "Okay ladies, now let's get in formation, 'cause I slay\n" + "Prove to me you got some coordination, 'cause I slay\n" + "Slay trick, or you get eliminated\n" + "When he fuck me good I take his ass to Red Lobster, 'cause I slay\n" + "When he fuck me good I take his ass to Red Lobster, 'cause I slay\n" + "If he hit it right, I might take him on a flight on my chopper, 'cause I slay\n" + "Drop him off at the mall, let him buy some J's, let him shop up, 'cause I slay\n" + "I might get your getSong played on the radio station, 'cause I slay\n" + "I might get your getSong played on the radio station, 'cause I slay\n" + "You just might be a black Bill Gates in the making, 'cause I slay\n" + "I just might be a black Bill Gates in the making\n" + "I see it, I want it\n" + "I stunt, yellow bone it\n" + "I dream it, I work hard\n" + "I grind 'til I own it\n" + "I twirl on them haters\n" + "Albino alligators\n" + "El Camino with the seat low\n" + "Sippin' Cuervo with no chaser\n" + "Sometimes I go off, I go off\n" + "I go hard, I go hard\n" + "Take what's mine, take what's mine\n" + "I'm a star, I'm a star\n" + "'Cause I slay, slay\n" + "I slay, hey, I slay, okay\n" + "I slay, okay, I slay, okay\n" + "I slay, okay, I slay okay\n" + "I slay, okay\n" + "We gon' slay, slay\n" + "Gon' slay, okay\n" + "We slay, okay\n" + "I slay, okay\n" + "I slay, okay\n" + "Okay, okay, I slay, okay\n" + "Okay, okay, okay, okay\n" + "Okay, okay, ladies, now let's get in formation, I slay\n" + "Okay ladies, now let's get in formation, I slay\n" + "Prove to me you got some coordination, I slay\n" + "Slay trick, or you get eliminated, I slay\n" + "Okay ladies, now let's get in formation, I slay\n" + "Okay ladies, now let's get in formation\n" + "You know you that bitch when you cause all this conversation\n" + "Always stay gracious, best revenge is your paper", "Trap"));
         songList.add(new Song("Ava Max", " -Sweet but Psycho", "https://firebasestorage.googleapis.com/v0/b/musicplayerofficial-563bc.appspot.com/o/avamax_sweetbutpsycho.mp3?alt=media&token=bacac979-17ab-46b2-a087-e2c904df79f1", "https://firebasestorage.googleapis.com/v0/b/musicplayerofficial-563bc.appspot.com/o/avamax.jpg?alt=media&token=39034ad7-bb1a-4f98-90ae-2f3825d649bf", "[Chorus]\n" + "Oh, she's sweet but a psycho\n" + "A little bit psycho\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "Oh, she's hot but a psycho\n" + "So left but she's right though\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "\n" + "[Verse 1]\n" + "She'll make you curse, but she a blessing\n" + "She'll rip your shirt within a second\n" + "You'll be coming back, back for seconds\n" + "With your plate, you just can't help it\n" + "\n" + "[Pre-Chorus]\n" + "No, no\n" + "You'll play alo-o-ong\n" + "Let her lead you o-o-on\n" + "You'll be saying \"No, no\"\n" + "Then saying \"Yes, yes, yes\"\n" + "'Cause she messin' with your head\n" + "\n" + "[Chorus]\n" + "Oh, she's sweet but a psycho\n" + "A little bit psycho\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "Oh, she's hot but a psycho\n" + "So left but she's right though\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "\n" + "[Post-Chorus]\n" + "Grab a cop gun kinda crazy\n" + "She's poison but tasty\n" + "Yeah, people say \"Run, don't walk away\"\n" + "'Cause she's sweet but a psycho\n" + "A little bit psycho\n" + "At night she screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "\n" + "[Verse 2]\n" + "See, someone said, don't drink her potions\n" + "She'll kiss your neck with no emotion\n" + "When she's mean, you know you love it\n" + "She tastes so sweet, don't sugar coat it\n" + "\n" + "[Pre-Chorus]\n" + "No, no\n" + "You'll play alo-o-ong\n" + "Let her lead you o-o-on\n" + "You'll be saying \"No (no, no, no), no (no)\"\n" + "Then saying \"Yes, yes, yes\"\n" + "'Cause she messin' with your head\n" + "\n" + "[Chorus]\n" + "Oh, she's sweet but a psycho\n" + "A little bit psycho\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "Oh, she's hot but a psycho\n" + "So left but she's right though\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "\n" + "[Post-Chorus]\n" + "Grab a cop gun kinda crazy\n" + "She's poison but tasty\n" + "Yeah, people say \"Run, don't walk away\"\n" + "'Cause she's sweet but a psycho\n" + "A little bit psycho\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "\n" + "[Bridge]\n" + "You're just like me, you're out your mind\n" + "I know it's strange, we're both the crazy kind\n" + "You're tellin' me that I'm insane\n" + "Boy, don't pretend that you don't love the pain\n" + "\n" + "[Chorus]\n" + "Oh, she's sweet but a psycho\n" + "A little bit psycho\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "Oh, she's hot but a psycho\n" + "So left but she's right though\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "\n" + "[Post-Chorus]\n" + "Grab a cop gun kinda crazy\n" + "She's poison but tasty\n" + "Yeah, people say \"Run, don't walk away\"\n" + "'Cause she's sweet but a psycho\n" + "A little bit psycho\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"", "Pop"));
