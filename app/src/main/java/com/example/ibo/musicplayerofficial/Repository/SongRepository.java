@@ -1,6 +1,6 @@
-package com.example.ibo.musicplayerofficialv2.Repository;
+package com.example.ibo.musicplayerofficial.Repository;
 
-import com.example.ibo.musicplayerofficialv2.Classes.Song;
+import com.example.ibo.musicplayerofficial.Classes.Song;
 
 import java.util.ArrayList;
 

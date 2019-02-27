@@ -1,4 +1,4 @@
-package com.example.ibo.musicplayerofficialv2.Adapters;
+package com.example.ibo.musicplayerofficial.Adapters;
 
 import android.content.Context;
 import android.net.Uri;
@@ -11,8 +11,8 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.ibo.musicplayerofficialv2.Classes.Song;
-import com.example.ibo.musicplayerofficialv2.R;
+import com.example.ibo.musicplayerofficial.Classes.Song;
+import com.example.ibo.musicplayerofficial.R;
 
 import java.util.ArrayList;
 

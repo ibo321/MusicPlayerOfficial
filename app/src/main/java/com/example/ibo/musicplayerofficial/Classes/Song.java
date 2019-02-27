@@ -1,4 +1,4 @@
-package com.example.ibo.musicplayerofficialv2.Classes;
+package com.example.ibo.musicplayerofficial.Classes;
 
 import java.io.Serializable;
 
@@ -6,6 +6,7 @@ public class Song implements Serializable {
 
     //Declare variables
     private String artist, songName, lyrics, genre, song, artistImg;
+    private boolean isFavorite;
 
     //Constructor
     public Song(String artist, String songName, String song, String artistImg, String lyrics, String genre) {
@@ -21,9 +22,13 @@ public class Song implements Serializable {
 
     }
 
-    //    public Song(String artist, String songName, int song, int artistImg, String lyrics) {
-//
-//    }
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
 
     public String getGenre() {
         return genre;
@@ -41,7 +46,6 @@ public class Song implements Serializable {
         this.lyrics = lyrics;
     }
 
-    //Get/Set methods
     public String getArtistImg() {
         return artistImg;
     }
@@ -73,7 +77,5 @@ public class Song implements Serializable {
     public void setSong(String song) {
         this.song = song;
     }
-
-
 }
 

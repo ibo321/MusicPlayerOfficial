@@ -14,9 +14,9 @@
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:alpha="0.4"
         android:background="@color/black"
         android:scaleType="centerCrop"
-        android:alpha="0.4"
         android:src="@drawable/edsher" />
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -27,8 +27,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="6dp"
         android:src="@drawable/edsher"
-        app:civ_border_color="@android:color/transparent"
-        app:civ_border_width="2sp" />
+        app:civ_border_color="@color/white"
+        app:civ_border_width="1dp" />
 
     <TextView
         android:id="@+id/songNameTxt"
@@ -46,23 +46,22 @@
         android:id="@+id/songFrag_currentDur"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/songNameTxt"
-        android:layout_marginTop="9sp"
-        android:layout_toStartOf="@id/songLenght"
+        android:layout_below="@id/songLenght"
+        android:layout_alignStart="@id/songLenght"
         android:text="00:00" />
 
     <TextView
         android:id="@+id/songFrag_songLength"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/songNameTxt"
+        android:layout_below="@id/songLenght"
         android:layout_marginTop="9sp"
-        android:layout_toRightOf="@id/songLenght"
+        android:layout_alignEnd="@id/songLenght"
         android:text="03:00" />
 
     <SeekBar
         android:id="@+id/songLenght"
-        android:layout_width="250dp"
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/songNameTxt"
         android:layout_centerInParent="true"
@@ -70,40 +69,39 @@
 
     <ImageView
         android:id="@+id/songFrag_previousBtn"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="20dp"
-
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_below="@id/songLenght"
+        android:layout_marginTop="40dp"
         android:layout_marginRight="40dp"
         android:layout_toLeftOf="@id/songFrag_playBtn"
-        android:src="@drawable/login_ic_previous" />
+        android:src="@drawable/previous" />
 
     <ImageView
         android:id="@+id/songFrag_playBtn"
-        android:layout_width="70sp"
-        android:layout_height="70sp"
-        android:layout_marginTop="15dp"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
         android:layout_below="@id/songLenght"
         android:layout_centerInParent="true"
-        android:src="@drawable/ic_action_play" />
+        android:layout_marginTop="15dp"
+        android:src="@drawable/play_big" />
 
     <ImageView
         android:id="@+id/songFrag_playNextBtn"
-        android:layout_width="60sp"
-        android:layout_height="60sp"
-        android:layout_marginTop="20dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_below="@id/songLenght"
         android:layout_marginLeft="40dp"
+        android:layout_marginTop="40dp"
         android:layout_toEndOf="@id/songFrag_playBtn"
-        android:src="@drawable/login_ic_next" />
+        android:src="@drawable/next" />
 
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/songFrag_playBtn"
-        android:alpha="0.5">
+        android:alpha="0.6">
 
 
         <TextView

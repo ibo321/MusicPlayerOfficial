@@ -17,9 +17,10 @@
         android:layout_below="@id/toolbar"
         android:layout_above="@id/bottom_navigation" />
 
-    <android.support.design.widget.BottomNavigationView
+    <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
+        android:background="@color/white"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:itemTextColor="@color/btm_nav_item_colors"

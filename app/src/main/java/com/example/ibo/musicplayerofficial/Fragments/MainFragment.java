@@ -1,13 +1,7 @@
-package com.example.ibo.musicplayerofficialv2.Fragments;
+package com.example.ibo.musicplayerofficial.Fragments;
 
-import android.arch.lifecycle.ViewModelProviders;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,11 +14,21 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.example.ibo.musicplayerofficialv2.Adapters.ListViewAdapter;
-import com.example.ibo.musicplayerofficialv2.Classes.Song;
-import com.example.ibo.musicplayerofficialv2.MainActivity;
-import com.example.ibo.musicplayerofficialv2.R;
-import com.example.ibo.musicplayerofficialv2.ViewModel.SharedViewModel;
+import com.example.ibo.musicplayerofficial.Adapters.ListViewAdapter;
+import com.example.ibo.musicplayerofficial.MainActivity;
+import com.example.ibo.musicplayerofficial.R;
+import com.example.ibo.musicplayerofficial.ViewModel.SharedViewModel;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProviders;
 
 public class MainFragment extends Fragment {
 
@@ -40,9 +44,9 @@ public class MainFragment extends Fragment {
     FragmentManager fragmentManager;
 
     Bundle bundle;
-    String TAG = "mainfragmentviews";
+    String TAG = "timecalculator";
 
-    MenuItem item;
+    MenuItem menuItem;
     SharedViewModel viewModel;
 
     @Override
@@ -75,7 +79,7 @@ public class MainFragment extends Fragment {
         songListView.setOnItemClickListener(new ListViewClickListener());
 
         Log.d(TAG, "onCreateView: isCalled");
-        //return my view
+
         return view;
     }
 
@@ -85,10 +89,10 @@ public class MainFragment extends Fragment {
 
         menu.clear();
         inflater.inflate(R.menu.menu_actionbar, menu);
-        item = menu.findItem(R.id.action_search);
+        menuItem = menu.findItem(R.id.action_search);
         SearchView searchView = new SearchView(((MainActivity) getActivity()).getSupportActionBar().getThemedContext());
-        //            MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
-        MenuItemCompat.setActionView(item, searchView);
+        //            MenuItemCompat.setShowAsAction(menuItem, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+        MenuItemCompat.setActionView(menuItem, searchView);
         searchView.setQueryHint("Search here..");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -109,36 +113,42 @@ public class MainFragment extends Fragment {
     //I call this class inside my onCreateView so i dont populate it too much
     private class ListViewClickListener implements AdapterView.OnItemClickListener {
 
+        @SuppressLint("SimpleDateFormat")
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-            final Song song = viewModel.getSongs().getValue().get(position);
+            //            final Song song = viewModel.getSongs().getValue().get(position);
             songFragment = new SongFragment();
 
             /*Call FragmentManager and begin the transaction to my SongFragment class*/
             fragmentManager = getFragmentManager();
             fragmentTransaction = fragmentManager.beginTransaction();
 
-            /*Send master details to SongFragment using bundle*/
-            bundle = new Bundle();
-            bundle.putSerializable("arg_song", song);
-            songFragment.setArguments(bundle);
+            //region Send master details to SongFragment using bundle replaced with Viewmodel.
+            //            bundle = new Bundle();
+            //            bundle.putSerializable("arg_song", song);
+            //            songFragment.setArguments(bundle);
+            //endregion
 
+            Log.d(TAG, "Reading song from viewmodel: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
+            viewModel.setClickedSong(viewModel.getSongs().getValue().get(position));
+            Log.d(TAG, "Got song: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
             //FIXED: When navigating to "main" and clicked on another song the same song was showing in SongFragment.
             //HOW: This was fixed by changing this whole fragment managing by "remove" instead of "hide" SongFragment.
             //TODO: Maybe this is a duplicate? Check BottomNavigationBar Switch-statement under "main"
-            if (fragmentManager.findFragmentByTag("song") == null) {
-                fragmentManager.beginTransaction().add(R.id.fragment_container, songFragment, "song").addToBackStack(null).commit();
+            if (fragmentManager.findFragmentByTag("songfragment") == null) {
+                fragmentManager.beginTransaction().add(R.id.fragment_container, songFragment, "songfragment").addToBackStack(null).commit();
                 fragmentTransaction.setCustomAnimations(R.anim.pull_up, R.anim.pull_down);
                 fragmentManager.beginTransaction().hide(mainFragment);
-                //                item.setVisible(false);
+                //                menuItem.setVisible(false);
             } else {
                 fragmentManager.beginTransaction().remove(songFragment).commit();
-                fragmentManager.beginTransaction().add(R.id.fragment_container, songFragment, "song").addToBackStack(null).commit();
+                fragmentManager.beginTransaction().add(R.id.fragment_container, songFragment, "songfragment").addToBackStack(null).commit();
                 fragmentManager.beginTransaction().show(songFragment).commit();
-                //                item.setVisible(false);
+                //                menuItem.setVisible(false);
                 //fragmentManager.beginTransaction().show(songFragment).addToBackStack(null).commit();
             }
+            Log.d(TAG, "Began transaction to Songfragment:  " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
         }
     }
     //region Calling a method to stop the song from adapter class (unused)

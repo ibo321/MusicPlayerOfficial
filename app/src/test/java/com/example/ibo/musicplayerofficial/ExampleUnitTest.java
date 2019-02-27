@@ -1,4 +1,4 @@
-package com.example.ibo.musicplayerofficialv2;
+package com.example.ibo.musicplayerofficial;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.example.ibo.musicplayerofficialv2.Interfaces;
+package com.example.ibo.musicplayerofficial.Interfaces;
 
 public interface OnUpdateFragment {
     void onDataSetChanged();

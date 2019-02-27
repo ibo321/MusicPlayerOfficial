@@ -1,12 +1,6 @@
-package com.example.ibo.musicplayerofficialv2.Fragments;
+package com.example.ibo.musicplayerofficial.Fragments;
 
-import android.arch.lifecycle.ViewModelProviders;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,23 +8,28 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import com.example.ibo.musicplayerofficialv2.Adapters.FavoriteListViewAdapter;
-import com.example.ibo.musicplayerofficialv2.Classes.Song;
-import com.example.ibo.musicplayerofficialv2.MainActivity;
-import com.example.ibo.musicplayerofficialv2.R;
-import com.example.ibo.musicplayerofficialv2.ViewModel.SharedViewModel;
+import com.example.ibo.musicplayerofficial.Adapters.FavoriteListViewAdapter;
+import com.example.ibo.musicplayerofficial.Classes.Song;
+import com.example.ibo.musicplayerofficial.MainActivity;
+import com.example.ibo.musicplayerofficial.R;
+import com.example.ibo.musicplayerofficial.ViewModel.SharedViewModel;
 
-import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.Set;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuItemCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProviders;
 
 public class FavoriteFragment extends Fragment {
 
@@ -43,6 +42,7 @@ public class FavoriteFragment extends Fragment {
 
     //Declare view objects
     TextView errorMsg;
+    SharedViewModel viewModel;
 
     //region Declare ObjectInputStream objects replaced with ViewModel
     String filePath;
@@ -63,7 +63,7 @@ public class FavoriteFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
-
+        Log.d(TAG1, "onCreateView: is called");
         listView = view.findViewById(R.id.favFrag_listview);
         errorMsg = view.findViewById(R.id.favFrag_emptyMsg);
         arrayList = new ArrayList<Song>();
@@ -71,42 +71,7 @@ public class FavoriteFragment extends Fragment {
         //        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         //        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Collection");
 
-        Log.d(TAG1, "onCreateView: is called");
-        return view;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-
-        menu.clear();
-        inflater.inflate(R.menu.menu_actionbar, menu);
-        MenuItem item = menu.findItem(R.id.action_search);
-        SearchView searchView = new SearchView(((MainActivity) getActivity()).getSupportActionBar().getThemedContext());
-        //        MenuItemCompat.setShowAsAction(item, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
-        MenuItemCompat.setActionView(item, searchView);
-        searchView.setQueryHint("Search here..");
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String input) {
-                if (adapter != null) {
-                    adapter.getFilter().filter(input);
-                }
-                return false;
-            }
-        });
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        SharedViewModel viewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+        viewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
 
         //region Replaced ObjectStream with ViewModel
         //        try {
@@ -145,15 +110,66 @@ public class FavoriteFragment extends Fragment {
         //        }
         //endregion
 
-        adapter = new FavoriteListViewAdapter(R.layout.fragment_favorites_customlayout, viewModel.getFavList().getValue(), getActivity());
+        if (viewModel.getFavList().getValue() == null){
+            adapter = new FavoriteListViewAdapter(R.layout.fragment_favorites_customlayout, arrayList, getActivity());
+        } else {
+            adapter = new FavoriteListViewAdapter(R.layout.fragment_favorites_customlayout, viewModel.getFavList().getValue(), getActivity());
+        }
 
         //Set my listview to my custom adapter
         listView.setAdapter(adapter);
         listView.setEmptyView(errorMsg);
 
-        Log.d(TAG1, "onStart: isCalled");
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                SongFragment songFragment = new SongFragment();
+                FavoriteFragment favoriteFragment = new FavoriteFragment();
+                Song song = viewModel.getFavList().getValue().get(position);
+                viewModel.setClickedSong(song);
+
+                if (fragmentManager.findFragmentByTag("song") == null) {
+                    fragmentManager.beginTransaction().remove(favoriteFragment);
+                    fragmentManager.beginTransaction().add(R.id.fragment_container, songFragment , "song").addToBackStack(null).commit();
+                    //                    fragmentManager.beginTransaction().hide(favoriteFragment);
+                } else {
+                    fragmentManager.beginTransaction().remove(songFragment).commit();
+                    fragmentManager.beginTransaction().add(R.id.fragment_container, songFragment, "song").addToBackStack(null).commit();
+                    fragmentManager.beginTransaction().show(songFragment).commit();
+                }
+            }
+        });
+        return view;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        menu.clear();
+        inflater.inflate(R.menu.menu_actionbar, menu);
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = new SearchView(((MainActivity) getActivity()).getSupportActionBar().getThemedContext());
+        //        MenuItemCompat.setShowAsAction(menuItem, MenuItemCompat.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW | MenuItemCompat.SHOW_AS_ACTION_IF_ROOM);
+        MenuItemCompat.setActionView(item, searchView);
+        searchView.setQueryHint("Search here..");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String input) {
+                if (adapter != null) {
+                    adapter.getFilter().filter(input);
+                }
+                return false;
+            }
+        });
+    }
     //region Can also use this (strings and values instead of whole class object)
     //            FileInputStream fileIn = getActivity().openFileInput("mytextfile.txt");
     //            InputStreamReader InputRead = new InputStreamReader(fileIn);

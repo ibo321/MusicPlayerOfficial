@@ -1,16 +1,11 @@
-package com.example.ibo.musicplayerofficialv2.Fragments;
+package com.example.ibo.musicplayerofficial.Fragments;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.ViewModelProviders;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,18 +16,25 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.ibo.musicplayerofficialv2.Classes.Song;
-import com.example.ibo.musicplayerofficialv2.R;
-import com.example.ibo.musicplayerofficialv2.ViewModel.SharedViewModel;
+import com.example.ibo.musicplayerofficial.Classes.Song;
+import com.example.ibo.musicplayerofficial.R;
+import com.example.ibo.musicplayerofficial.ViewModel.SharedViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 
 public class SongFragment extends Fragment {
 
-    String TAG = "songfragviews";
+    String TAG = "timecalculator";
     ScrollView scrollView;
     TextView songNameTV, lyricTxt, currentDur, songLenght;
     ImageView artistImg, artistImgBG, playBtn, playNextBtn, playPreviousBtn;
@@ -45,7 +47,7 @@ public class SongFragment extends Fragment {
     String getSong;
     Song currentSong;
     SharedViewModel viewModel;
-    Song song;
+    Song mySong;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +61,8 @@ public class SongFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_song, container, false);
 
+        Log.d(TAG, "Finding views: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
+
         //find views
         songNameTV = view.findViewById(R.id.songNameTxt);
         artistImg = view.findViewById(R.id.songFrag_artistImg);
@@ -71,6 +75,7 @@ public class SongFragment extends Fragment {
         playPreviousBtn = view.findViewById(R.id.songFrag_previousBtn);
         songLenght = view.findViewById(R.id.songFrag_songLength);
         currentDur = view.findViewById(R.id.songFrag_currentDur);
+        Log.d(TAG, "Views found: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
 
         viewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
 
@@ -80,31 +85,71 @@ public class SongFragment extends Fragment {
         playPreviousBtn.setOnClickListener(new OnClickPreviousSong());
         seekBar.setOnSeekBarChangeListener(new SeekbarProgress());
 
-        if (getArguments() != null) {
+        //region Replaced Bundle with Viewmodel
+        //        if (getArguments() != null) {
+        //
+        //            song = (Song) getArguments().getSerializable("arg_song");
+        //
+        //            Glide.with(getActivity()).load(song.getArtistImg()).into(artistImg);
+        //            Glide.with(getActivity()).load(song.getArtistImg()).into(artistImgBG);
+        //            getSong = song.getSong();
+        //            songNameTV.setText(song.getArtist() + " " + song.getSongName());
+        //            lyricTxt.setText(song.getLyrics());
+        //        } else {
+        //            Toast.makeText(getActivity(), "Bundle is null", Toast.LENGTH_SHORT).show();
+        //        }
+        //endregion
 
-            song = (Song) getArguments().getSerializable("arg_song");
+        Log.d(TAG, "Reading song from viewmodel: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
+        /*Get value from viewmodel*/
+        //        viewModel.setClickedSong().observe(this, new Observer<Song>() {
+        //                    @Override
+        //                    public void onChanged(Song song) {
+        //                        mySong = song;
+        //
+        //            }
+        //        });
 
-            Glide.with(getActivity()).load(song.getArtistImg()).into(artistImg);
-            Glide.with(getActivity()).load(song.getArtistImg()).into(artistImgBG);
-            getSong = song.getSong();
-            songNameTV.setText(song.getArtist() + " " + song.getSongName());
-            lyricTxt.setText(song.getLyrics());
-        } else {
-            Toast.makeText(getActivity(), "Bundle is null", Toast.LENGTH_SHORT).show();
-        }
+        mySong = viewModel.getClickedSong().getValue();
+
+        Log.d(TAG, "Inserting values to layout: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) + " " + "Starting with artist image");
+        /*Assign the values to its properties*/
+        Glide.with(getActivity()).load(mySong.getArtistImg()).into(artistImg);
+        Log.d(TAG, "Inserting artist image background: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
+
+        Glide.with(getActivity()).load(mySong.getArtistImg()).into(artistImgBG);
+        Log.d(TAG, "Inserted both artist images: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) + " " + "Fetching song..");
+
+        getSong = mySong.getSong();
+        Log.d(TAG, "Song is read. Setting artist info..: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
+
+        songNameTV.setText(mySong.getArtist() + " " + mySong.getSongName());
+        Log.d(TAG, "Artist info is set. Setting lyrics..: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
+
+        lyricTxt.setText(mySong.getLyrics());
+        Log.d(TAG, "Lyrics set. Displaying artist in toolbar..:" + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
+
+        /*Get artist info*/
         displayArtist = "Now playing " + songNameTV.getText().toString();
+        Log.d(TAG, "Toolbar done. Getting list of songs from viewmodel..: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
 
+        /*Get whole list of songs from my viewmodel*/
         arrayList = viewModel.getSongs().getValue();
-        //Set the mediaplayer object
-        mediaPlayer = MediaPlayer.create(getActivity(), Uri.parse(getSong));
+        Log.d(TAG, "Got list. Setting mediaplayer object..: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
 
-        //Set the duration of the song
+        //TODO: Creating the MediaPlayer object takes too long!
+        /*Get audio-file*/
+        mediaPlayer = MediaPlayer.create(getActivity(), Uri.parse(getSong));
+        Log.d(TAG, "Mediaplayer object set. Getting song duration..: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
+
+        /*Set the duration of the song*/
         songDuration(mediaPlayer.getDuration());
+        Log.d(TAG, "Song duration is set. Setting toolbar..: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
 
         //new SoapCall().execute();
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(displayArtist);
-        Log.d(TAG, "onCreateView: isCalled");
+        Log.d(TAG, "Toolbar set. OnCreateView is done: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
         return view;
     }
 
@@ -123,7 +168,6 @@ public class SongFragment extends Fragment {
             } else {
                 mSeekbarUpdateHandler.removeCallbacks(this);
             }
-
         }
     };
 
@@ -349,7 +393,6 @@ public class SongFragment extends Fragment {
         // return timer string
         return finalTimerString;
     }
-
 
     //region Lifecycle-methods
     @Override

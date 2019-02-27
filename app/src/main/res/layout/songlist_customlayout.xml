@@ -17,19 +17,18 @@
         android:id="@+id/artistTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/songFrag_artistImg"
         android:autoSizeTextType="uniform"
         android:text="Artist"
-        android:layout_marginLeft="5dp"
         android:textColor="@color/black" />
 
     <TextView
         android:id="@+id/songNameTxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-
         android:layout_below="@id/artistTxt"
+        android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/songFrag_artistImg"
         android:autoSizeTextType="uniform"
         android:text="Song Name"

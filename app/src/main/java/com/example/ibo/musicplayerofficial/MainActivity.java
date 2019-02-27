@@ -1,26 +1,25 @@
-package com.example.ibo.musicplayerofficialv2;
+package com.example.ibo.musicplayerofficial;
 
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleOwner;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.ibo.musicplayerofficialv2.Fragments.CollectionFragment;
-import com.example.ibo.musicplayerofficialv2.Fragments.MainFragment;
-import com.example.ibo.musicplayerofficialv2.Fragments.RadioFragment;
-import com.example.ibo.musicplayerofficialv2.LoginRegister.LoginActivity;
-import com.example.ibo.musicplayerofficialv2.ViewModel.SharedViewModel;
+import com.example.ibo.musicplayerofficial.Fragments.CollectionFragment;
+import com.example.ibo.musicplayerofficial.Fragments.MainFragment;
+import com.example.ibo.musicplayerofficial.Fragments.RadioFragment;
+import com.example.ibo.musicplayerofficial.LoginRegister.LoginActivity;
+import com.example.ibo.musicplayerofficial.ViewModel.SharedViewModel;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity implements LifecycleOwner {
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProviders;
+
+public class MainActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager;
     SharedViewModel viewModel;
@@ -31,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner {
         //getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.activity_main);
 
-        android.support.v7.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        androidx.appcompat.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         //getSupportActionBar().setBackgroundDrawable(getDrawable(R.color.OrangeTheme));
@@ -39,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner {
         getSupportActionBar().setTitle("Song list");
 
         viewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
+
         //find my bottomNavigation
         BottomNavigationView bottomNav = (BottomNavigationView) findViewById(R.id.bottom_navigation);
 
@@ -72,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner {
                     }
 
                     //FIXED: Stopped song from playing when clicking on "main" again by replacing "hide" with "remove"
-                    if (fragmentManager.findFragmentByTag("song") != null) {
-                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentByTag("song")).commit();
+                    if (fragmentManager.findFragmentByTag("songfragment") != null) {
+                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentByTag("songfragment")).commit();
                     }
 
                     if (fragmentManager.findFragmentByTag("main") != null) {
@@ -99,8 +99,8 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner {
                     }
 
                     //FIXED: Stopped song from playing when clicking on "main" again by replacing "hide" with "remove"
-                    if (fragmentManager.findFragmentByTag("song") != null) {
-                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentByTag("song")).commit();
+                    if (fragmentManager.findFragmentByTag("songfragment") != null) {
+                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentByTag("songfragment")).commit();
                     }
 
                     //TODO: Re-create CollectionFragment so it can update the listview
@@ -131,8 +131,8 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner {
                     }
 
                     //FIXED: Stopped song from playing when clicking on "main" again by replacing "hide" with "remove"
-                    if (fragmentManager.findFragmentByTag("song") != null) {
-                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentByTag("song")).commit();
+                    if (fragmentManager.findFragmentByTag("songfragment") != null) {
+                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentByTag("songfragment")).commit();
                     }
                     if (fragmentManager.findFragmentByTag("radio") != null) {
                         fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("radio")).commit();
@@ -187,11 +187,5 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner {
         } else {
             super.onBackPressed();
         }
-    }
-
-    @NonNull
-    @Override
-    public Lifecycle getLifecycle() {
-        return null;
     }
 }

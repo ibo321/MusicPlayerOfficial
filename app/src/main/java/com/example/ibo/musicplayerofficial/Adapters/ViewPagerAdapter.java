@@ -1,15 +1,16 @@
-package com.example.ibo.musicplayerofficialv2.Adapters;
+package com.example.ibo.musicplayerofficial.Adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.example.ibo.musicplayerofficialv2.Fragments.FavoriteFragment;
-import com.example.ibo.musicplayerofficialv2.Fragments.HistoryFragment;
-import com.example.ibo.musicplayerofficialv2.Fragments.PlaylistFragment;
-import com.example.ibo.musicplayerofficialv2.R;
+import com.example.ibo.musicplayerofficial.Fragments.FavoriteFragment;
+import com.example.ibo.musicplayerofficial.Fragments.HistoryFragment;
+import com.example.ibo.musicplayerofficial.Fragments.PlaylistFragment;
+import com.example.ibo.musicplayerofficial.R;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
