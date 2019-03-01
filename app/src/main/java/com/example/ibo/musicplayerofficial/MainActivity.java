@@ -17,12 +17,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProviders;
 
 public class MainActivity extends AppCompatActivity {
 
     FragmentManager fragmentManager;
     SharedViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Song list");
 
-        viewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
+//        viewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
 
         //find my bottomNavigation
         BottomNavigationView bottomNav = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -103,15 +103,21 @@ public class MainActivity extends AppCompatActivity {
                         fragmentManager.beginTransaction().remove(fragmentManager.findFragmentByTag("songfragment")).commit();
                     }
 
-                    //TODO: Re-create CollectionFragment so it can update the listview
-                    //FIXED: Changed the management of the transactions!
-                    if (fragmentManager.findFragmentByTag("collection") == null) {
-                        fragmentManager.beginTransaction().add(R.id.fragment_container, new CollectionFragment(), "collection").addToBackStack(null).commit();
+                    if (fragmentManager.findFragmentByTag("collection") != null) {
+                        fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("collection")).commit();
                     } else {
-                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentByTag("collection"));
-                        fragmentManager.beginTransaction().add(R.id.fragment_container, new CollectionFragment(), "collection").addToBackStack(null).commit();
-                        fragmentManager.beginTransaction().show(new CollectionFragment());
+                        fragmentManager.beginTransaction().add(R.id.fragment_container, new CollectionFragment(), "collection").commit();
                     }
+
+//                    //TODO: Re-create CollectionFragment so it can update the listview
+//                    //FIXED: Changed the management of the transactions!
+//                    if (fragmentManager.findFragmentByTag("collection") == null) {
+//                        fragmentManager.beginTransaction().add(R.id.fragment_container, new CollectionFragment(), "collection").addToBackStack(null).commit();
+//                    } else {
+//                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentByTag("collection"));
+//                        fragmentManager.beginTransaction().add(R.id.fragment_container, new CollectionFragment(), "collection").addToBackStack(null).commit();
+//                        fragmentManager.beginTransaction().show(new CollectionFragment());
+//                    }
 
                     getSupportActionBar().setTitle("Collection");
 
@@ -181,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
         //        }
 
         //if there is something in my stack of fragments then go back to it when clicked 'back'
+
         android.app.FragmentManager fragmentManager = getFragmentManager();
         if (fragmentManager.getBackStackEntryCount() > 0) {
             fragmentManager.popBackStack();

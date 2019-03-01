@@ -15,12 +15,14 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.ibo.musicplayerofficial.Adapters.ListViewAdapter;
+import com.example.ibo.musicplayerofficial.Classes.Song;
 import com.example.ibo.musicplayerofficial.MainActivity;
 import com.example.ibo.musicplayerofficial.R;
 import com.example.ibo.musicplayerofficial.ViewModel.SharedViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +30,7 @@ import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 public class MainFragment extends Fragment {
@@ -48,6 +51,7 @@ public class MainFragment extends Fragment {
 
     MenuItem menuItem;
     SharedViewModel viewModel;
+    List<Song> s;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,15 +72,21 @@ public class MainFragment extends Fragment {
         songFragment = new SongFragment();
         mainFragment = new MainFragment();
 
-        viewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
-
-        adapter = new ListViewAdapter(R.layout.songlist_customlayout, viewModel.getSongs().getValue(), getActivity());
+        adapter = new ListViewAdapter(R.layout.songlist_customlayout, getActivity());
 
         //Set my listview to my custom adapter
         songListView.setAdapter(adapter);
         songListView.setEmptyView(errorMsg);
-        songListView.setScrollingCacheEnabled(false);
+        //        songListView.setScrollingCacheEnabled(false);
         songListView.setOnItemClickListener(new ListViewClickListener());
+
+        viewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+        viewModel.getAllSongs().observe(getActivity(), new Observer<List<Song>>() {
+            @Override
+            public void onChanged(List<Song> songs) {
+                adapter.setSongs(songs);
+            }
+        });
 
         Log.d(TAG, "onCreateView: isCalled");
 
@@ -131,11 +141,8 @@ public class MainFragment extends Fragment {
             //endregion
 
             Log.d(TAG, "Reading song from viewmodel: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
-            viewModel.setClickedSong(viewModel.getSongs().getValue().get(position));
-            Log.d(TAG, "Got song: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
-            //FIXED: When navigating to "main" and clicked on another song the same song was showing in SongFragment.
-            //HOW: This was fixed by changing this whole fragment managing by "remove" instead of "hide" SongFragment.
-            //TODO: Maybe this is a duplicate? Check BottomNavigationBar Switch-statement under "main"
+            viewModel.setClickedSong(viewModel.getAllSongs().getValue().get(position));
+
             if (fragmentManager.findFragmentByTag("songfragment") == null) {
                 fragmentManager.beginTransaction().add(R.id.fragment_container, songFragment, "songfragment").addToBackStack(null).commit();
                 fragmentTransaction.setCustomAnimations(R.anim.pull_up, R.anim.pull_down);

@@ -23,8 +23,8 @@ import com.example.ibo.musicplayerofficial.R;
 import com.example.ibo.musicplayerofficial.ViewModel.SharedViewModel;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -42,7 +42,7 @@ public class SongFragment extends Fragment {
 
     MediaPlayer mediaPlayer;
     ObjectAnimator objectAnimator;
-    ArrayList<Song> arrayList;
+    List<Song> arrayList;
     String displayArtist;
     String getSong;
     Song currentSong;
@@ -101,41 +101,20 @@ public class SongFragment extends Fragment {
         //endregion
 
         Log.d(TAG, "Reading song from viewmodel: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
-        /*Get value from viewmodel*/
-        //        viewModel.setClickedSong().observe(this, new Observer<Song>() {
-        //                    @Override
-        //                    public void onChanged(Song song) {
-        //                        mySong = song;
-        //
-        //            }
-        //        });
-
         mySong = viewModel.getClickedSong().getValue();
 
-        Log.d(TAG, "Inserting values to layout: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) + " " + "Starting with artist image");
-        /*Assign the values to its properties*/
         Glide.with(getActivity()).load(mySong.getArtistImg()).into(artistImg);
         Log.d(TAG, "Inserting artist image background: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
-
         Glide.with(getActivity()).load(mySong.getArtistImg()).into(artistImgBG);
         Log.d(TAG, "Inserted both artist images: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) + " " + "Fetching song..");
 
         getSong = mySong.getSong();
-        Log.d(TAG, "Song is read. Setting artist info..: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
-
         songNameTV.setText(mySong.getArtist() + " " + mySong.getSongName());
-        Log.d(TAG, "Artist info is set. Setting lyrics..: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
-
         lyricTxt.setText(mySong.getLyrics());
-        Log.d(TAG, "Lyrics set. Displaying artist in toolbar..:" + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
-
-        /*Get artist info*/
         displayArtist = "Now playing " + songNameTV.getText().toString();
-        Log.d(TAG, "Toolbar done. Getting list of songs from viewmodel..: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
 
         /*Get whole list of songs from my viewmodel*/
-        arrayList = viewModel.getSongs().getValue();
-        Log.d(TAG, "Got list. Setting mediaplayer object..: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
+        arrayList = viewModel.getAllSongs().getValue();
 
         //TODO: Creating the MediaPlayer object takes too long!
         /*Get audio-file*/
@@ -144,12 +123,10 @@ public class SongFragment extends Fragment {
 
         /*Set the duration of the song*/
         songDuration(mediaPlayer.getDuration());
-        Log.d(TAG, "Song duration is set. Setting toolbar..: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
 
         //new SoapCall().execute();
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(displayArtist);
-        Log.d(TAG, "Toolbar set. OnCreateView is done: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
         return view;
     }
 
@@ -182,7 +159,6 @@ public class SongFragment extends Fragment {
                 }
             }
         }
-
         //region Unused seekbar methods
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {

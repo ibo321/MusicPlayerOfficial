@@ -23,26 +23,27 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 public class FavoriteFragment extends Fragment {
 
     private String TAG1 = "callingviews";
 
-    //Declare listview objects
     ListView listView;
     ArrayList<Song> arrayList;
     FavoriteListViewAdapter adapter;
 
-    //Declare view objects
     TextView errorMsg;
     SharedViewModel viewModel;
+    FavoriteFragment favoriteFragment;
 
     //region Declare ObjectInputStream objects replaced with ViewModel
     String filePath;
@@ -66,10 +67,11 @@ public class FavoriteFragment extends Fragment {
         Log.d(TAG1, "onCreateView: is called");
         listView = view.findViewById(R.id.favFrag_listview);
         errorMsg = view.findViewById(R.id.favFrag_emptyMsg);
-        arrayList = new ArrayList<Song>();
-
+        favoriteFragment = new FavoriteFragment();
+        //region Unused ActionBar
         //        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
         //        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Collection");
+        //endregion
 
         viewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
 
@@ -110,15 +112,18 @@ public class FavoriteFragment extends Fragment {
         //        }
         //endregion
 
-        if (viewModel.getFavList().getValue() == null){
-            adapter = new FavoriteListViewAdapter(R.layout.fragment_favorites_customlayout, arrayList, getActivity());
-        } else {
-            adapter = new FavoriteListViewAdapter(R.layout.fragment_favorites_customlayout, viewModel.getFavList().getValue(), getActivity());
-        }
+        adapter = new FavoriteListViewAdapter(R.layout.fragment_favorites_customlayout, getActivity());
 
         //Set my listview to my custom adapter
         listView.setAdapter(adapter);
         listView.setEmptyView(errorMsg);
+
+        viewModel.getFavSongs().observe(getActivity(), new Observer<List<Song>>() {
+            @Override
+            public void onChanged(List<Song> songs) {
+                adapter.setSongs(songs);
+            }
+        });
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -126,16 +131,16 @@ public class FavoriteFragment extends Fragment {
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 SongFragment songFragment = new SongFragment();
                 FavoriteFragment favoriteFragment = new FavoriteFragment();
-                Song song = viewModel.getFavList().getValue().get(position);
+                //                Song song = viewModel.getFavList().getValue().get(position);
+                Song song = viewModel.getFavSongs().getValue().get(position);
                 viewModel.setClickedSong(song);
 
-                if (fragmentManager.findFragmentByTag("song") == null) {
-                    fragmentManager.beginTransaction().remove(favoriteFragment);
-                    fragmentManager.beginTransaction().add(R.id.fragment_container, songFragment , "song").addToBackStack(null).commit();
-                    //                    fragmentManager.beginTransaction().hide(favoriteFragment);
+                if (fragmentManager.findFragmentByTag("songfragment") == null) {
+                    fragmentManager.beginTransaction().add(R.id.fragment_container, songFragment, "songfragment").addToBackStack(null).commit();
+                    fragmentManager.beginTransaction().hide(favoriteFragment);
                 } else {
                     fragmentManager.beginTransaction().remove(songFragment).commit();
-                    fragmentManager.beginTransaction().add(R.id.fragment_container, songFragment, "song").addToBackStack(null).commit();
+                    fragmentManager.beginTransaction().add(R.id.fragment_container, songFragment, "songfragment").addToBackStack(null).commit();
                     fragmentManager.beginTransaction().show(songFragment).commit();
                 }
             }

@@ -15,26 +15,31 @@ import com.example.ibo.musicplayerofficial.Classes.Song;
 import com.example.ibo.musicplayerofficial.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class FavoriteListViewAdapter extends BaseAdapter implements Filterable {
 
     int layout;
-    ArrayList<Song> arrayList;
+    List<Song> arrayList;
     Context context;
     CustomFilter filter;
-    ArrayList<Song> filterList;
+    List<Song> filterList;
 
 
-    public FavoriteListViewAdapter(int layout, ArrayList<Song> arrayList, Context context) {
+    public FavoriteListViewAdapter(int layout, Context context) {
         this.layout = layout;
-        this.arrayList = arrayList;
+//        this.arrayList = arrayList;
         this.context = context;
-        this.filterList = arrayList;
+//        this.filterList = arrayList;
         notifyDataSetChanged();
     }
-
+    public void setSongs(List<Song> songs){
+        this.arrayList = songs;
+        this.filterList = songs;
+        notifyDataSetChanged();
+    }
     @Override
     public Filter getFilter() {
         if (filter == null) {
@@ -45,6 +50,9 @@ public class FavoriteListViewAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public int getCount() {
+        if (arrayList == null) {
+            arrayList = new ArrayList<>();
+        }
         return arrayList.size();
     }
 
@@ -101,7 +109,7 @@ public class FavoriteListViewAdapter extends BaseAdapter implements Filterable {
 
         /*Decrease memory size of each artist image using Glide library*/
         Glide.with(view).load(song.getArtistImg()).into(viewholder.artistImg);
-        notifyDataSetChanged();
+//        notifyDataSetChanged();
         return view;
     }
 

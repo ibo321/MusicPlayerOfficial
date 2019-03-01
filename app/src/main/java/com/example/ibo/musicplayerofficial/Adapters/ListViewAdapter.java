@@ -9,7 +9,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.ibo.musicplayerofficial.Classes.Song;
@@ -21,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import androidx.fragment.app.FragmentActivity;
@@ -30,16 +30,15 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
 
     //Create variables
     int layout;
-    ArrayList<Song> arrayList;
+    List<Song> arrayList;
     Context context;
-    Song oldPos;
     FileOutputStream file;
     ObjectOutputStream object;
     int counter = 0;
 
-    ArrayList<Song> favList = new ArrayList<>();
+    List<Song> favList = new ArrayList<>();
     CustomFilter filter;
-    ArrayList<Song> filterList;
+    List<Song> filterList;
     Set<Song> nodup = new LinkedHashSet<>();
     String filePath;
     File getFile;
@@ -47,11 +46,11 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
     SharedViewModel viewModel;
 
     //Constructor
-    public ListViewAdapter(int layout, ArrayList<Song> arrayList, Context context) {
+    public ListViewAdapter(int layout, Context context) {
         this.layout = layout;
-        this.arrayList = arrayList;
+        //        this.arrayList = arrayList;
         this.context = context;
-        this.filterList = arrayList;
+        //        this.filterList = getSongs(arrayList);
         viewModel = ViewModelProviders.of((FragmentActivity) context).get(SharedViewModel.class);
         notifyDataSetChanged();
     }
@@ -70,8 +69,17 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
         ImageView favBtn, artistImg;
     }
 
+    public void setSongs(List<Song> songs) {
+        this.arrayList = songs;
+        this.filterList = songs;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
+        if (arrayList == null) {
+            arrayList = new ArrayList<>();
+        }
         return arrayList.size();
     }
 
@@ -142,7 +150,6 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
 
                 favList.add(song);
                 nodup.add(song);
-                oldPos = arrayList.get(position);
 
                 /*If the no-duplicate list is empty then i handle the exception like this*/
                 if (nodup.size() == 0) {
@@ -150,32 +157,44 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
                 }
 
                 /*Iterate through the favorite list*/
-                for (int i = 0; i < favList.size(); i++) {
+                //                for (int i = 0; i < favList.size(); i++) {
 
                     /*As the Set<> type of list cannot contain any duplicates -
                     i check if the list is lower than the favorite list and this
                     means if it is TRUE -> then there is duplicates
                      */
-                    if (nodup.size() < favList.size()) {
 
-                        /*I remove the song from both list
-                        to update them synchronously
-                         */
-                        song.setFavorite(false);
-                        favList.remove(song);
-                        nodup.remove(song);
-                        viewModel.deleteFromfav(song, false);
-                        viewholder.favBtn.setImageResource(R.drawable.favorite_half);
-                        Toast.makeText(context, "Removed " + song.getArtist() + " " + song.getSongName() + " from favorites", Toast.LENGTH_SHORT).show();
-                        break;
-                    } else {
-                        song.setFavorite(true);
-                        viewModel.setFavList(favList, true);
-                        viewholder.favBtn.setImageResource(R.drawable.favorite);
-                        Toast.makeText(context, "Added " + song.getArtist() + " " + song.getSongName() + " to favorites", Toast.LENGTH_SHORT).show();
-                        break;
-                    }
+                if (song.isFavorite()) {
+                    song.setFavorite(false);
+                    viewModel.update(song);
+                    viewholder.favBtn.setImageResource(R.drawable.favorite_half);
+                } else {
+                    song.setFavorite(true);
+                    viewModel.update(song);
+                    viewholder.favBtn.setImageResource(R.drawable.favorite);
+
                 }
+                //                    if (nodup.size() < favList.size()) {
+                //
+                //                        /*I remove the song from both list
+                //                        to update them synchronously
+                //                         */
+                //                        song.setFavorite(false);
+                //                        viewModel.update(song);
+                //                        favList.remove(song);
+                //                        nodup.remove(song);
+                ////                        viewModel.delete(song);
+                //
+                //                        //                        Toast.makeText(context, "Removed " + song.getArtist() + " " + song.getSongName() + " from favorites", Toast.LENGTH_SHORT).show();
+                //                        break;
+                //                    } else {
+                //                        song.setFavorite(true);
+                //                        viewModel.update(song);
+                ////                        viewModel.insertToFav().setValue(favList);
+                //                        //                        Toast.makeText(context, "Added " + song.getArtist() + " " + song.getSongName() + " to favorites", Toast.LENGTH_SHORT).show();
+                //                        break;
+                //                    }
+                //                }
                 //region Replaced ObjectStream with ViewModel
                 //                try {
                 //                    /*Create fileoutputstream and objectoutputstream*/
@@ -233,7 +252,7 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
                 /*Converts to UpperCase*/
                 inputText = inputText.toString().toUpperCase();
 
-                ArrayList<Song> filters = new ArrayList<Song>();
+                List<Song> filters = new ArrayList<>();
 
                 /*Iterate through the whole list
                  * and checks if the matching inputtext

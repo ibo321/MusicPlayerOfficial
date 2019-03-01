@@ -1,11 +1,19 @@
 package com.example.ibo.musicplayerofficial.Classes;
 
-import java.io.Serializable;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-public class Song implements Serializable {
+@Entity(tableName = "song_table")
+public class Song {
 
-    //Declare variables
-    private String artist, songName, lyrics, genre, song, artistImg;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+    private String artist;
+    private String songName;
+    private String lyrics;
+    private String genre;
+    private String song;
+    private String artistImg;
     private boolean isFavorite;
 
     //Constructor
@@ -20,6 +28,14 @@ public class Song implements Serializable {
 
     public Song() {
 
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public boolean isFavorite() {

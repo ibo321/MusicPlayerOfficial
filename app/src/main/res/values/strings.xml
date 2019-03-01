@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MusicPlayer v.2</string>
+    <string name="app_name">MusicPlayer</string>
     <string name="menu_main">Main</string>
     <string name="menu_collection">Collection</string>
     <string name="menu_radio">Radio</string>
