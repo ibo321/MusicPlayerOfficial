@@ -7,7 +7,6 @@ import com.example.ibo.musicplayerofficial.Fragments.HistoryFragment;
 import com.example.ibo.musicplayerofficial.Fragments.PlaylistFragment;
 import com.example.ibo.musicplayerofficial.R;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -33,10 +32,10 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
-    @Override
-    public int getItemPosition(@NonNull Object object) {
-        return POSITION_NONE;
-    }
+//    @Override
+//    public int getItemPosition(@NonNull Object object) {
+//        return POSITION_NONE;
+//    }
 
     @Override
     public int getCount() {

@@ -16,4 +16,10 @@
         android:title="Log out"
         android:icon="@drawable/lock_closed"/>
 
+    <!--<item-->
+        <!--android:id="@+id/save_playlist"-->
+        <!--android:icon="@drawable/icon_save"-->
+        <!--android:title="Save playlist"-->
+        <!--app:showAsAction="ifRoom" />-->
+
 </menu>

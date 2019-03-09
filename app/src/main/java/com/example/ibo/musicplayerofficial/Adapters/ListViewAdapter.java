@@ -2,16 +2,20 @@ package com.example.ibo.musicplayerofficial.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.ibo.musicplayerofficial.Classes.Song;
+import com.example.ibo.musicplayerofficial.Fragments.MainPlaylistFragment;
 import com.example.ibo.musicplayerofficial.R;
 import com.example.ibo.musicplayerofficial.ViewModel.SharedViewModel;
 
@@ -23,7 +27,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProviders;
 
 public class ListViewAdapter extends BaseAdapter implements Filterable {
@@ -48,9 +55,7 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
     //Constructor
     public ListViewAdapter(int layout, Context context) {
         this.layout = layout;
-        //        this.arrayList = arrayList;
         this.context = context;
-        //        this.filterList = getSongs(arrayList);
         viewModel = ViewModelProviders.of((FragmentActivity) context).get(SharedViewModel.class);
         notifyDataSetChanged();
     }
@@ -66,7 +71,8 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
     //ViewHolder class holding my views
     static class Viewholder {
         TextView artistTxt, songNameTxt, genreTxt;
-        ImageView favBtn, artistImg;
+        ImageView favBtn, artistImg, moreBtn;
+        RelativeLayout layout;
     }
 
     public void setSongs(List<Song> songs) {
@@ -94,7 +100,7 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
     }
 
     @Override
-    public View getView(final int position, View convertView, final ViewGroup parent) {
+    public View getView(final int position, final View convertView, final ViewGroup parent) {
 
         //        final Viewholder viewholder;
         View view = null;
@@ -110,11 +116,12 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
 
             //Find my view id's
             viewholder.artistImg = view.findViewById(R.id.songFrag_artistImg);
-            viewholder.artistTxt = view.findViewById(R.id.artistTxt);
-            viewholder.songNameTxt = view.findViewById(R.id.songNameTxt);
-            viewholder.favBtn = view.findViewById(R.id.favButton);
-            viewholder.genreTxt = view.findViewById(R.id.genre);
-
+            viewholder.artistTxt = view.findViewById(R.id.songFrag_artist);
+            viewholder.songNameTxt = view.findViewById(R.id.songFrag_songName);
+            viewholder.favBtn = view.findViewById(R.id.songFrag_favorite);
+            viewholder.genreTxt = view.findViewById(R.id.songFrag_genre);
+            viewholder.moreBtn = view.findViewById(R.id.songFrag_more);
+            viewholder.layout = view.findViewById(R.id.mainFrag_parent);
             /*Set my view to viewholder*/
             view.setTag(viewholder);
 
@@ -125,9 +132,9 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
         /*Assign song to my arraylist*/
         final Song song = arrayList.get(position);
         final Viewholder viewholder = (Viewholder) view.getTag();
+
         //Set my views to their resources
         Glide.with(context).asBitmap().load(song.getArtistImg()).into(viewholder.artistImg);
-        //        viewholder.artistImg.setImageURI(Uri.parse(song.getArtistImg()));
         viewholder.artistTxt.setText(song.getArtist());
         viewholder.songNameTxt.setText(song.getSongName());
         viewholder.genreTxt.setText(song.getGenre());
@@ -156,14 +163,6 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
                     nodup.addAll(favList);
                 }
 
-                /*Iterate through the favorite list*/
-                //                for (int i = 0; i < favList.size(); i++) {
-
-                    /*As the Set<> type of list cannot contain any duplicates -
-                    i check if the list is lower than the favorite list and this
-                    means if it is TRUE -> then there is duplicates
-                     */
-
                 if (song.isFavorite()) {
                     song.setFavorite(false);
                     viewModel.update(song);
@@ -174,27 +173,6 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
                     viewholder.favBtn.setImageResource(R.drawable.favorite);
 
                 }
-                //                    if (nodup.size() < favList.size()) {
-                //
-                //                        /*I remove the song from both list
-                //                        to update them synchronously
-                //                         */
-                //                        song.setFavorite(false);
-                //                        viewModel.update(song);
-                //                        favList.remove(song);
-                //                        nodup.remove(song);
-                ////                        viewModel.delete(song);
-                //
-                //                        //                        Toast.makeText(context, "Removed " + song.getArtist() + " " + song.getSongName() + " from favorites", Toast.LENGTH_SHORT).show();
-                //                        break;
-                //                    } else {
-                //                        song.setFavorite(true);
-                //                        viewModel.update(song);
-                ////                        viewModel.insertToFav().setValue(favList);
-                //                        //                        Toast.makeText(context, "Added " + song.getArtist() + " " + song.getSongName() + " to favorites", Toast.LENGTH_SHORT).show();
-                //                        break;
-                //                    }
-                //                }
                 //region Replaced ObjectStream with ViewModel
                 //                try {
                 //                    /*Create fileoutputstream and objectoutputstream*/
@@ -236,6 +214,37 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
                 //                    e.printStackTrace();
                 //                }
                 //endregion
+            }
+        });
+
+        //TODO: Work on this to display playlist fragment!
+        viewholder.moreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(context, viewholder.moreBtn);
+                popupMenu.inflate(R.menu.menu_more);
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_playlist:
+                                MainPlaylistFragment mainPlaylistFragment = new MainPlaylistFragment();
+
+                                FragmentManager manager = ((AppCompatActivity) context).getSupportFragmentManager();
+                                FragmentTransaction transaction = manager.beginTransaction();
+                                viewModel.setClickedSong(song);
+                                transaction.setCustomAnimations(R.anim.pull_up, R.anim.pull_down)
+                                        //                                        .hide(manager.findFragmentByTag("main"))
+                                        .add(R.id.fragment_container, mainPlaylistFragment, "mainplaylistfragment").addToBackStack(null).commit();
+
+                                break;
+                        }
+                        return false;
+                    }
+                });
+
+                popupMenu.show();
             }
         });
         return view;

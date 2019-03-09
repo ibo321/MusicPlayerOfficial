@@ -52,7 +52,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Sign in success, updateSong UI with the signed-in user's information
                             Log.d("register", "Successfully registered account: " + email + " " + password);
                             Toast.makeText(RegisterActivity.this, "Successfully registered account!", Toast.LENGTH_LONG).show();
                             startActivity(new Intent(RegisterActivity.this, LoginActivity.class));

@@ -1,4 +1,4 @@
-package com.example.ibo.musicplayerofficial;
+package com.example.ibo.musicplayerofficial.Interfaces;
 
 import com.example.ibo.musicplayerofficial.Classes.Song;
 
@@ -15,13 +15,13 @@ import androidx.room.Update;
 public interface SongDao {
 
     @Insert
-    void insert(Song song);
+    void insertSong(Song song);
 
     @Delete
-    void delete(Song song);
+    void deleteSong(Song song);
 
     @Update
-    void update (Song song);
+    void updateSong(Song song);
 
     @Query("SELECT * FROM song_table WHERE isFavorite = 1")
     LiveData<List<Song>> getFavList();

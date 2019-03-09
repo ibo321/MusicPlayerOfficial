@@ -64,7 +64,7 @@ public class SongFragment extends Fragment {
         Log.d(TAG, "Finding views: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
 
         //find views
-        songNameTV = view.findViewById(R.id.songNameTxt);
+        songNameTV = view.findViewById(R.id.songFrag_songName);
         artistImg = view.findViewById(R.id.songFrag_artistImg);
         artistImgBG = view.findViewById(R.id.songFrag_artistImgBG);
         lyricTxt = view.findViewById(R.id.lyricTxt);
@@ -130,8 +130,8 @@ public class SongFragment extends Fragment {
         return view;
     }
 
-    /*Constantly update the seek bar according to the media player object with the help of a Runnable.
-        We are using this because only the main thread can update the UI.*/
+    /*Constantly updateSong the seek bar according to the media player object with the help of a Runnable.
+        We are using this because only the main thread can updateSong the UI.*/
     private Handler mSeekbarUpdateHandler = new Handler();
 
     private Runnable mUpdateSeekbar = new Runnable() {
@@ -251,7 +251,7 @@ public class SongFragment extends Fragment {
                 mediaPlayer.start();
                 playBtn.setImageResource(R.drawable.ic_pause);
 
-                /*Call my handler to update my seekbar*/
+                /*Call my handler to updateSong my seekbar*/
                 mSeekbarUpdateHandler.postDelayed(mUpdateSeekbar, 0);
 
                 /*Start scrolling*/

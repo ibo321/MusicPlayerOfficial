@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         getSupportActionBar().setTitle("Song list");
 
-//        viewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
+        //        viewModel = ViewModelProviders.of(this).get(SharedViewModel.class);
 
         //find my bottomNavigation
         BottomNavigationView bottomNav = (BottomNavigationView) findViewById(R.id.bottom_navigation);
@@ -55,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
             fragmentManager = getSupportFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
             switch (menuItem.getItemId()) {
                 case R.id.action_main:
@@ -65,22 +67,28 @@ public class MainActivity extends AppCompatActivity {
                      * And hides previous fragments in the backstack*/
 
                     if (fragmentManager.findFragmentByTag("collection") != null) {
-                        fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("collection")).commit();
+                        fragmentTransaction.hide(fragmentManager.findFragmentByTag("collection"));
                     }
+
                     if (fragmentManager.findFragmentByTag("radio") != null) {
-                        fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("radio")).commit();
+                        fragmentTransaction.hide(fragmentManager.findFragmentByTag("radio"));
                     }
 
                     //FIXED: Stopped song from playing when clicking on "main" again by replacing "hide" with "remove"
                     if (fragmentManager.findFragmentByTag("songfragment") != null) {
-                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentByTag("songfragment")).commit();
+                        fragmentTransaction.remove(fragmentManager.findFragmentByTag("songfragment"));
+                    }
+
+                    if (fragmentManager.findFragmentByTag("mainplaylistfragment") != null) {
+                        fragmentTransaction.remove(fragmentManager.findFragmentByTag("mainplaylistfragment"));
                     }
 
                     if (fragmentManager.findFragmentByTag("main") != null) {
-                        fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("main")).commit();
+                        fragmentTransaction.show(fragmentManager.findFragmentByTag("main"));
                     } else {
-                        fragmentManager.beginTransaction().add(R.id.fragment_container, new MainFragment(), "main").commit();
+                        fragmentTransaction.add(R.id.fragment_container, new MainFragment(), "main");
                     }
+                    fragmentTransaction.commit();
                     getSupportActionBar().setTitle("Song list");
                     break;
 
@@ -92,33 +100,29 @@ public class MainActivity extends AppCompatActivity {
                      * And hides previous fragments in the backstack*/
 
                     if (fragmentManager.findFragmentByTag("main") != null) {
-                        fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("main")).commit();
+                        fragmentTransaction.hide(fragmentManager.findFragmentByTag("main"));
                     }
+
                     if (fragmentManager.findFragmentByTag("radio") != null) {
-                        fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("radio")).commit();
+                        fragmentTransaction.hide(fragmentManager.findFragmentByTag("radio"));
                     }
 
                     //FIXED: Stopped song from playing when clicking on "main" again by replacing "hide" with "remove"
                     if (fragmentManager.findFragmentByTag("songfragment") != null) {
-                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentByTag("songfragment")).commit();
+                        fragmentTransaction.remove(fragmentManager.findFragmentByTag("songfragment"));
+                    }
+
+                    if (fragmentManager.findFragmentByTag("mainplaylistfragment") != null) {
+                        fragmentTransaction.remove(fragmentManager.findFragmentByTag("mainplaylistfragment"));
                     }
 
                     if (fragmentManager.findFragmentByTag("collection") != null) {
-                        fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("collection")).commit();
+                        fragmentTransaction.show(fragmentManager.findFragmentByTag("collection"));
                     } else {
-                        fragmentManager.beginTransaction().add(R.id.fragment_container, new CollectionFragment(), "collection").commit();
+                        fragmentTransaction.add(R.id.fragment_container, new CollectionFragment(), "collection");
                     }
 
-//                    //TODO: Re-create CollectionFragment so it can update the listview
-//                    //FIXED: Changed the management of the transactions!
-//                    if (fragmentManager.findFragmentByTag("collection") == null) {
-//                        fragmentManager.beginTransaction().add(R.id.fragment_container, new CollectionFragment(), "collection").addToBackStack(null).commit();
-//                    } else {
-//                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentByTag("collection"));
-//                        fragmentManager.beginTransaction().add(R.id.fragment_container, new CollectionFragment(), "collection").addToBackStack(null).commit();
-//                        fragmentManager.beginTransaction().show(new CollectionFragment());
-//                    }
-
+                    fragmentTransaction.commit();
                     getSupportActionBar().setTitle("Collection");
 
                     break;
@@ -130,22 +134,29 @@ public class MainActivity extends AppCompatActivity {
                      * And hides previous fragments in the backstack*/
 
                     if (fragmentManager.findFragmentByTag("main") != null) {
-                        fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("main")).commit();
+                        fragmentTransaction.hide(fragmentManager.findFragmentByTag("main"));
                     }
+
                     if (fragmentManager.findFragmentByTag("collection") != null) {
-                        fragmentManager.beginTransaction().hide(fragmentManager.findFragmentByTag("collection")).commit();
+                        fragmentTransaction.hide(fragmentManager.findFragmentByTag("collection"));
                     }
 
                     //FIXED: Stopped song from playing when clicking on "main" again by replacing "hide" with "remove"
                     if (fragmentManager.findFragmentByTag("songfragment") != null) {
-                        fragmentManager.beginTransaction().remove(fragmentManager.findFragmentByTag("songfragment")).commit();
-                    }
-                    if (fragmentManager.findFragmentByTag("radio") != null) {
-                        fragmentManager.beginTransaction().show(fragmentManager.findFragmentByTag("radio")).commit();
-                    } else {
-                        fragmentManager.beginTransaction().add(R.id.fragment_container, new RadioFragment(), "radio").commit();
+                        fragmentTransaction.remove(fragmentManager.findFragmentByTag("songfragment"));
                     }
 
+                    if (fragmentManager.findFragmentByTag("mainplaylistfragment") != null) {
+                        fragmentTransaction.remove(fragmentManager.findFragmentByTag("mainplaylistfragment"));
+                    }
+
+                    if (fragmentManager.findFragmentByTag("radio") != null) {
+                        fragmentTransaction.show(fragmentManager.findFragmentByTag("radio"));
+                    } else {
+                        fragmentTransaction.add(R.id.fragment_container, new RadioFragment(), "radio");
+                    }
+
+                    fragmentTransaction.commit();
                     getSupportActionBar().setTitle("Radio");
 
                     break;

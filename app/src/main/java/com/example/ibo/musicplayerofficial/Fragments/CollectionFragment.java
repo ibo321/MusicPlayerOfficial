@@ -33,41 +33,41 @@ public class CollectionFragment extends Fragment {
         viewPager.setAdapter(adapter);
 
         tabLayout.setupWithViewPager(viewPager);
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int i, float v, int i1) {
-
-            }
-
-            @Override
-            public void onPageSelected(int i) {
-
-                viewPager.getAdapter().notifyDataSetChanged();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int i) {
-
-            }
-        });
+//        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int i, float v, int i1) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int i) {
+//
+//                viewPager.getAdapter().notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int i) {
+//
+//            }
+//        });
 
         //        viewPager.setId(R.id.fragment_container);
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-        }
-    }
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        if (adapter != null) {
+//            adapter.notifyDataSetChanged();
+//        }
+//    }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-        }
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        if (adapter != null) {
+//            adapter.notifyDataSetChanged();
+//        }
+//    }
 }

@@ -4,8 +4,8 @@ import android.app.Application;
 import android.os.AsyncTask;
 
 import com.example.ibo.musicplayerofficial.Classes.Song;
-import com.example.ibo.musicplayerofficial.SongDao;
-import com.example.ibo.musicplayerofficial.SongDatabase;
+import com.example.ibo.musicplayerofficial.Database.SongDatabase;
+import com.example.ibo.musicplayerofficial.Interfaces.SongDao;
 
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class SongRepository {
 
         @Override
         protected Void doInBackground(Song... songs) {
-            songDao.insert(songs[0]);
+            songDao.insertSong(songs[0]);
             return null;
         }
     }
@@ -68,7 +68,7 @@ public class SongRepository {
 
         @Override
         protected Void doInBackground(Song... songs) {
-            songDao.delete(songs[0]);
+            songDao.deleteSong(songs[0]);
             return null;
         }
     }
@@ -83,7 +83,7 @@ public class SongRepository {
 
         @Override
         protected Void doInBackground(Song... songs) {
-            songDao.update(songs[0]);
+            songDao.updateSong(songs[0]);
             return null;
         }
     }

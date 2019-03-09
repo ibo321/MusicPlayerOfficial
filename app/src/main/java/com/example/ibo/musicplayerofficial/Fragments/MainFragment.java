@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -52,6 +54,7 @@ public class MainFragment extends Fragment {
     MenuItem menuItem;
     SharedViewModel viewModel;
     List<Song> s;
+    RelativeLayout layout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,7 +70,7 @@ public class MainFragment extends Fragment {
         //Find my listview
         songListView = view.findViewById(R.id.mainFrag_songListView);
         errorMsg = view.findViewById(R.id.mainFrag_emptyMsg);
-
+        layout = view.findViewById(R.id.mainFrag_parent);
         /*Initiliaze my SongFragment*/
         songFragment = new SongFragment();
         mainFragment = new MainFragment();
@@ -144,20 +147,30 @@ public class MainFragment extends Fragment {
             viewModel.setClickedSong(viewModel.getAllSongs().getValue().get(position));
 
             if (fragmentManager.findFragmentByTag("songfragment") == null) {
-                fragmentManager.beginTransaction().add(R.id.fragment_container, songFragment, "songfragment").addToBackStack(null).commit();
                 fragmentTransaction.setCustomAnimations(R.anim.pull_up, R.anim.pull_down);
-                fragmentManager.beginTransaction().hide(mainFragment);
+                fragmentTransaction.add(R.id.fragment_container, songFragment, "songfragment").addToBackStack(null);
+                fragmentTransaction.hide(mainFragment);
                 //                menuItem.setVisible(false);
             } else {
-                fragmentManager.beginTransaction().remove(songFragment).commit();
-                fragmentManager.beginTransaction().add(R.id.fragment_container, songFragment, "songfragment").addToBackStack(null).commit();
-                fragmentManager.beginTransaction().show(songFragment).commit();
+                fragmentManager.beginTransaction().remove(songFragment);
+                fragmentTransaction.setCustomAnimations(R.anim.pull_up, R.anim.pull_down);
+                fragmentTransaction.add(R.id.fragment_container, songFragment, "songfragment").addToBackStack(null);
+                fragmentTransaction.show(songFragment);
                 //                menuItem.setVisible(false);
                 //fragmentManager.beginTransaction().show(songFragment).addToBackStack(null).commit();
             }
+            fragmentTransaction.commit();
             Log.d(TAG, "Began transaction to Songfragment:  " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
         }
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        layout.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.black));
+    }
+
     //region Calling a method to stop the song from adapter class (unused)
     //    @Override
     //    public void onPause() {
