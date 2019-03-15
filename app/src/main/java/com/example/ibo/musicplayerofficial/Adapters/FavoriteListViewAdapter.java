@@ -1,7 +1,6 @@
 package com.example.ibo.musicplayerofficial.Adapters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,12 +26,9 @@ public class FavoriteListViewAdapter extends BaseAdapter implements Filterable {
     CustomFilter filter;
     List<Song> filterList;
 
-
     public FavoriteListViewAdapter(int layout, Context context) {
         this.layout = layout;
-//        this.arrayList = arrayList;
         this.context = context;
-//        this.filterList = arrayList;
         notifyDataSetChanged();
     }
     public void setSongs(List<Song> songs){
@@ -99,17 +95,11 @@ public class FavoriteListViewAdapter extends BaseAdapter implements Filterable {
             viewholder = (Viewholder) view.getTag();
         }
 
-        //Assign song to my arraylist
         final Song song = arrayList.get(position);
-
-        //Set my views to their resources
-        viewholder.artistImg.setImageURI(Uri.parse(song.getArtistImg()));
-        viewholder.artistTxt.setText(song.getArtist());
+        Glide.with(context).load(song.getArtist().getArtist_image()).into(viewholder.artistImg);
+        viewholder.artistTxt.setText(song.getArtist().getArtist_name());
         viewholder.songNameTxt.setText(song.getSongName());
 
-        /*Decrease memory size of each artist image using Glide library*/
-        Glide.with(view).load(song.getArtistImg()).into(viewholder.artistImg);
-//        notifyDataSetChanged();
         return view;
     }
 
@@ -131,9 +121,9 @@ public class FavoriteListViewAdapter extends BaseAdapter implements Filterable {
                  * is equal to the artist name
                  * and converts everything to Uppercase*/
                 for (int i = 0; i < filterList.size(); i++) {
-                    if (filterList.get(i).getArtist().contains(inputText)) {
-                        Song p = new Song(filterList.get(i).getArtist(), filterList.get(i).getSongName(), filterList.get(i).getSong(),
-                                filterList.get(i).getArtistImg(), filterList.get(i).getLyrics(), filters.get(i).getGenre());
+                    if (filterList.get(i).getArtist().getArtist_name().contains(inputText)) {
+                        Song p = new Song(filterList.get(i).getSong_artistId(), filterList.get(i).getArtist(), filterList.get(i).getSong(),
+                                filterList.get(i).getArtist().getArtist_image(), filterList.get(i).getLyrics(), filters.get(i).getGenre());
                         filters.add(p);
                     }
                 }

@@ -134,8 +134,8 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
         final Viewholder viewholder = (Viewholder) view.getTag();
 
         //Set my views to their resources
-        Glide.with(context).asBitmap().load(song.getArtistImg()).into(viewholder.artistImg);
-        viewholder.artistTxt.setText(song.getArtist());
+        Glide.with(context).asBitmap().load(song.getArtist().getArtist_image()).into(viewholder.artistImg);
+        viewholder.artistTxt.setText(song.getArtist().getArtist_name());
         viewholder.songNameTxt.setText(song.getSongName());
         viewholder.genreTxt.setText(song.getGenre());
 
@@ -155,6 +155,7 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
             @Override
             public void onClick(View v) {
 
+                //region Checking for dups (unused
                 favList.add(song);
                 nodup.add(song);
 
@@ -162,6 +163,7 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
                 if (nodup.size() == 0) {
                     nodup.addAll(favList);
                 }
+                //endregion
 
                 if (song.isFavorite()) {
                     song.setFavorite(false);
@@ -268,8 +270,8 @@ public class ListViewAdapter extends BaseAdapter implements Filterable {
                  * is equal to the artist name
                  * and converts everything to Uppercase*/
                 for (int i = 0; i < filterList.size(); i++) {
-                    if (filterList.get(i).getArtist().toUpperCase().contains(inputText)) {
-                        Song p = new Song(filterList.get(i).getArtist(), filterList.get(i).getSongName(), filterList.get(i).getSong(), filterList.get(i).getArtistImg(), filterList.get(i).getLyrics(), filterList.get(i).getGenre());
+                    if (filterList.get(i).getArtist().getArtist_name().toUpperCase().contains(inputText)) {
+                        Song p = new Song(filterList.get(i).getSong_artistId(), filterList.get(i).getArtist(), filterList.get(i).getSongName(), filterList.get(i).getLyrics(), filterList.get(i).getGenre(), filterList.get(i).getSong());
                         filters.add(p);
                     }
                 }

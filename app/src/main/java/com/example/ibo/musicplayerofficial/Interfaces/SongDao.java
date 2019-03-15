@@ -15,7 +15,7 @@ import androidx.room.Update;
 public interface SongDao {
 
     @Insert
-    void insertSong(Song song);
+    void insertSong(Song... song);
 
     @Delete
     void deleteSong(Song song);
