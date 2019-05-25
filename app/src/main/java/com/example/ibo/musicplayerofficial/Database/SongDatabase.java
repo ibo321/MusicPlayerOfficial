@@ -8,6 +8,10 @@ import com.example.ibo.musicplayerofficial.Classes.Song;
 import com.example.ibo.musicplayerofficial.Interfaces.ArtistDao;
 import com.example.ibo.musicplayerofficial.Interfaces.SongDao;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
@@ -17,7 +21,24 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 @Database(entities = {Song.class, Artist.class}, version = 1)
 public abstract class SongDatabase extends RoomDatabase {
 
-    //IMAGES
+    //region Artist names
+    private static final String BEYONCE = "Beyonce";
+    private static final String AVAMAX = "Ava Max";
+    private static final String FIFTYCENT = "50 Cent";
+    private static final String CHAMILLIONARI = "Chamillionari";
+    private static final String AVICII = "Avicii";
+    private static final String SCARLETPLEASURE = "Scarlet Pleasure";
+    private static final String ANNEMARIE = "Anne Marie";
+    private static final String MATTHUNTER = "Matt Hunter";
+    private static final String RIHANNA = "Rihanna";
+    private static final String LELEPONS = "Lele Pons";
+    private static final String LINKINPARK = "Linkin Park";
+    private static final String BOBDYLAN = "Bob Dylan";
+    private static final String METALLICA = "Metallica";
+    private static final String JAMESARTHUR = "James Arthur";
+    //endregion
+
+    //region Artist images
     private static final String BEYONCE_IMAGE = "https://firebasestorage.googleapis.com/v0/b/musicplayerofficial-563bc.appspot.com/o/beyonce.jpg?alt=media&token=0e635764-72e2-43cd-9a6b-412e6be48b19";
     private static final String AVAMAX_IMAGE = "https://firebasestorage.googleapis.com/v0/b/musicplayerofficial-563bc.appspot.com/o/avamax.jpg?alt=media&token=39034ad7-bb1a-4f98-90ae-2f3825d649bf";
     private static final String FIFTYCENT_IMAGE = "https://firebasestorage.googleapis.com/v0/b/musicplayerofficial-563bc.appspot.com/o/fiftycent.jpg?alt=media&token=a2e11321-4910-4686-aaf3-a82b7e436c25";
@@ -31,8 +52,9 @@ public abstract class SongDatabase extends RoomDatabase {
     private static final String LINKINPARK_IMAGE = "https://firebasestorage.googleapis.com/v0/b/musicplayerofficial-563bc.appspot.com/o/linkinpark.png?alt=media&token=5b9c032c-0bcd-4160-b1b1-474d644e34b9";
     private static final String BOBDYLAN_IMAGE = "https://firebasestorage.googleapis.com/v0/b/musicplayerofficial-563bc.appspot.com/o/bobdylan.jpg?alt=media&token=e89357a9-acad-4474-87b4-3588443b3bdd";
     private static final String METALLICA_IMAGE = "https://firebasestorage.googleapis.com/v0/b/musicplayerofficial-563bc.appspot.com/o/metallica.jpg?alt=media&token=6d456809-85e3-46a1-b00f-d1152bd86f0c";
+    //endregion
 
-    //LYRICS AND SONGS
+    //region Artist audio and lyrics
     private static final String BEYONCE_FORMATION_LYRICS = "Y'all haters corny with that illuminati mess\n" + "Paparazzi, catch my fly, and my cocky fresh\n" + "I'm so reckless when I rock my Givenchy dress (stylin')\n" + "I'm so possessive so I rock his Roc necklaces\n" + "My daddy Alabama, momma Louisiana\n" + "You mix that negro with that Creole make a Texas bamma\n" + "I like my baby hair, with baby hair and afros\n" + "I like my negro nose with Jackson Five nostrils\n" + "Earned all this money but they never take the country out me\n" + "I got a hot sauce in my bag, swag\n" + "I see it, I want it\n" + "I stunt, yellow bone it\n" + "I dream it, I work hard\n" + "I grind 'til I own it\n" + "I twirl on them haters\n" + "Albino alligators\n" + "El Camino with the seat low\n" + "Sippin' Cuervo with no chaser\n" + "Sometimes I go off, I go off\n" + "I go hard, I go hard\n" + "Get what's mine, take what's mine\n" + "I'm a star, I'm a star\n" + "'Cause I slay, slay\n" + "I slay, hey, I slay, okay\n" + "I slay, okay, all day, okay\n" + "I slay, okay, I slay okay\n" + "We gon' slay, slay\n" + "Gon' slay, okay\n" + "We slay, okay\n" + "I slay, okay\n" + "I slay, okay\n" + "Okay, okay, I slay, okay\n" + "Okay, okay, okay, okay\n" + "Okay, okay, ladies, now let's get in formation, 'cause I slay\n" + "Okay ladies, now let's get in formation, 'cause I slay\n" + "Prove to me you got some coordination, 'cause I slay\n" + "Slay trick, or you get eliminated\n" + "When he fuck me good I take his ass to Red Lobster, 'cause I slay\n" + "When he fuck me good I take his ass to Red Lobster, 'cause I slay\n" + "If he hit it right, I might take him on a flight on my chopper, 'cause I slay\n" + "Drop him off at the mall, let him buy some J's, let him shop up, 'cause I slay\n" + "I might get your getSong played on the radio station, 'cause I slay\n" + "I might get your getSong played on the radio station, 'cause I slay\n" + "You just might be a black Bill Gates in the making, 'cause I slay\n" + "I just might be a black Bill Gates in the making\n" + "I see it, I want it\n" + "I stunt, yellow bone it\n" + "I dream it, I work hard\n" + "I grind 'til I own it\n" + "I twirl on them haters\n" + "Albino alligators\n" + "El Camino with the seat low\n" + "Sippin' Cuervo with no chaser\n" + "Sometimes I go off, I go off\n" + "I go hard, I go hard\n" + "Take what's mine, take what's mine\n" + "I'm a star, I'm a star\n" + "'Cause I slay, slay\n" + "I slay, hey, I slay, okay\n" + "I slay, okay, I slay, okay\n" + "I slay, okay, I slay okay\n" + "I slay, okay\n" + "We gon' slay, slay\n" + "Gon' slay, okay\n" + "We slay, okay\n" + "I slay, okay\n" + "I slay, okay\n" + "Okay, okay, I slay, okay\n" + "Okay, okay, okay, okay\n" + "Okay, okay, ladies, now let's get in formation, I slay\n" + "Okay ladies, now let's get in formation, I slay\n" + "Prove to me you got some coordination, I slay\n" + "Slay trick, or you get eliminated, I slay\n" + "Okay ladies, now let's get in formation, I slay\n" + "Okay ladies, now let's get in formation\n" + "You know you that bitch when you cause all this conversation\n" + "Always stay gracious, best revenge is your paper";
     private static final String BEYONCE_FORMATION_AUDIO = "\"https://firebasestorage.googleapis.com/v0/b/musicplayerofficial-563bc.appspot.com/o/beyonce_formation.mp3?alt=media&token=47be3353-2045-4d7e-8c2d-a4d913475e7c\"";
     private static final String AVAMAX_SWEETBUYPSYCHO_LYRICS = "[Chorus]\n" + "Oh, she's sweet but a psycho\n" + "A little bit psycho\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "Oh, she's hot but a psycho\n" + "So left but she's right though\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "\n" + "[Verse 1]\n" + "She'll make you curse, but she a blessing\n" + "She'll rip your shirt within a second\n" + "You'll be coming back, back for seconds\n" + "With your plate, you just can't help it\n" + "\n" + "[Pre-Chorus]\n" + "No, no\n" + "You'll play alo-o-ong\n" + "Let her lead you o-o-on\n" + "You'll be saying \"No, no\"\n" + "Then saying \"Yes, yes, yes\"\n" + "'Cause she messin' with your head\n" + "\n" + "[Chorus]\n" + "Oh, she's sweet but a psycho\n" + "A little bit psycho\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "Oh, she's hot but a psycho\n" + "So left but she's right though\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "\n" + "[Post-Chorus]\n" + "Grab a cop gun kinda crazy\n" + "She's poison but tasty\n" + "Yeah, people say \"Run, don't walk away\"\n" + "'Cause she's sweet but a psycho\n" + "A little bit psycho\n" + "At night she screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "\n" + "[Verse 2]\n" + "See, someone said, don't drink her potions\n" + "She'll kiss your neck with no emotion\n" + "When she's mean, you know you love it\n" + "She tastes so sweet, don't sugar coat it\n" + "\n" + "[Pre-Chorus]\n" + "No, no\n" + "You'll play alo-o-ong\n" + "Let her lead you o-o-on\n" + "You'll be saying \"No (no, no, no), no (no)\"\n" + "Then saying \"Yes, yes, yes\"\n" + "'Cause she messin' with your head\n" + "\n" + "[Chorus]\n" + "Oh, she's sweet but a psycho\n" + "A little bit psycho\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "Oh, she's hot but a psycho\n" + "So left but she's right though\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "\n" + "[Post-Chorus]\n" + "Grab a cop gun kinda crazy\n" + "She's poison but tasty\n" + "Yeah, people say \"Run, don't walk away\"\n" + "'Cause she's sweet but a psycho\n" + "A little bit psycho\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "\n" + "[Bridge]\n" + "You're just like me, you're out your mind\n" + "I know it's strange, we're both the crazy kind\n" + "You're tellin' me that I'm insane\n" + "Boy, don't pretend that you don't love the pain\n" + "\n" + "[Chorus]\n" + "Oh, she's sweet but a psycho\n" + "A little bit psycho\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "Oh, she's hot but a psycho\n" + "So left but she's right though\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"\n" + "\n" + "[Post-Chorus]\n" + "Grab a cop gun kinda crazy\n" + "She's poison but tasty\n" + "Yeah, people say \"Run, don't walk away\"\n" + "'Cause she's sweet but a psycho\n" + "A little bit psycho\n" + "At night she's screamin'\n" + "\"I'm-ma-ma-ma out my mind\"";
@@ -59,16 +81,22 @@ public abstract class SongDatabase extends RoomDatabase {
     private static final String BOBDYLAN_LIKEAROLLINGSTONE_AUDIO = "https://firebasestorage.googleapis.com/v0/b/musicplayerofficial-563bc.appspot.com/o/bobydylan_rolling.mp3?alt=media&token=12f60ada-f857-4d9c-a0ed-9d1510938184";
     private static final String METALLICA_NOTHINGELSEMATTERS_LYRICS = "So close, no matter how far\n" + "Couldn't be much more from the heart\n" + "Forever trusting who we are\n" + "And nothing else matters\n" + "Never opened myself this way\n" + "Life is ours, we live it our way\n" + "All these words I don't just say\n" + "And nothing else matters\n" + "Trust I seek and I find in you\n" + "Every day for us something new\n" + "Open mind for a different view\n" + "And nothing else matters\n" + "Never cared for what they do\n" + "Never cared for what they know\n" + "But I know\n" + "So close, no matter how far\n" + "Couldn't be much more from the heart\n" + "Forever trusting who we are\n" + "And nothing else matters\n" + "Never cared for what they do\n" + "Never cared for what they know\n" + "But I know\n" + "I never opened myself this way\n" + "Life is ours, we live it our way\n" + "All these words I don't just say\n" + "And nothing else matters\n" + "Trust I seek and I find in you\n" + "Every day for us, something new\n" + "Open mind for a different view\n" + "And nothing else matters\n" + "Never cared for what they say\n" + "Never cared for games they play\n" + "Never cared for what they do\n" + "Never cared for what they know\n" + "And I know, yeah!\n" + "So close, no matter how far\n" + "Couldn't be much more from the heart\n" + "Forever trusting who we are\n" + "No, nothing else matters";
     private static final String METALLICA_NOTHINGELSEMATTERS_AUDIO = "https://firebasestorage.googleapis.com/v0/b/musicplayerofficial-563bc.appspot.com/o/metallica_nothingelsematters.mp3?alt=media&token=50f7a61e-1060-4236-a12a-016c69603e13";
-
+    //endregion
 
     private static SongDatabase instance;
 
     public abstract SongDao songDao();
+
     public abstract ArtistDao artistDao();
 
     public static synchronized SongDatabase getInstance(Context context) {
         if (instance == null) {
-            instance = Room.databaseBuilder(context.getApplicationContext(), SongDatabase.class, "song_database").fallbackToDestructiveMigration().addCallback(roomCallback).build();
+            instance = Room.databaseBuilder(
+                    context.
+                    getApplicationContext(), SongDatabase.class, "song_database")
+                    .fallbackToDestructiveMigration()
+                    .addCallback(roomCallback)
+                    .build();
         }
         return instance;
     }
@@ -93,21 +121,19 @@ public abstract class SongDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
 
-            Artist beyonce = new Artist("Beyonce", BEYONCE_IMAGE, "Born 1999");
-            Artist avamax = new Artist("Ava Max", AVAMAX_IMAGE, "Born 1555");
-            Artist fiftycent = new Artist("50 cent", FIFTYCENT_IMAGE, "Born 12333");
-            Artist annemarie = new Artist("Anne Marie ft. James Arthur", ANNEMARIE_IMAGE, "Born 2133");
-            Artist scarletpleasure = new Artist("Scarlet Pleasure", SCARLETPLEASURE_IMAGE, "Born 4561");
-            Artist avicii = new Artist("Avicii", AVICII_IMAGE, "Born 4561");
-            Artist bobdylan = new Artist("Bob Dylan", BOBDYLAN_IMAGE, "Born 4561");
-            Artist rihanna = new Artist("Rihanna", RIHANNA_IMAGE, "Born 4561");
-            Artist matthunter = new Artist("Matt Huner ft. Lele Pons", MATTHUNTER_IMAGE, "Born 4561");
-            Artist lelepons = new Artist("Lele Pons", LELEPONS_IMAGE, "Born 4561");
-            Artist chamillionari = new Artist("Chamillionari", CHAMILLIONARI_IMAGE, "Born 4561");
-            Artist linkinpark = new Artist("Linkin Park", LINKINPARK_IMAGE, "Born 4561");
-            Artist metallica = new Artist("Metallica", METALLICA_IMAGE, "Born 4561");
-
-            artistDao.insert(beyonce, avamax, fiftycent, annemarie, scarletpleasure, avicii, bobdylan, rihanna, matthunter, lelepons, chamillionari, linkinpark, metallica);
+            Artist beyonce = new Artist(BEYONCE, BEYONCE_IMAGE, "Born 1999");
+            Artist avamax = new Artist(AVAMAX, AVAMAX_IMAGE, "Born 1555");
+            Artist fiftycent = new Artist(FIFTYCENT, FIFTYCENT_IMAGE, "Born 12333");
+            Artist annemarie = new Artist(ANNEMARIE + "ft " + JAMESARTHUR, ANNEMARIE_IMAGE, "Born 2133");
+            Artist scarletpleasure = new Artist(SCARLETPLEASURE, SCARLETPLEASURE_IMAGE, "Born 4561");
+            Artist avicii = new Artist(AVICII, AVICII_IMAGE, "Born 4561");
+            Artist bobdylan = new Artist(BOBDYLAN, BOBDYLAN_IMAGE, "Born 4561");
+            Artist rihanna = new Artist(RIHANNA, RIHANNA_IMAGE, "Born 4561");
+            Artist matthunter = new Artist(MATTHUNTER + "ft " + LELEPONS, MATTHUNTER_IMAGE, "Born 4561");
+            Artist lelepons = new Artist(LELEPONS, LELEPONS_IMAGE, "Born 4561");
+            Artist chamillionari = new Artist(CHAMILLIONARI, CHAMILLIONARI_IMAGE, "Born 4561");
+            Artist linkinpark = new Artist(LINKINPARK, LINKINPARK_IMAGE, "Born 4561");
+            Artist metallica = new Artist(METALLICA, METALLICA_IMAGE, "Born 4561");
 
             long beyonce_id = artistDao.insertId(beyonce);
             long avamax_id = artistDao.insertId(avamax);

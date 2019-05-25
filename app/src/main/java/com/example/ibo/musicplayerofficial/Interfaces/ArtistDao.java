@@ -5,6 +5,7 @@ import com.example.ibo.musicplayerofficial.Classes.Artist;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.Update;
 
 /**
  * Created by Ibrahim Delice on 09,March,2019
@@ -21,9 +22,10 @@ public interface ArtistDao {
     @Delete
     void deleteArtist(Artist artist);
 
-    //
-    //    @Update
-    //    void updateArtist(Artist artist);
+    @Update
+    void updateArtist(Artist artist);
+
+
     //
     //    @Query("DELETE FROM artist_table")
     //    void deleteAllArtist();

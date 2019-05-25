@@ -122,7 +122,7 @@ public class FavoriteListViewAdapter extends BaseAdapter implements Filterable {
                  * and converts everything to Uppercase*/
                 for (int i = 0; i < filterList.size(); i++) {
                     if (filterList.get(i).getArtist().getArtist_name().contains(inputText)) {
-                        Song p = new Song(filterList.get(i).getSong_artistId(), filterList.get(i).getArtist(), filterList.get(i).getSong(),
+                        Song p = new Song(filterList.get(i).getArtistId(), filterList.get(i).getArtist(), filterList.get(i).getSong(),
                                 filterList.get(i).getArtist().getArtist_image(), filterList.get(i).getLyrics(), filters.get(i).getGenre());
                         filters.add(p);
                     }

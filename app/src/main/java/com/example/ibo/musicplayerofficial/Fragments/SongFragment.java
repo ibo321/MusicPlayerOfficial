@@ -22,9 +22,12 @@ import com.example.ibo.musicplayerofficial.Classes.Song;
 import com.example.ibo.musicplayerofficial.R;
 import com.example.ibo.musicplayerofficial.ViewModel.SharedViewModel;
 
+import org.apache.logging.log4j.LogManager;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Logger;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,6 +56,7 @@ public class SongFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+
     }
 
     @SuppressLint("SetTextI18n")
