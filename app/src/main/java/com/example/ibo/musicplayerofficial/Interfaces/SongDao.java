@@ -1,5 +1,6 @@
 package com.example.ibo.musicplayerofficial.Interfaces;
 
+import com.example.ibo.musicplayerofficial.Classes.Artist;
 import com.example.ibo.musicplayerofficial.Classes.Song;
 
 import java.util.List;
@@ -15,7 +16,10 @@ import androidx.room.Update;
 public interface SongDao {
 
     @Insert
-    void insertSong(Song song);
+    void insertSong(Song... song);
+
+    @Insert
+    long insertSongId(Song id);
 
     @Delete
     void deleteSong(Song song);
@@ -31,4 +35,5 @@ public interface SongDao {
 
     @Query("SELECT * FROM song_table ORDER BY genre DESC")
     LiveData<List<Song>> getAllSongs();
+
 }

@@ -22,9 +22,12 @@ import com.example.ibo.musicplayerofficial.Classes.Song;
 import com.example.ibo.musicplayerofficial.R;
 import com.example.ibo.musicplayerofficial.ViewModel.SharedViewModel;
 
+import org.apache.logging.log4j.LogManager;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Logger;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,6 +56,7 @@ public class SongFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+
     }
 
     @SuppressLint("SetTextI18n")
@@ -103,13 +107,13 @@ public class SongFragment extends Fragment {
         Log.d(TAG, "Reading song from viewmodel: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
         mySong = viewModel.getClickedSong().getValue();
 
-        Glide.with(getActivity()).load(mySong.getArtistImg()).into(artistImg);
+        Glide.with(getActivity()).load(mySong.getArtist().getArtist_image()).into(artistImg);
         Log.d(TAG, "Inserting artist image background: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()));
-        Glide.with(getActivity()).load(mySong.getArtistImg()).into(artistImgBG);
+        Glide.with(getActivity()).load(mySong.getArtist().getArtist_image()).into(artistImgBG);
         Log.d(TAG, "Inserted both artist images: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) + " " + "Fetching song..");
 
         getSong = mySong.getSong();
-        songNameTV.setText(mySong.getArtist() + " " + mySong.getSongName());
+        songNameTV.setText(mySong.getArtist().getArtist_name() + " " + mySong.getSongName());
         lyricTxt.setText(mySong.getLyrics());
         displayArtist = "Now playing " + songNameTV.getText().toString();
 
@@ -213,13 +217,13 @@ public class SongFragment extends Fragment {
                     seekBar.setMax(mediaPlayer.getDuration());
 
                     songDuration(mediaPlayer.getDuration());
-                    songNameTV.setText(currentSong.getArtist() + " " + currentSong.getSongName());
-                    artistImg.setImageURI(Uri.parse(currentSong.getArtistImg()));
-                    artistImgBG.setImageURI(Uri.parse(currentSong.getArtistImg()));
+                    songNameTV.setText(currentSong.getArtist().getArtist_name() + " " + currentSong.getSongName());
+                    artistImg.setImageURI(Uri.parse(currentSong.getArtist().getArtist_image()));
+                    artistImgBG.setImageURI(Uri.parse(currentSong.getArtist().getArtist_image()));
                     lyricTxt.setText(currentSong.getLyrics());
 
-                    Glide.with(getActivity()).load(currentSong.getArtistImg()).into(artistImg);
-                    Glide.with(getActivity()).load(currentSong.getArtistImg()).into(artistImgBG);
+                    Glide.with(getActivity()).load(currentSong.getArtist().getArtist_image()).into(artistImg);
+                    Glide.with(getActivity()).load(currentSong.getArtist().getArtist_image()).into(artistImgBG);
                     mediaPlayer.start();
 
                     mediaPlayer.seekTo(mediaPlayer.getCurrentPosition());
@@ -313,12 +317,12 @@ public class SongFragment extends Fragment {
                 mediaPlayer = MediaPlayer.create(getActivity(), Uri.parse(currentSong.getSong()));
                 seekBar.setMax(mediaPlayer.getDuration());
                 songDuration(mediaPlayer.getDuration());
-                songNameTV.setText(currentSong.getArtist() + " " + currentSong.getSongName());
-                artistImg.setImageURI(Uri.parse(currentSong.getArtistImg()));
-                artistImgBG.setImageURI(Uri.parse(currentSong.getArtistImg()));
+                songNameTV.setText(currentSong.getArtist().getArtist_name() + " " + currentSong.getSongName());
+                artistImg.setImageURI(Uri.parse(currentSong.getArtist().getArtist_image()));
+                artistImgBG.setImageURI(Uri.parse(currentSong.getArtist().getArtist_image()));
                 lyricTxt.setText(currentSong.getLyrics());
-                Glide.with(getActivity()).load(currentSong.getArtistImg()).into(artistImg);
-                Glide.with(getActivity()).load(currentSong.getArtistImg()).into(artistImgBG);
+                Glide.with(getActivity()).load(currentSong.getArtist().getArtist_image()).into(artistImg);
+                Glide.with(getActivity()).load(currentSong.getArtist().getArtist_image()).into(artistImgBG);
 
                 mediaPlayer.start();
                 playBtn.setImageResource(R.drawable.ic_pause);
